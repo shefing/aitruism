@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic AI Control Plane: An Interactive Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Stone & Teal -->
+    <!-- Application Structure Plan: A single-page dashboard structure is used to guide the user from high-level concepts to implementation details. The flow is: 1. The Core Architecture (big picture), 2. Component Deep Dive (the "how"), 3. Control Plane in Action (feature responsibilities), and 4. Implementation Blueprint (the "when"). This non-linear, thematic structure is more engaging and intuitive for exploring a complex technical document than a simple linear scroll. Key interactions include a clickable architecture diagram, tabbed content for component comparison, and an interactive chart to visualize feature allocation, making the dense information easily digestible. -->
+    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | The core "Trinity" architecture -> Organize -> HTML/CSS Diagram -> Interactive hover/click -> Clearly visualizes relationships without SVG. | Portkey vs LiteLLM comparison -> Compare -> Tabbed content cards -> Click to switch -> Facilitates direct comparison of features. | Feature Locus (Gateway vs Sidecar) -> Compare/Organize -> Interactive Bar Chart (Chart.js) -> Click bar to see details -> Quantifies and clarifies the separation of concerns, which is a central point of the report. | Implementation Roadmap -> Organize -> CSS Timeline -> Click to expand -> Presents a clear, actionable plan. | All choices avoid SVG/Mermaid as required and prioritize interaction to enhance understanding. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+            color: #292524; /* stone-800 */
+        }
+        .nav-link {
+            transition: color 0.2s, border-bottom-color 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #14b8a6; /* teal-500 */
+            border-bottom-color: #14b8a6;
+        }
+        .tab.active {
+            background-color: #14b8a6;
+            color: white;
+        }
+        .tab {
+            transition: all 0.2s;
+        }
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e7e5e4; /* stone-200 */
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 500px;
+            max-height: 70vh;
+        }
+        .timeline-item {
+            border-left: 3px solid #5eead4; /* teal-300 */
+        }
+        .timeline-dot {
+            background-color: #14b8a6; /* teal-500 */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-stone-800">AI Control Plane</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#architecture" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Architecture</a>
+                        <a href="#components" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Components</a>
+                        <a href="#features" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Features</a>
+                        <a href="#roadmap" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Roadmap</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <!-- Section 1: Core Architecture -->
+        <section id="architecture" class="mb-16 md:mb-24 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">A Unified Architecture for AI Governance</h2>
+            <p class="max-w-3xl mx-auto text-lg text-stone-600 mb-12">
+                This interactive guide explores a robust, three-part architecture for managing Agentic AI systems. The framework, consisting of a Gateway, a Sidecar, and OTEL instrumentation, provides a comprehensive control plane for security, quality, and observability. Explore the diagram below to see how they work together.
+            </p>
+
+            <div class="w-full max-w-5xl mx-auto p-4 md:p-8 card">
+                <div class="relative flex flex-col items-center space-y-8">
+                    
+                    <div class="flex items-center space-x-4 text-lg font-semibold">
+                        <span>👤</span>
+                        <p>User</p>
+                    </div>
+                    
+                    <div class="w-16 h-0.5 bg-stone-300 transform rotate-90"></div>
+                    
+                    <div class="w-full flex justify-center items-start p-4 border-2 border-dashed border-stone-300 rounded-xl">
+                        <div class="w-full flex flex-col md:flex-row items-center justify-around gap-8">
+                            
+                            <!-- Agentic App + Sidecar Pod -->
+                            <div class="flex flex-col items-center space-y-4">
+                                <p class="font-bold text-teal-600">Application Pod</p>
+                                <div class="p-6 border border-teal-400 rounded-lg bg-teal-50/50 flex space-x-4">
+                                    <div id="diagram-agent" class="diagram-component p-4 bg-white rounded-lg shadow cursor-pointer text-center">
+                                        <span class="text-2xl">🤖</span>
+                                        <p class="font-semibold">Agentic App</p>
+                                    </div>
+                                    <div id="diagram-sidecar" class="diagram-component p-4 bg-white rounded-lg shadow cursor-pointer text-center">
+                                        <span class="text-2xl">🔬</span>
+                                        <p class="font-semibold">Sidecar</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 text-sm text-stone-500">
+                                    <span>East-West Traffic (OTEL)</span>
+                                    <div class="w-8 h-px bg-stone-400"></div>
+                                    <span>↔️</span>
+                                </div>
+                            </div>
+                            
+                            <div class="hidden md:block w-32 h-0.5 bg-stone-300"></div>
+                            
+                            <!-- Gateway -->
+                            <div id="diagram-gateway" class="diagram-component flex flex-col items-center space-y-2 cursor-pointer">
+                                <span class="text-4xl">🛡️</span>
+                                <p class="font-bold">LLM Gateway</p>
+                                <p class="text-sm text-stone-500">North-South Traffic</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-16 h-0.5 bg-stone-300 transform rotate-90"></div>
+
+                    <div class="flex items-center space-x-4 text-lg font-semibold">
+                        <span>☁️</span>
+                        <p>External LLM Provider</p>
+                    </div>
+
+                </div>
+                 <div id="diagram-info" class="mt-8 p-4 bg-stone-100 rounded-lg text-left text-stone-700 min-h-[50px]">
+                    Hover over or tap a component to learn more.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Component Deep Dive -->
+        <section id="components" class="mb-16 md:mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Component Deep Dive</h2>
+            <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
+                Each piece of the architecture plays a distinct role. The Gateway guards the perimeter, the Sidecar analyzes internal logic, and OpenTelemetry (OTEL) provides the data fabric connecting them. Select a component to understand its function and available open-source tools.
+            </p>
+            
+            <div class="flex justify-center mb-8">
+                <div class="flex space-x-2 p-1 bg-stone-200 rounded-lg">
+                    <button class="tab px-4 py-2 text-sm font-semibold rounded-md" data-tab="gateway">LLM Gateway</button>
+                    <button class="tab px-4 py-2 text-sm font-semibold rounded-md" data-tab="sidecar">Agentic Sidecar</button>
+                    <button class="tab px-4 py-2 text-sm font-semibold rounded-md" data-tab="otel">OpenTelemetry</button>
+                </div>
+            </div>
+
+            <div id="component-content" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <!-- Content will be injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 3: Features - Locus of Control -->
+        <section id="features" class="mb-16 md:mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">The Control Plane in Action</h2>
+            <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
+                Not all safety features can be implemented in the same place. The Gateway handles stateless, perimeter checks, while the Sidecar is required for stateful, context-aware analysis of the agent's internal workflow. Click on the bars in the chart to see why each feature belongs where it does.
+            </p>
+
+            <div class="card p-4 md:p-8">
+                <div class="chart-container">
+                    <canvas id="featuresChart"></canvas>
+                </div>
+                <div id="feature-details" class="mt-8 p-4 bg-stone-100 rounded-lg text-stone-700 min-h-[100px]">
+                    <h4 class="font-bold text-lg mb-2">Select a Feature</h4>
+                    <p>Click on a feature in the chart above to learn about its optimal implementation locus and the reasoning behind it.</p>
+                </div>
+            </div>
+
+        </section>
+        
+        <!-- Section 4: Implementation Roadmap -->
+        <section id="roadmap">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Phased Implementation Roadmap</h2>
+            <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
+                Building a complete AI control plane is a journey. This phased roadmap outlines a strategic approach to deliver value incrementally, starting with foundational controls and progressing to a dynamic, full-scale policy enforcement engine.
+            </p>
+
+            <div class="relative pl-8">
+                <div id="roadmap-content">
+                    <!-- Roadmap items injected by JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-200 mt-16">
+        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-stone-600 text-sm">
+            <p>Interactive guide based on the "Architecting a Production-Grade Observability and Control Plane for Agentic AI Systems" report.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Data Store
+            const appData = {
+                components: {
+                    gateway: {
+                        title: '🛡️ The LLM Gateway: Perimeter Defense',
+                        description: `The Gateway acts as the mandatory, centralized "North-South" traffic controller for all communication with external LLM providers. It intercepts every prompt and response, making it the ideal enforcement point for policies on data leaving the organizational trust boundary.`,
+                        tools: [
+                            {
+                                name: 'Portkey',
+                                philosophy: 'Integrated Production Platform',
+                                strengths: 'Offers an end-to-end solution with a built-in observability dashboard, advanced guardrails, and enterprise-grade security features like SOC 2 certification. Aims for a low-code/no-code experience.',
+                                considerations: 'Full value is realized via its managed cloud platform, which may introduce vendor dependency and a commercial pricing structure.'
+                            },
+                            {
+                                name: 'LiteLLM',
+                                philosophy: 'Developer-First Abstraction Framework',
+                                strengths: 'A lightweight, highly flexible library that unifies the API for over 100 LLMs. It prioritizes simplicity, composability, and deep integration with the OSS observability ecosystem.',
+                                considerations: 'Relies on external systems for dashboards and advanced guardrails, requiring more integration effort to build a complete solution. Ideal for a self-hosted strategy.'
+                            }
+                        ]
+                    },
+                    sidecar: {
+                        title: '🔬 The Agentic Sidecar: Introspective Analysis',
+                        description: `Deployed alongside the agent application, the Sidecar monitors "East-West" traffic—the internal logic, tool calls, and reasoning steps. It receives real-time telemetry from the agent, allowing it to perform deep, contextual validations that the stateless gateway cannot.`,
+                        tools: [
+                             {
+                                name: 'OTEL Collector',
+                                philosophy: 'Core Backbone',
+                                strengths: 'A high-performance, vendor-agnostic proxy for telemetry data. Its pipeline architecture (receiver, processor, exporter) is perfect for building custom validation logic.',
+                                considerations: 'Requires configuration and potentially custom processor development in Go.'
+                            },
+                            {
+                                name: 'Guardrails AI / NeMo',
+                                philosophy: 'Validation Libraries',
+                                strengths: 'Powerful open-source libraries for enforcing structural (Guardrails AI) and conversational (NeMo) boundaries. They can be integrated into the sidecar\'s custom processors.',
+                                considerations: 'These are libraries, not standalone services, and need to be integrated into the sidecar\'s logic.'
+                            }
+                        ]
+                    },
+                    otel: {
+                        title: '🕸️ OpenTelemetry: The Universal Data Fabric',
+                        description: 'OTEL is the critical connective tissue of this architecture. As a vendor-neutral observability framework, it allows the agentic application to be instrumented once. The resulting traces, metrics, and logs are then sent to the Sidecar for analysis, decoupling the application from the observability logic.',
+                        tools: [
+                           {
+                                name: 'OTEL SDKs',
+                                philosophy: 'Application Instrumentation',
+                                strengths: 'Provides language-specific libraries (e.g., for Python) to generate telemetry data from within the application code.',
+                                considerations: 'Requires adding initialization code to the application.'
+                            },
+                             {
+                                name: 'Auto-Instrumentation',
+                                philosophy: 'Effortless Tracing',
+                                strengths: 'Libraries like `opentelemetry-instrumentation-langchain` automatically create detailed traces for AI frameworks, drastically reducing manual instrumentation effort.',
+                                considerations: 'May not cover every custom part of an application, but provides excellent baseline visibility.'
+                            }
+                        ]
+                    }
+                },
+                features: {
+                    labels: [
+                        'PII Detection & Masking', 'Jailbreak/Prompt Injection', 'Content Moderation (Basic)', 'Data Leakage (Simple)', 
+                        'Hallucination Detection', 'Business Logic Validation', 'Topic Enforcement (Advanced)', 'Data Leakage (Complex)'
+                    ],
+                    gateway:  [100, 100, 100, 100, 5, 5, 10, 10],
+                    sidecar:  [20, 20, 20, 20, 100, 100, 100, 100],
+                    details: [
+                        { locus: 'Gateway', rationale: 'This is a canonical gateway function. It inspects stateless request/response payloads to prevent sensitive data from ever reaching the external LLM provider. This is a critical perimeter security measure.'},
+                        { locus: 'Gateway', rationale: 'The gateway is the first line of defense against adversarial user inputs. It can apply real-time, centralized checks like pattern matching or "guard" LLMs to block malicious prompts before they are processed.'},
+                        { locus: 'Gateway', rationale: 'High-level content policies based on keywords, deny-lists, or simple classifiers can be efficiently enforced at the gateway by inspecting the payload of individual messages.'},
+                        { locus: 'Gateway', rationale: 'The gateway can use simple, fast regular expression filters to block well-defined, static data patterns like internal project codes or API key formats from leaving the network.'},
+                        { locus: 'Sidecar', rationale: 'This is impossible for a gateway. Reliable detection requires comparing the LLM\'s response against the specific context retrieved during the RAG process. The sidecar has access to the full application trace and can perform this deep, contextual comparison.'},
+                        { locus: 'Sidecar', rationale: 'Business rules are inherently stateful and context-dependent (e.g., usage limits per user). The sidecar can analyze the full application trace, access user state, and maintain counters, which the stateless gateway cannot.'},
+                        { locus: 'Sidecar', rationale: 'True topic enforcement requires semantic understanding, not just keyword matching. The sidecar can perform vector similarity searches against a knowledge base to detect nuanced, off-topic discussions that a gateway would miss.'},
+                        { locus: 'Sidecar', rationale: 'Detecting the leakage of complex, context-dependent information requires understanding the agent\'s reasoning path and the source of the information. This level of introspection is only possible for the sidecar, which sees the entire workflow.'},
+                    ]
+                },
+                roadmap: [
+                    {
+                        phase: 1,
+                        title: "Foundational Control & Visibility",
+                        duration: "1-2 Months",
+                        objective: "Achieve immediate control over all LLM traffic and establish baseline observability.",
+                        actions: [
+                            "Deploy an LLM Gateway (e.g., LiteLLM).",
+                            "Implement gateway-centric features: PII masking, prompt injection prevention, cost tracking.",
+                            "Instrument all agents with the OTEL SDK.",
+                            "Deploy a central observability backend (e.g., SigNoz)."
+                        ],
+                        outcome: "All LLM traffic is secured and monitored. Teams have full trace visibility for debugging."
+                    },
+                    {
+                        phase: 2,
+                        title: "Advanced Introspective Monitoring",
+                        duration: "2-3 Months",
+                        objective: "Prove the sidecar pattern and deliver value on a critical advanced feature like hallucination detection.",
+                        actions: [
+                            "Develop and deploy the v1 Observability Sidecar (OTEL Collector).",
+                            "Implement the first custom analysis processor for hallucination detection (semantic similarity).",
+                            "Roll out the sidecar to a key RAG-based application.",
+                            "Analyze and refine detection results in the observability backend."
+                        ],
+                        outcome: "A functioning sidecar architecture is in place, automatically flagging potential hallucinations in production."
+                    },
+                    {
+                        phase: 3,
+                        title: "Dynamic Policy Enforcement & Rollout",
+                        duration: "Ongoing",
+                        objective: "Mature the sidecar into a full-featured, dynamic policy enforcement engine.",
+                        actions: [
+                            "Implement a custom Rules Engine processor in the sidecar.",
+                            "Define and encode custom business logic validations as declarative rules.",
+                            "Implement other advanced analysis features (e.g., semantic topic detection).",
+                            "Standardize the 'Agent + Sidecar' deployment pattern for all teams."
+                        ],
+                        outcome: "A mature, scalable, and dynamic AI Control Plane is operational, providing robust governance for all AI applications."
+                    }
+                ],
+                diagramInfo: {
+                    agent: "The Agentic Application runs the core business logic. It's instrumented with OpenTelemetry (OTEL) to emit traces of its internal operations.",
+                    sidecar: "The Observability Sidecar receives OTEL data from the agent in real-time. It analyzes the agent's internal reasoning and tool use to enforce complex policies.",
+                    gateway: "The LLM Gateway is the single entry/exit point for all communication with external LLMs. It enforces perimeter security and data policies.",
+                    default: "Hover over or tap a component to learn more."
+                }
+            };
+            
+            // Component Tabs
+            const tabs = document.querySelectorAll('.tab');
+            const componentContent = document.getElementById('component-content');
+
+            function updateComponentContent(tabName) {
+                const content = appData.components[tabName];
+                componentContent.innerHTML = `
+                    <div class="card p-6">
+                        <h3 class="text-2xl font-bold mb-4">${content.title}</h3>
+                        <p class="text-stone-600">${content.description}</p>
+                    </div>
+                    <div class="space-y-6">
+                        ${content.tools.map(tool => `
+                            <div class="card p-6">
+                                <h4 class="font-semibold text-lg text-teal-600">${tool.name}</h4>
+                                <p class="text-sm text-stone-500 mb-2">${tool.philosophy}</p>
+                                <p class="font-semibold mt-2 text-sm">Strengths:</p>
+                                <p class="text-stone-600 text-sm">${tool.strengths}</p>
+                                <p class="font-semibold mt-2 text-sm">Considerations:</p>
+                                <p class="text-stone-600 text-sm">${tool.considerations}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.dataset.tab;
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    updateComponentContent(tabName);
+                });
+            });
+
+            // Set initial tab
+            tabs[0].classList.add('active');
+            updateComponentContent('gateway');
+
+            // Features Chart
+            const ctx = document.getElementById('featuresChart').getContext('2d');
+            const featureDetails = document.getElementById('feature-details');
+            const featuresChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: appData.features.labels,
+                    datasets: [
+                        {
+                            label: 'Gateway Suitability',
+                            data: appData.features.gateway,
+                            backgroundColor: 'rgba(13, 148, 136, 0.6)', // teal-600
+                            borderColor: 'rgba(13, 148, 136, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Sidecar Suitability',
+                            data: appData.features.sidecar,
+                            backgroundColor: 'rgba(245, 158, 11, 0.6)', // amber-500
+                            borderColor: 'rgba(245, 158, 11, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: true,
+                            display: false,
+                        },
+                        y: {
+                            stacked: true,
+                            ticks: {
+                                font: {
+                                    size: 14,
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                           enabled: false
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const elementIndex = elements[0].index;
+                            const featureData = appData.features.details[elementIndex];
+                            featureDetails.innerHTML = `
+                                <h4 class="font-bold text-lg mb-2">${appData.features.labels[elementIndex]}</h4>
+                                <p><span class="font-semibold">Optimal Locus:</span> <span class="font-bold text-teal-600">${featureData.locus}</span></p>
+                                <p class="mt-2"><span class="font-semibold">Rationale:</span> ${featureData.rationale}</p>
+                            `;
+                        }
+                    }
+                }
+            });
+
+            // Roadmap
+            const roadmapContent = document.getElementById('roadmap-content');
+            roadmapContent.innerHTML = appData.roadmap.map(item => `
+                <div class="mb-12 timeline-item pl-8 relative">
+                    <div class="absolute -left-[7.5px] top-1 w-4 h-4 rounded-full timeline-dot border-4 border-white"></div>
+                    <p class="text-sm font-semibold text-stone-500">${item.duration}</p>
+                    <h3 class="text-xl font-bold text-teal-700 mt-1 mb-2">Phase ${item.phase}: ${item.title}</h3>
+                    <div class="card p-6">
+                        <p class="font-semibold mb-2">Objective:</p>
+                        <p class="text-stone-600 mb-4">${item.objective}</p>
+                        <p class="font-semibold mb-2">Key Actions:</p>
+                        <ul class="list-disc list-inside text-stone-600 space-y-1 mb-4">
+                            ${item.actions.map(action => `<li>${action}</li>`).join('')}
+                        </ul>
+                        <p class="font-semibold mb-2">Outcome:</p>
+                        <p class="text-stone-600">${item.outcome}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Architecture Diagram Interactivity
+            const diagramComponents = document.querySelectorAll('.diagram-component');
+            const diagramInfo = document.getElementById('diagram-info');
+            diagramComponents.forEach(comp => {
+                comp.addEventListener('mouseenter', () => {
+                    const id = comp.id.split('-')[1];
+                    diagramInfo.textContent = appData.diagramInfo[id];
+                });
+                comp.addEventListener('mouseleave', () => {
+                    diagramInfo.textContent = appData.diagramInfo.default;
+                });
+                comp.addEventListener('click', () => {
+                    const id = comp.id.split('-')[1];
+                    const targetSection = document.getElementById(id === 'agent' ? 'sidecar' : id);
+                    if(targetSection) {
+                         targetSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
