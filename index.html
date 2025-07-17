@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agentic AI Control Plane: An Interactive Guide (V4)</title>
+    <title>Agentic AI Control Plane: An Interactive Guide (V5)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Stone & Teal -->
-    <!-- Application Structure Plan: A single-page dashboard guides the user from high-level concepts to implementation details. Flow: 1. Core Architecture, 2. Gateway Deep Dive, 3. Sidecar Architecture, 4. Advanced Interactions (new), 5. Future Architecture, 6. Feature Locus, 7. Roadmap. This thematic structure is more intuitive than a linear report. Interactions include clickable diagrams, tabbed content, and an interactive chart. -->
-    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Core Architecture -> Organize -> HTML/CSS Diagram -> Interactive hover/click -> Visualize relationships. | Gateway Comparison -> Compare -> Detailed HTML Table -> Facilitate direct comparison. | Sidecar Data Flow -> Organize/Explain -> HTML/CSS Diagram -> Break down a process. | Advanced Interactions -> Compare/Explain -> Dual HTML/CSS diagrams -> Contrast observational vs. enforcement patterns. | Future Architecture -> Inform -> Interactive Cards -> Present enhancement concepts. | Feature Locus -> Compare -> Bar Chart (Chart.js) -> Quantify responsibility. | All choices avoid SVG/Mermaid. -->
+    <!-- Application Structure Plan: A single-page dashboard guides the user from high-level concepts to implementation details. Flow: 1. Core Architecture, 2. Gateway Deep Dive, 3. Sidecar Architecture, 4. Advanced Interactions, 5. The Role of Judge LLMs (new), 6. Future Architecture, 7. Feature Locus, 8. Roadmap. This thematic structure is more intuitive than a linear report. Interactions include clickable diagrams, tabbed content, and an interactive chart. -->
+    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Core Architecture -> Organize -> HTML/CSS Diagram -> Interactive hover/click -> Visualize relationships. | Gateway Comparison -> Compare -> Detailed HTML Table -> Facilitate direct comparison. | Sidecar Data Flow -> Organize/Explain -> HTML/CSS Diagram -> Break down a process. | Judge LLM concept -> Explain -> Card layout with pros/cons -> Clearly articulate a new technical concept. | All choices avoid SVG/Mermaid and prioritize interaction. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -85,6 +85,16 @@
             bottom: -5px;
             color: #9ca3af;
         }
+        .arch-line {
+            position: absolute;
+            background-color: #9ca3af;
+            z-index: 0;
+        }
+        .arch-arrow::after {
+            content: '▶';
+            color: #9ca3af;
+            position: absolute;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -94,7 +104,7 @@
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0">
-                    <h1 class="text-xl font-bold text-stone-800">AI Control Plane V4</h1>
+                    <h1 class="text-xl font-bold text-stone-800">AI Control Plane V5</h1>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
@@ -102,6 +112,7 @@
                         <a href="#gateway-deep-dive" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Gateway</a>
                         <a href="#sidecar-architecture" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Sidecar</a>
                         <a href="#advanced-interactions" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Interactions</a>
+                        <a href="#judge-llm" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Judge LLM</a>
                         <a href="#future-architecture" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Future</a>
                         <a href="#features" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Features</a>
                         <a href="#roadmap" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Roadmap</a>
@@ -117,30 +128,71 @@
         <section id="architecture" class="mb-16 md:mb-24 text-center scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">A Unified Architecture for AI Governance</h2>
             <p class="max-w-3xl mx-auto text-lg text-stone-600 mb-12">
-                This interactive guide explores a robust, three-part architecture for managing Agentic AI systems. The framework, consisting of a Gateway, a Sidecar, and OTEL instrumentation, provides a comprehensive control plane for security, quality, and observability. Explore the diagram below to see how they work together.
+                This interactive guide explores a robust, multi-layered architecture for managing Agentic AI systems. This framework provides a comprehensive control plane for security, quality, and observability across all AI interactions. Hover over or tap components to learn more.
             </p>
-            <div class="w-full max-w-5xl mx-auto p-4 md:p-8 card">
-                <div class="relative flex flex-col items-center space-y-8">
-                    <div class="flex items-center space-x-4 text-lg font-semibold"><span>👤</span><p>User</p></div>
-                    <div class="w-16 h-0.5 bg-stone-300 transform rotate-90"></div>
-                    <div class="w-full flex justify-center items-start p-4 border-2 border-dashed border-stone-300 rounded-xl">
-                        <div class="w-full flex flex-col md:flex-row items-center justify-around gap-8">
-                            <div class="flex flex-col items-center space-y-4">
-                                <p class="font-bold text-teal-600">Application Pod</p>
-                                <div class="p-6 border border-teal-400 rounded-lg bg-teal-50/50 flex space-x-4">
-                                    <div id="diagram-agent" class="diagram-component p-4 bg-white rounded-lg shadow cursor-pointer text-center"><span class="text-2xl">🤖</span><p class="font-semibold">Agentic App</p></div>
-                                    <div id="diagram-sidecar" class="diagram-component p-4 bg-white rounded-lg shadow cursor-pointer text-center"><span class="text-2xl">🔬</span><p class="font-semibold">Sidecar</p></div>
-                                </div>
-                                <div class="flex items-center space-x-2 text-sm text-stone-500"><span>East-West Traffic (OTEL)</span><div class="w-8 h-px bg-stone-400"></div><span>↔️</span></div>
+            <div class="w-full max-w-7xl mx-auto p-4 md:p-8 card relative">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left Column: User & App Pod -->
+                    <div class="flex flex-col items-center space-y-6">
+                        <div class="flex items-center space-x-4 text-lg font-semibold"><span>👤</span><p>User</p></div>
+                        <div class="w-px h-8 bg-stone-300"></div>
+                        <div id="diagram-agent-pod" class="diagram-component p-4 border-2 border-dashed border-teal-500 rounded-xl bg-teal-50/30 w-full">
+                            <p class="font-bold text-teal-600 text-center mb-2">Application Pod</p>
+                            <div class="p-4 bg-white rounded-lg shadow text-center relative">
+                                <span class="text-2xl">🤖</span>
+                                <p class="font-semibold">Agentic App</p>
+                                <div class="absolute top-1/2 -translate-y-1/2 -right-4 text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full z-10">OTEL</div>
                             </div>
-                            <div class="hidden md:block w-32 h-0.5 bg-stone-300"></div>
-                            <div id="diagram-gateway" class="diagram-component flex flex-col items-center space-y-2 cursor-pointer"><span class="text-4xl">🛡️</span><p class="font-bold">LLM Gateway</p><p class="text-sm text-stone-500">North-South Traffic</p></div>
+                            <div class="h-4"></div>
+                            <div class="p-4 bg-white rounded-lg shadow text-center relative">
+                                <span class="text-2xl">🔬</span>
+                                <p class="font-semibold">Sidecar</p>
+                                <div class="absolute top-2 right-2 text-xs bg-amber-100 text-amber-700 px-1 rounded-full" title="Embedded Judge LLM">🧠</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="w-16 h-0.5 bg-stone-300 transform rotate-90"></div>
-                    <div class="flex items-center space-x-4 text-lg font-semibold"><span>☁️</span><p>External LLM Provider</p></div>
+
+                    <!-- Middle Column: Internal & Central Services -->
+                    <div class="flex flex-col items-center space-y-6">
+                        <div id="diagram-mcp" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full">
+                             <p class="font-bold text-stone-600 text-center mb-2">Internal Tools & Data (MCP)</p>
+                             <div class="space-y-2">
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">🗄️</span>RAG Vector DB</div>
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">🛠️</span>Other Tool Servers</div>
+                             </div>
+                        </div>
+                        <div class="w-px h-8 bg-stone-300"></div>
+                        <div id="diagram-backend" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full">
+                            <p class="font-bold text-stone-600 text-center mb-2">Central Backend Services</p>
+                             <div class="space-y-2">
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">⚖️</span>Policy Engine (OPA)</div>
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">🏦</span>Secure Keystore</div>
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">📡</span>Event Bus to SIEM</div>
+                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Gateway & External Services -->
+                     <div class="flex flex-col items-center space-y-6">
+                        <div id="diagram-gateway" class="diagram-component p-4 border-2 border-dashed border-sky-500 rounded-xl bg-sky-50/30 w-full">
+                            <p class="font-bold text-sky-600 text-center mb-2">LLM Gateway</p>
+                            <div class="p-4 bg-white rounded-lg shadow text-center relative">
+                                <span class="text-2xl">🛡️</span>
+                                <p class="font-semibold">Gateway Logic</p>
+                                <div class="absolute top-2 right-2 text-xs bg-amber-100 text-amber-700 px-1 rounded-full" title="Embedded Judge LLM">🧠</div>
+                            </div>
+                        </div>
+                        <div class="w-px h-8 bg-stone-300"></div>
+                        <div id="diagram-external" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full">
+                            <p class="font-bold text-stone-600 text-center mb-2">External Services</p>
+                             <div class="space-y-2">
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">☁️</span>Primary LLM Providers</div>
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">👨‍⚖️</span>External Judge LLM</div>
+                             </div>
+                        </div>
+                    </div>
                 </div>
-                 <div id="diagram-info" class="mt-8 p-4 bg-stone-100 rounded-lg text-left text-stone-700 min-h-[50px]">Hover over or tap a component to learn more.</div>
+                <div id="diagram-info" class="mt-8 p-4 bg-stone-100 rounded-lg text-left text-stone-700 min-h-[50px]">Hover over or tap a component to learn more.</div>
             </div>
         </section>
 
@@ -175,42 +227,60 @@
                 A mature control plane distinguishes between *observing* behavior and *preventing* it. The Sidecar excels at observation, analyzing telemetry after an action occurs. True prevention requires policy enforcement at the resource itself, like the MCP/Tool server, before the action is executed.
             </p>
             <div class="grid md:grid-cols-2 gap-8 items-start">
-                <!-- Observational Pattern -->
                 <div class="card p-6">
                     <h3 class="text-xl font-bold text-center mb-4 text-teal-700">Pattern 1: Sidecar Observation (for Hallucination)</h3>
-                    <div class="space-y-4">
-                        <div class="p-3 bg-stone-50 rounded-md text-center">🤖 Agent App</div>
-                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
-                        <div class="p-3 bg-stone-50 rounded-md text-center">📡 Emits OTEL Trace</div>
-                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
-                        <div class="p-3 bg-stone-50 rounded-md text-center">🔬 Sidecar Ingests Trace</div>
-                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
-                        <div class="p-3 bg-stone-50 rounded-md text-center">🔎 Asynchronously Analyzes Trace</div>
-                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
-                        <div class="p-3 bg-stone-50 rounded-md text-center">✏️ Annotates Trace with Findings</div>
-                    </div>
+                    <div class="space-y-4"><div class="p-3 bg-stone-50 rounded-md text-center">🤖 Agent App</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-stone-50 rounded-md text-center">📡 Emits OTEL Trace</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-stone-50 rounded-md text-center">🔬 Sidecar Ingests Trace</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-stone-50 rounded-md text-center">🔎 Asynchronously Analyzes Trace</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-stone-50 rounded-md text-center">✏️ Annotates Trace with Findings</div></div>
                     <p class="mt-6 text-sm text-stone-600">The sidecar is an after-the-fact observer. It's perfect for detecting issues like hallucinations by analyzing the completed trace, but it doesn't block the agent in real-time.</p>
                 </div>
-                <!-- Enforcement Pattern -->
                 <div class="card p-6 border-2 border-teal-500 bg-teal-50/30">
                      <h3 class="text-xl font-bold text-center mb-4 text-teal-700">Pattern 2: Tool Enforcement (for Blocking)</h3>
-                     <div class="space-y-4">
-                        <div class="p-3 bg-white rounded-md text-center">🤖 Agent App requests Tool use</div>
-                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
-                        <div class="p-3 bg-white rounded-md text-center">🛠️ MCP / Tool Server receives request</div>
-                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
-                        <div class="p-3 bg-white rounded-md text-center">⚖️ **Synchronously** queries Policy Engine (OPA)</div>
-                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
-                        <div class="p-3 bg-white rounded-md text-center font-semibold text-teal-800">✅ Receives `allow` / `deny`</div>
-                         <div class="flex justify-center"><div class="flow-line h-6"></div></div>
-                        <div class="p-3 bg-white rounded-md text-center">➡️ Executes or Rejects Action</div>
-                    </div>
+                     <div class="space-y-4"><div class="p-3 bg-white rounded-md text-center">🤖 Agent App requests Tool use</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-white rounded-md text-center">🛠️ MCP / Tool Server receives request</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-white rounded-md text-center">⚖️ **Synchronously** queries Policy Engine (OPA)</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-white rounded-md text-center font-semibold text-teal-800">✅ Receives `allow` / `deny`</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-white rounded-md text-center">➡️ Executes or Rejects Action</div></div>
                      <p class="mt-6 text-sm text-stone-600">To prevent actions, the enforcement check must happen at the resource itself. The tool server makes a blocking call to the policy engine *before* executing, providing true preventative control.</p>
                 </div>
             </div>
         </section>
+        
+        <!-- Section 5: The Role of Judge LLMs -->
+        <section id="judge-llm" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">The Role of Judge LLMs</h2>
+            <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
+                Many critical validations require understanding nuance, intent, and context—tasks that are impossible for deterministic algorithms. The "LLM-as-a-Judge" pattern, where one LLM is used to evaluate the output of another, is a powerful technique for these scenarios. This can be achieved by embedding smaller, specialized models directly within the control plane components.
+            </p>
+            <div id="judge-llm-content" class="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-4 text-teal-700">Use Cases for Judge LLMs</h3>
+                    <ul class="space-y-3 text-stone-700">
+                        <li class="flex items-start"><span class="mr-3 text-teal-500">🛡️</span><div><span class="font-semibold">At the Gateway:</span> For real-time analysis of user prompts to detect sophisticated jailbreak attempts and nuanced toxicity that pattern matching would miss.</div></li>
+                        <li class="flex items-start"><span class="mr-3 text-teal-500">🔬</span><div><span class="font-semibold">In the Sidecar:</span> For asynchronous, deep analysis like judging the factual grounding of a RAG response (hallucination detection) or assessing if an agent's tone aligns with qualitative business rules (e.g., "be empathetic").</div></li>
+                    </ul>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-4 text-teal-700">Embedded Judge LLM: Pros & Cons</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-semibold text-green-600">Pros</h4>
+                            <ul class="mt-2 space-y-2 text-sm text-stone-600 list-disc list-inside">
+                                <li>Low Latency</li>
+                                <li>Reduced Cost</li>
+                                <li>Enhanced Privacy</li>
+                                <li>Self-Sufficiency</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-red-600">Cons</h4>
+                            <ul class="mt-2 space-y-2 text-sm text-stone-600 list-disc list-inside">
+                                <li>Increased Resources (CPU/RAM)</li>
+                                <li>Reduced Capability vs. SOTA</li>
+                                <li>Maintenance Overhead</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-sm text-stone-600"><span class="font-semibold">Recommendation:</span> Use fast, embedded judges at the gateway for security, and a tiered approach in the sidecar (embedded for common checks, external SOTA model for high-stakes validation).</p>
+                </div>
+            </div>
+        </section>
 
-        <!-- Section 5: Future Architecture & Enterprise Hardening -->
+        <!-- Section 6: Future Architecture & Enterprise Hardening -->
         <section id="future-architecture" class="mb-16 md:mb-24 scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Future Architecture & Enterprise Hardening</h2>
             <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -219,7 +289,7 @@
             <div id="future-architecture-content" class="grid md:grid-cols-2 gap-8"></div>
         </section>
 
-        <!-- Section 6: Features - Locus of Control -->
+        <!-- Section 7: Features - Locus of Control -->
         <section id="features" class="mb-16 md:mb-24 scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">The Control Plane in Action</h2>
             <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -236,7 +306,7 @@
             </div>
         </section>
         
-        <!-- Section 7: Implementation Roadmap -->
+        <!-- Section 8: Implementation Roadmap -->
         <section id="roadmap" class="scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Phased Implementation Roadmap</h2>
             <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -251,7 +321,7 @@
 
     <footer class="bg-stone-200 mt-16">
         <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-stone-600 text-sm">
-            <p>Interactive guide based on the "Architecting a Production-Grade Observability and Control Plane for Agentic AI Systems" report (V4).</p>
+            <p>Interactive guide based on the "Architecting a Production-Grade Observability and Control Plane for Agentic AI Systems" report (V5).</p>
         </div>
     </footer>
 
@@ -274,9 +344,9 @@
                     dataFlow: [
                         { step: 1, title: 'Ingestion', icon: '📥', description: 'The OTEL Collector (Go) in the sidecar receives a constant stream of trace data from the Agentic App via gRPC on `localhost`.'},
                         { step: 2, title: 'Batching', icon: '📦', description: 'The `batch` processor groups individual spans into batches to optimize processing and network traffic.'},
-                        { step: 3, title: 'Orchestration', icon: '🎼', description: 'A Custom Go Processor iterates through spans, evaluates simple rules, and triggers deeper analysis for complex cases.'},
+                        { step: 3, title: 'Orchestration', icon: ' orchestrator', description: 'A Custom Go Processor iterates through spans, evaluates simple rules, and triggers deeper analysis for complex cases.'},
                         { step: 4, title: 'Async RPC Call', icon: '⚡️', description: 'For complex analysis, the Go processor makes a non-blocking gRPC call to the Python Analysis Service within the same pod.'},
-                        { step: 5, title: 'Specialized Analysis', icon: '🔬', description: 'The Python service uses libraries like `sentence-transformers` for tasks like hallucination detection, then returns a structured result.'},
+                        { step: 5, title: 'Specialized Analysis', icon: '🔬', description: 'The Python service uses libraries like `sentence-transformers` or an embedded Judge LLM for tasks like hallucination detection, then returns a structured result.'},
                         { step: 6, title: 'Telemetry Enrichment', icon: '✏️', description: 'The Go processor receives the analysis result and enriches the original span with new attributes (e.g., `validation.score = 0.85`).'},
                         { step: 7, title: 'Export', icon: '📤', description: 'The final, enriched telemetry is exported to a central observability backend like SigNoz or Jaeger.'}
                     ],
@@ -286,12 +356,13 @@
                         { component: '`opentelemetry-instrumentation-langchain`', type: 'Python Library', location: 'Agentic App Container', role: 'The Smart Sensor. Auto-enriches traces with LangChain-specific context (chains, tools, docs), making data meaningful.' },
                         { component: '`sentence-transformers`', type: 'Python Library', location: 'Python Analysis Service (Sidecar)', role: 'The Hallucination Detector. Computes vector embeddings for context-response semantic similarity checks.' },
                         { component: '`pymilvus` / `weaviate-client`', type: 'Python Library', location: 'Python Analysis Service (Sidecar)', role: 'The Topic Violation Detector. Queries a central vector DB to check for semantic topic violations.' },
-                        { component: '`Guardrails AI` / `NVIDIA NeMo`', type: 'Python Library', location: 'Python Analysis Service (Sidecar)', role: 'The Advanced Rules Engine. Invoked for complex conversational or structural rule enforcement.' },
+                        { component: 'Embedded Judge LLM (e.g., Phi-3)', type: 'Python Library/Model', location: 'Gateway & Sidecar Containers', role: 'Performs nuanced validation for tasks like prompt injection, advanced content moderation, and qualitative business logic checks.' },
                         { component: 'SigNoz / Jaeger', type: 'Go Application', location: 'Central Observability Cluster', role: 'The Brain. Visualizes traces, creates dashboards, and alerts on custom attributes added by the sidecar.' }
                     ]
                 },
                 futureArchitecture: [
                     { icon: '⚖️', title: 'Formal Policy Engine (OPA/Cedar)', description: 'Replace the custom rules engine with a standard, battle-tested engine like Open Policy Agent (OPA). This provides a declarative, auditable, and secure way to manage policies as code (using Rego), separating policy logic from application logic and enabling security teams to own policy authorship.' },
+                    { icon: '🧠', title: 'Embedded Judge LLMs', description: 'Deploy small, fast, and private Judge LLMs (e.g., Phi-3, Llama-3-8B) directly within the gateway and sidecar. This enables extremely low-latency, secure, and cost-effective analysis for tasks like prompt injection and qualitative checks.' },
                     { icon: '🏦', title: 'Secure Keystore for PII Tokenization', description: 'Enhance PII redaction by integrating with a secure vault (e.g., HashiCorp Vault). Instead of just masking data, the gateway tokenizes it, storing the encrypted value in the vault and replacing it with a non-sensitive token. This allows for auditable, reversible de-tokenization by authorized systems, a critical feature for compliance.' },
                     { icon: '📡', title: 'Asynchronous Event Bus for SIEM/SOC', description: 'Configure the OTEL Collector with a second exporter (e.g., Kafka) to stream a filtered set of high-priority security events (policy violations, detected threats) to a dedicated event bus. This decouples observability from security and allows the SOC team to ingest AI-specific security signals into their SIEM (e.g., Splunk, Sentinel) for enterprise-wide correlation.' },
                     { icon: '⚙️', title: 'MCP Enforcement & Validation', description: 'Implement a defense-in-depth strategy for tools. MCP/Tool servers perform synchronous, blocking calls to the Policy Engine for preventative control. The sidecar provides a secondary, observational layer, verifying tool behavior and context freshness by monitoring both the agent trace and MCP server logs.' }
@@ -315,12 +386,14 @@
                     { phase: 1, title: "Foundational Control & Visibility", duration: "1-2 Months", objective: "Achieve immediate control over all LLM traffic and establish baseline observability.", actions: ["Deploy an LLM Gateway (LiteLLM).", "Implement gateway-centric features: PII masking, prompt injection prevention.", "Instrument all agents with the OTEL SDK.", "Deploy a central observability backend (e.g., SigNoz)."], outcome: "All LLM traffic is secured and monitored. Teams have full trace visibility for debugging." },
                     { phase: 2, title: "Advanced Introspective Monitoring", duration: "2-3 Months", objective: "Prove the sidecar pattern and deliver value on a critical advanced feature like hallucination detection.", actions: ["Develop and deploy the v1 Observability Sidecar (OTEL Collector + Python Service).", "Implement the first custom analysis processor for hallucination detection.", "Roll out the sidecar to a key RAG-based application.", "Analyze and refine detection results."], outcome: "Functioning sidecar architecture flagging potential hallucinations in production." },
                     { phase: 3, title: "Dynamic Policy Enforcement & Rollout", duration: "Ongoing", objective: "Mature the sidecar into a full-featured, dynamic policy enforcement engine.", actions: ["Implement a custom Rules Engine processor in the sidecar.", "Define and encode custom business logic validations as declarative rules.", "Standardize the 'Agent + Sidecar' deployment pattern for all teams."], outcome: "A mature, scalable, and dynamic AI Control Plane is operational, providing robust governance." },
-                    { phase: 4, title: "Enterprise Hardening & Integration", duration: "Future", objective: "Evolve the control plane into a fully hardened, enterprise-integrated system ready for the most stringent security and compliance requirements.", actions: ["Replace the custom rules engine with a formal Policy Engine (e.g., OPA).", "Integrate the gateway with a secure Keystore (e.g., HashiCorp Vault) for PII tokenization.", "Add a dedicated OTEL exporter to stream security events to a SIEM via an Event Bus (e.g., Kafka).", "Implement preventative controls by integrating MCP/Tool servers directly with the Policy Engine for synchronous enforcement."], outcome: "A fully enterprise-grade AI Control Plane, integrated with corporate security (SOC/SIEM) and IT systems, providing auditable, preventative, and robust governance." }
+                    { phase: 4, title: "Enterprise Hardening & Integration", duration: "Future", objective: "Evolve the control plane into a fully hardened, enterprise-integrated system ready for the most stringent security and compliance requirements.", actions: ["Replace the custom rules engine with a formal Policy Engine (e.g., OPA).", "Integrate the gateway with a secure Keystore (e.g., HashiCorp Vault) for PII tokenization.", "Add a dedicated OTEL exporter to stream security events to a SIEM via an Event Bus (e.g., Kafka).", "Implement preventative controls by integrating MCP/Tool servers directly with the Policy Engine.", "Deploy embedded Judge LLMs in the gateway and sidecar for low-latency, nuanced validations."], outcome: "A fully enterprise-grade AI Control Plane, integrated with corporate security (SOC/SIEM) and IT systems, providing auditable, preventative, and robust governance." }
                 ],
                 diagramInfo: {
-                    agent: "The Agentic Application runs the core business logic. It's instrumented with OpenTelemetry (OTEL) to emit traces of its internal operations.",
-                    sidecar: "The Observability Sidecar receives OTEL data from the agent. It analyzes the agent's internal reasoning and tool use to enforce complex policies. Scroll down to the Sidecar Architecture section for a full deep-dive.",
-                    gateway: "The LLM Gateway is the single entry/exit point for all communication with external LLMs. It enforces perimeter security and data policies. See the Gateway Deep-Dive section for a detailed tool comparison.",
+                    'agent-pod': "The Application Pod contains the agent and its sidecar. They share a network namespace, allowing secure, low-latency communication.",
+                    'mcp': "Internal services the agent interacts with. This includes RAG databases for context and other tools providing business capabilities.",
+                    'backend': "Shared, cluster-level services that support the control plane, such as the policy engine and secure keystore.",
+                    'gateway': "The single entry/exit point for all external LLM traffic. It enforces perimeter security and can use an embedded Judge LLM for fast prompt analysis.",
+                    'external': "Third-party services, including the primary LLM providers (OpenAI, Anthropic) and potentially more powerful external Judge LLMs for high-stakes validation.",
                     default: "Hover over or tap a component to learn more."
                 }
             };
@@ -399,16 +472,9 @@
             const diagramComponents = document.querySelectorAll('.diagram-component');
             const diagramInfo = document.getElementById('diagram-info');
             diagramComponents.forEach(comp => {
-                comp.addEventListener('mouseenter', () => { diagramInfo.textContent = appData.diagramInfo[comp.id.split('-')[1]]; });
+                const id = comp.id.split('-')[1];
+                comp.addEventListener('mouseenter', () => { diagramInfo.textContent = appData.diagramInfo[id] || appData.diagramInfo.default; });
                 comp.addEventListener('mouseleave', () => { diagramInfo.textContent = appData.diagramInfo.default; });
-                comp.addEventListener('click', (e) => {
-                    const id = comp.id.split('-')[1];
-                    let targetId;
-                    if (id === 'gateway') targetId = '#gateway-deep-dive';
-                    else if (id === 'sidecar') targetId = '#sidecar-architecture';
-                    else return;
-                    document.querySelector(targetId)?.scrollIntoView({ behavior: 'smooth' });
-                });
             });
             
             // Smooth scrolling for nav links
