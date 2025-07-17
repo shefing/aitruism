@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agentic AI Control Plane: An Interactive Guide (V3)</title>
+    <title>Agentic AI Control Plane: An Interactive Guide (V4)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Stone & Teal -->
-    <!-- Application Structure Plan: A single-page dashboard structure guides the user from high-level concepts to implementation details. The flow is: 1. Core Architecture, 2. Gateway Deep Dive, 3. Sidecar Architecture, 4. Future Architecture (new), 5. Feature Locus, and 6. Implementation Roadmap. This thematic structure is more intuitive than a linear report. Interactions include clickable diagrams, tabbed content, and an interactive chart to make dense information digestible. -->
-    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Core Architecture -> Organize -> HTML/CSS Diagram -> Interactive hover/click -> Visualize relationships. | Gateway Comparison -> Compare -> Detailed HTML Table -> Facilitate direct comparison. | Sidecar Data Flow -> Organize/Explain -> HTML/CSS Diagram -> Click to highlight -> Break down a complex process. | Future Architecture -> Inform/Explain -> Interactive Cards -> Clearly present enhancement concepts. | Feature Locus -> Compare/Organize -> Interactive Bar Chart (Chart.js) -> Quantify responsibility. | All choices avoid SVG/Mermaid and prioritize interaction. -->
+    <!-- Application Structure Plan: A single-page dashboard guides the user from high-level concepts to implementation details. Flow: 1. Core Architecture, 2. Gateway Deep Dive, 3. Sidecar Architecture, 4. Advanced Interactions (new), 5. Future Architecture, 6. Feature Locus, 7. Roadmap. This thematic structure is more intuitive than a linear report. Interactions include clickable diagrams, tabbed content, and an interactive chart. -->
+    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Core Architecture -> Organize -> HTML/CSS Diagram -> Interactive hover/click -> Visualize relationships. | Gateway Comparison -> Compare -> Detailed HTML Table -> Facilitate direct comparison. | Sidecar Data Flow -> Organize/Explain -> HTML/CSS Diagram -> Break down a process. | Advanced Interactions -> Compare/Explain -> Dual HTML/CSS diagrams -> Contrast observational vs. enforcement patterns. | Future Architecture -> Inform -> Interactive Cards -> Present enhancement concepts. | Feature Locus -> Compare -> Bar Chart (Chart.js) -> Quantify responsibility. | All choices avoid SVG/Mermaid. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -74,6 +74,17 @@
             font-size: 2rem;
             line-height: 1;
         }
+        .flow-line {
+            position: relative;
+            border-left: 2px dashed #9ca3af;
+        }
+        .flow-line::after {
+            content: '▼';
+            position: absolute;
+            left: -9px;
+            bottom: -5px;
+            color: #9ca3af;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -83,14 +94,15 @@
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0">
-                    <h1 class="text-xl font-bold text-stone-800">AI Control Plane V3</h1>
+                    <h1 class="text-xl font-bold text-stone-800">AI Control Plane V4</h1>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a href="#architecture" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Architecture</a>
                         <a href="#gateway-deep-dive" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Gateway</a>
                         <a href="#sidecar-architecture" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Sidecar</a>
-                        <a href="#future-architecture" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Future Architecture</a>
+                        <a href="#advanced-interactions" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Interactions</a>
+                        <a href="#future-architecture" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Future</a>
                         <a href="#features" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Features</a>
                         <a href="#roadmap" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Roadmap</a>
                     </div>
@@ -156,7 +168,49 @@
             <div id="sidecar-blueprint-content" class="card overflow-x-auto"></div>
         </section>
 
-        <!-- Section 4: Future Architecture & Enterprise Hardening -->
+        <!-- Section 4: Advanced Interaction Patterns -->
+        <section id="advanced-interactions" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Advanced Interaction Patterns</h2>
+            <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
+                A mature control plane distinguishes between *observing* behavior and *preventing* it. The Sidecar excels at observation, analyzing telemetry after an action occurs. True prevention requires policy enforcement at the resource itself, like the MCP/Tool server, before the action is executed.
+            </p>
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <!-- Observational Pattern -->
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-center mb-4 text-teal-700">Pattern 1: Sidecar Observation (for Hallucination)</h3>
+                    <div class="space-y-4">
+                        <div class="p-3 bg-stone-50 rounded-md text-center">🤖 Agent App</div>
+                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
+                        <div class="p-3 bg-stone-50 rounded-md text-center">📡 Emits OTEL Trace</div>
+                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
+                        <div class="p-3 bg-stone-50 rounded-md text-center">🔬 Sidecar Ingests Trace</div>
+                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
+                        <div class="p-3 bg-stone-50 rounded-md text-center">🔎 Asynchronously Analyzes Trace</div>
+                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
+                        <div class="p-3 bg-stone-50 rounded-md text-center">✏️ Annotates Trace with Findings</div>
+                    </div>
+                    <p class="mt-6 text-sm text-stone-600">The sidecar is an after-the-fact observer. It's perfect for detecting issues like hallucinations by analyzing the completed trace, but it doesn't block the agent in real-time.</p>
+                </div>
+                <!-- Enforcement Pattern -->
+                <div class="card p-6 border-2 border-teal-500 bg-teal-50/30">
+                     <h3 class="text-xl font-bold text-center mb-4 text-teal-700">Pattern 2: Tool Enforcement (for Blocking)</h3>
+                     <div class="space-y-4">
+                        <div class="p-3 bg-white rounded-md text-center">🤖 Agent App requests Tool use</div>
+                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
+                        <div class="p-3 bg-white rounded-md text-center">🛠️ MCP / Tool Server receives request</div>
+                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
+                        <div class="p-3 bg-white rounded-md text-center">⚖️ **Synchronously** queries Policy Engine (OPA)</div>
+                        <div class="flex justify-center"><div class="flow-line h-6"></div></div>
+                        <div class="p-3 bg-white rounded-md text-center font-semibold text-teal-800">✅ Receives `allow` / `deny`</div>
+                         <div class="flex justify-center"><div class="flow-line h-6"></div></div>
+                        <div class="p-3 bg-white rounded-md text-center">➡️ Executes or Rejects Action</div>
+                    </div>
+                     <p class="mt-6 text-sm text-stone-600">To prevent actions, the enforcement check must happen at the resource itself. The tool server makes a blocking call to the policy engine *before* executing, providing true preventative control.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Future Architecture & Enterprise Hardening -->
         <section id="future-architecture" class="mb-16 md:mb-24 scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Future Architecture & Enterprise Hardening</h2>
             <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -165,7 +219,7 @@
             <div id="future-architecture-content" class="grid md:grid-cols-2 gap-8"></div>
         </section>
 
-        <!-- Section 5: Features - Locus of Control -->
+        <!-- Section 6: Features - Locus of Control -->
         <section id="features" class="mb-16 md:mb-24 scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">The Control Plane in Action</h2>
             <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -182,7 +236,7 @@
             </div>
         </section>
         
-        <!-- Section 6: Implementation Roadmap -->
+        <!-- Section 7: Implementation Roadmap -->
         <section id="roadmap" class="scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Phased Implementation Roadmap</h2>
             <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -197,7 +251,7 @@
 
     <footer class="bg-stone-200 mt-16">
         <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-stone-600 text-sm">
-            <p>Interactive guide based on the "Architecting a Production-Grade Observability and Control Plane for Agentic AI Systems" report (V3).</p>
+            <p>Interactive guide based on the "Architecting a Production-Grade Observability and Control Plane for Agentic AI Systems" report (V4).</p>
         </div>
     </footer>
 
@@ -240,7 +294,7 @@
                     { icon: '⚖️', title: 'Formal Policy Engine (OPA/Cedar)', description: 'Replace the custom rules engine with a standard, battle-tested engine like Open Policy Agent (OPA). This provides a declarative, auditable, and secure way to manage policies as code (using Rego), separating policy logic from application logic and enabling security teams to own policy authorship.' },
                     { icon: '🏦', title: 'Secure Keystore for PII Tokenization', description: 'Enhance PII redaction by integrating with a secure vault (e.g., HashiCorp Vault). Instead of just masking data, the gateway tokenizes it, storing the encrypted value in the vault and replacing it with a non-sensitive token. This allows for auditable, reversible de-tokenization by authorized systems, a critical feature for compliance.' },
                     { icon: '📡', title: 'Asynchronous Event Bus for SIEM/SOC', description: 'Configure the OTEL Collector with a second exporter (e.g., Kafka) to stream a filtered set of high-priority security events (policy violations, detected threats) to a dedicated event bus. This decouples observability from security and allows the SOC team to ingest AI-specific security signals into their SIEM (e.g., Splunk, Sentinel) for enterprise-wide correlation.' },
-                    { icon: '⚙️', title: 'Master Control Plane (MCP) & Vector DB Access', description: 'Centralize dynamic configuration by having sidecars fetch rules from a Master Control Plane service. This allows for fleet-wide policy updates without redeployments. For hallucination detection, the sidecar must have direct, read-only access to the RAG Vector DB to fetch the exact context chunks used by the agent for grounding validation.' }
+                    { icon: '⚙️', title: 'MCP Enforcement & Validation', description: 'Implement a defense-in-depth strategy for tools. MCP/Tool servers perform synchronous, blocking calls to the Policy Engine for preventative control. The sidecar provides a secondary, observational layer, verifying tool behavior and context freshness by monitoring both the agent trace and MCP server logs.' }
                 ],
                 features: {
                     labels: ['PII Detection', 'Jailbreak Prevention', 'Content Moderation', 'Data Leakage (Simple)', 'Hallucination Detection', 'Business Logic Validation', 'Topic Enforcement', 'Data Leakage (Complex)'],
@@ -261,7 +315,7 @@
                     { phase: 1, title: "Foundational Control & Visibility", duration: "1-2 Months", objective: "Achieve immediate control over all LLM traffic and establish baseline observability.", actions: ["Deploy an LLM Gateway (LiteLLM).", "Implement gateway-centric features: PII masking, prompt injection prevention.", "Instrument all agents with the OTEL SDK.", "Deploy a central observability backend (e.g., SigNoz)."], outcome: "All LLM traffic is secured and monitored. Teams have full trace visibility for debugging." },
                     { phase: 2, title: "Advanced Introspective Monitoring", duration: "2-3 Months", objective: "Prove the sidecar pattern and deliver value on a critical advanced feature like hallucination detection.", actions: ["Develop and deploy the v1 Observability Sidecar (OTEL Collector + Python Service).", "Implement the first custom analysis processor for hallucination detection.", "Roll out the sidecar to a key RAG-based application.", "Analyze and refine detection results."], outcome: "Functioning sidecar architecture flagging potential hallucinations in production." },
                     { phase: 3, title: "Dynamic Policy Enforcement & Rollout", duration: "Ongoing", objective: "Mature the sidecar into a full-featured, dynamic policy enforcement engine.", actions: ["Implement a custom Rules Engine processor in the sidecar.", "Define and encode custom business logic validations as declarative rules.", "Standardize the 'Agent + Sidecar' deployment pattern for all teams."], outcome: "A mature, scalable, and dynamic AI Control Plane is operational, providing robust governance." },
-                    { phase: 4, title: "Enterprise Hardening & Integration", duration: "Future", objective: "Evolve the control plane into a fully hardened, enterprise-integrated system ready for the most stringent security and compliance requirements.", actions: ["Replace the custom rules engine with a formal Policy Engine (e.g., OPA).", "Integrate the gateway with a secure Keystore (e.g., HashiCorp Vault) for PII tokenization.", "Add a dedicated OTEL exporter to stream security events to a SIEM via an Event Bus (e.g., Kafka).", "Implement a Master Control Plane for dynamic, fleet-wide policy updates."], outcome: "A fully enterprise-grade AI Control Plane, integrated with corporate security (SOC/SIEM) and IT systems, providing auditable, dynamic, and robust governance." }
+                    { phase: 4, title: "Enterprise Hardening & Integration", duration: "Future", objective: "Evolve the control plane into a fully hardened, enterprise-integrated system ready for the most stringent security and compliance requirements.", actions: ["Replace the custom rules engine with a formal Policy Engine (e.g., OPA).", "Integrate the gateway with a secure Keystore (e.g., HashiCorp Vault) for PII tokenization.", "Add a dedicated OTEL exporter to stream security events to a SIEM via an Event Bus (e.g., Kafka).", "Implement preventative controls by integrating MCP/Tool servers directly with the Policy Engine for synchronous enforcement."], outcome: "A fully enterprise-grade AI Control Plane, integrated with corporate security (SOC/SIEM) and IT systems, providing auditable, preventative, and robust governance." }
                 ],
                 diagramInfo: {
                     agent: "The Agentic Application runs the core business logic. It's instrumented with OpenTelemetry (OTEL) to emit traces of its internal operations.",
