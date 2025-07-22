@@ -2,7 +2,576 @@
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic AI Control Plane: An Interactive Guide (V5)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Stone & Teal -->
+    <!-- Application Structure Plan: A single-page dashboard guides the user from high-level concepts to implementation details. Flow: 1. Core Architecture, 2. Gateway Deep Dive, 3. Gateway Validators (new), 4. Sidecar Architecture, 5. Advanced Interactions, 6. The Role of Judge LLMs, 7. Future Architecture, 8. Feature Locus, 9. Roadmap. This thematic structure is more intuitive than a linear report. Interactions include clickable diagrams, tabbed content, and an interactive chart. -->
+    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Core Architecture -> Organize -> HTML/CSS Diagram -> Interactive hover/click -> Visualize relationships. | Gateway Comparison -> Compare -> Detailed HTML Table -> Facilitate direct comparison. | Gateway Validators -> Inform/Compare -> Filterable card layout -> Allow easy exploration of OSS tools. | Sidecar Data Flow -> Organize/Explain -> HTML/CSS Diagram -> Break down a process. | All choices avoid SVG/Mermaid and prioritize interaction. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+            color: #292524; /* stone-800 */
+        }
+        .nav-link {
+            transition: color 0.2s, border-bottom-color 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #14b8a6; /* teal-500 */
+            border-bottom-color: #14b8a6;
+        }
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e7e5e4; /* stone-200 */
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 500px;
+            max-height: 70vh;
+        }
+        .timeline-item {
+            border-left: 3px solid #5eead4; /* teal-300 */
+        }
+        .timeline-dot {
+            background-color: #14b8a6; /* teal-500 */
+        }
+        .comparison-table td, .comparison-table th {
+            padding: 1rem;
+            text-align: left;
+        }
+        .comparison-table tbody tr:nth-child(odd) {
+            background-color: #fafaf9; /* stone-50 */
+        }
+        .data-flow-step {
+            transition: all 0.3s ease-in-out;
+            border: 2px solid transparent;
+        }
+        .data-flow-step.highlight {
+            border-color: #14b8a6;
+            transform: scale(1.03);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .flow-arrow {
+            color: #a8a29e; /* stone-400 */
+            font-size: 2rem;
+            line-height: 1;
+        }
+        .flow-line {
+            position: relative;
+            border-left: 2px dashed #9ca3af;
+        }
+        .flow-line::after {
+            content: '▼';
+            position: absolute;
+            left: -9px;
+            bottom: -5px;
+            color: #9ca3af;
+        }
+        .arch-line {
+            position: absolute;
+            background-color: #9ca3af;
+            z-index: 0;
+        }
+        .arch-arrow::after {
+            content: '▶';
+            color: #9ca3af;
+            position: absolute;
+        }
+        .filter-btn.active {
+            background-color: #14b8a6;
+            color: white;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-stone-800">AI Control Plane V5</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-2">
+                        <a href="#architecture" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Architecture</a>
+                        <a href="#gateway-deep-dive" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Gateway</a>
+                        <a href="#gateway-validators" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Validators</a>
+                        <a href="#sidecar-architecture" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Sidecar</a>
+                        <a href="#advanced-interactions" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Interactions</a>
+                        <a href="#judge-llm" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Judge LLM</a>
+                        <a href="#future-architecture" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Future</a>
+                        <a href="#features" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Features</a>
+                        <a href="#roadmap" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Roadmap</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <!-- Section 1: Core Architecture -->
+        <section id="architecture" class="mb-16 md:mb-24 text-center scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">A Unified Architecture for AI Governance</h2>
+            <p class="max-w-3xl mx-auto text-lg text-stone-600 mb-12">
+                This interactive guide explores a robust, multi-layered architecture for managing Agentic AI systems. This framework provides a comprehensive control plane for security, quality, and observability across all AI interactions. Hover over or tap components to learn more.
+            </p>
+            <div class="w-full max-w-7xl mx-auto p-4 md:p-8 card relative">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left Column: User & App Pod -->
+                    <div class="flex flex-col items-center space-y-6">
+                        <div class="flex items-center space-x-4 text-lg font-semibold"><span>👤</span><p>User</p></div>
+                        <div class="w-px h-8 bg-stone-300"></div>
+                        <div id="diagram-agent-pod" class="diagram-component p-4 border-2 border-dashed border-teal-500 rounded-xl bg-teal-50/30 w-full">
+                            <p class="font-bold text-teal-600 text-center mb-2">Application Pod</p>
+                            <div class="p-4 bg-white rounded-lg shadow text-center relative">
+                                <span class="text-2xl">🤖</span>
+                                <p class="font-semibold">Agentic App</p>
+                                <div class="absolute top-1/2 -translate-y-1/2 -right-4 text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full z-10">OTEL</div>
+                            </div>
+                            <div class="h-4"></div>
+                            <div class="p-4 bg-white rounded-lg shadow text-center relative">
+                                <span class="text-2xl">🔬</span>
+                                <p class="font-semibold">Sidecar</p>
+                                <div class="absolute top-2 right-2 text-xs bg-amber-100 text-amber-700 px-1 rounded-full" title="Embedded Judge LLM">🧠</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Column: Internal & Central Services -->
+                    <div class="flex flex-col items-center space-y-6">
+                        <div id="diagram-mcp" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full">
+                             <p class="font-bold text-stone-600 text-center mb-2">Internal Tools & Data (MCP)</p>
+                             <div class="space-y-2">
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">🗄️</span>RAG Vector DB</div>
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">🛠️</span>Other Tool Servers</div>
+                             </div>
+                        </div>
+                        <div class="w-px h-8 bg-stone-300"></div>
+                        <div id="diagram-backend" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full">
+                            <p class="font-bold text-stone-600 text-center mb-2">Central Backend Services</p>
+                             <div class="space-y-2">
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">⚖️</span>Policy Engine (OPA)</div>
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">🏦</span>Secure Keystore</div>
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">📡</span>Event Bus to SIEM</div>
+                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Gateway & External Services -->
+                     <div class="flex flex-col items-center space-y-6">
+                        <div id="diagram-gateway" class="diagram-component p-4 border-2 border-dashed border-sky-500 rounded-xl bg-sky-50/30 w-full">
+                            <p class="font-bold text-sky-600 text-center mb-2">LLM Gateway</p>
+                            <div class="p-4 bg-white rounded-lg shadow text-center relative">
+                                <span class="text-2xl">🛡️</span>
+                                <p class="font-semibold">Gateway Logic</p>
+                                <div class="absolute top-2 right-2 text-xs bg-amber-100 text-amber-700 px-1 rounded-full" title="Embedded Judge LLM">🧠</div>
+                            </div>
+                        </div>
+                        <div class="w-px h-8 bg-stone-300"></div>
+                        <div id="diagram-external" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full">
+                            <p class="font-bold text-stone-600 text-center mb-2">External Services</p>
+                             <div class="space-y-2">
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">☁️</span>Primary LLM Providers</div>
+                                <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">👨‍⚖️</span>External Judge LLM</div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="diagram-info" class="mt-8 p-4 bg-stone-100 rounded-lg text-left text-stone-700 min-h-[50px]">Hover over or tap a component to learn more.</div>
+            </div>
+        </section>
+
+        <!-- Section 2: Gateway Deep Dive -->
+        <section id="gateway-deep-dive" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Gateway Deep-Dive for JS/TS Teams</h2>
+            <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
+                For a JavaScript/TypeScript-centric company, the choice between Portkey and LiteLLM involves weighing managed convenience against framework flexibility. The following comparison focuses on developer experience, extensibility within a Node.js environment, and alignment with a best-of-breed open-source strategy.
+            </p>
+            <div id="gateway-comparison-content" class="card overflow-x-auto"></div>
+        </section>
+
+        <!-- Section 3: Gateway Validators -->
+        <section id="gateway-validators" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Gateway Validators: Open-Source Library Deep Dive</h2>
+            <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
+                The LLM Gateway is the ideal place to enforce stateless policies on prompts and responses. The following open-source validators from Guardrails Hub and other projects can be plugged into the gateway to provide a robust first line of defense, operating without needing access to the agent's internal context.
+            </p>
+            <div class="flex justify-center mb-8">
+                <div class="flex flex-wrap gap-2 p-1 bg-stone-200 rounded-lg">
+                    <button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md active" data-filter="all">All</button>
+                    <button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md" data-filter="pii">PII</button>
+                    <button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md" data-filter="security">Security</button>
+                    <button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md" data-filter="content">Content</button>
+                    <button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md" data-filter="quality">Quality</button>
+                </div>
+            </div>
+            <div id="validators-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Validator cards will be injected here by JS -->
+            </div>
+        </section>
+        
+        <!-- Section 4: Sidecar Internal Architecture -->
+        <section id="sidecar-architecture" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Sidecar Internal Architecture</h2>
+            <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
+                The sidecar is a sophisticated micro-platform for real-time analysis. It's not a single process, but a high-performance Go-based pipeline that orchestrates calls to a specialized Python service for complex AI/ML validations. This dual-component design provides raw speed for data handling and the rich ecosystem of Python for intelligent analysis. Click through the steps below to trace the data flow.
+            </p>
+            <div id="sidecar-data-flow" class="space-y-4"></div>
+            
+            <h3 class="text-2xl font-bold tracking-tight text-center mt-16 mb-4">Technical Blueprint: Library Integration</h3>
+            <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
+                This table maps each open-source component to its role and location within the architecture, clarifying how the system is composed.
+            </p>
+            <div id="sidecar-blueprint-content" class="card overflow-x-auto"></div>
+        </section>
+
+        <!-- Section 5: Advanced Interaction Patterns -->
+        <section id="advanced-interactions" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Advanced Interaction Patterns</h2>
+            <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
+                A mature control plane distinguishes between *observing* behavior and *preventing* it. The Sidecar excels at observation, analyzing telemetry after an action occurs. True prevention requires policy enforcement at the resource itself, like the MCP/Tool server, before the action is executed.
+            </p>
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-center mb-4 text-teal-700">Pattern 1: Sidecar Observation (for Hallucination)</h3>
+                    <div class="space-y-4"><div class="p-3 bg-stone-50 rounded-md text-center">🤖 Agent App</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-stone-50 rounded-md text-center">📡 Emits OTEL Trace</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-stone-50 rounded-md text-center">🔬 Sidecar Ingests Trace</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-stone-50 rounded-md text-center">🔎 Asynchronously Analyzes Trace</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-stone-50 rounded-md text-center">✏️ Annotates Trace with Findings</div></div>
+                    <p class="mt-6 text-sm text-stone-600">The sidecar is an after-the-fact observer. It's perfect for detecting issues like hallucinations by analyzing the completed trace, but it doesn't block the agent in real-time.</p>
+                </div>
+                <div class="card p-6 border-2 border-teal-500 bg-teal-50/30">
+                     <h3 class="text-xl font-bold text-center mb-4 text-teal-700">Pattern 2: Tool Enforcement (for Blocking)</h3>
+                     <div class="space-y-4"><div class="p-3 bg-white rounded-md text-center">🤖 Agent App requests Tool use</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-white rounded-md text-center">🛠️ MCP / Tool Server receives request</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-white rounded-md text-center">⚖️ **Synchronously** queries Policy Engine (OPA)</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-white rounded-md text-center font-semibold text-teal-800">✅ Receives `allow` / `deny`</div><div class="flex justify-center"><div class="flow-line h-6"></div></div><div class="p-3 bg-white rounded-md text-center">➡️ Executes or Rejects Action</div></div>
+                     <p class="mt-6 text-sm text-stone-600">To prevent actions, the enforcement check must happen at the resource itself. The tool server makes a blocking call to the policy engine *before* executing, providing true preventative control.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 6: The Role of Judge LLMs -->
+        <section id="judge-llm" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">The Role of Judge LLMs</h2>
+            <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
+                Many critical validations require understanding nuance, intent, and context—tasks that are impossible for deterministic algorithms. The "LLM-as-a-Judge" pattern, where one LLM is used to evaluate the output of another, is a powerful technique for these scenarios. This can be achieved by embedding smaller, specialized models directly within the control plane components.
+            </p>
+            <div id="judge-llm-content" class="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-4 text-teal-700">Use Cases for Judge LLMs</h3>
+                    <ul class="space-y-3 text-stone-700">
+                        <li class="flex items-start"><span class="mr-3 text-teal-500">🛡️</span><div><span class="font-semibold">At the Gateway:</span> For real-time analysis of user prompts to detect sophisticated jailbreak attempts and nuanced toxicity that pattern matching would miss.</div></li>
+                        <li class="flex items-start"><span class="mr-3 text-teal-500">🔬</span><div><span class="font-semibold">In the Sidecar:</span> For asynchronous, deep analysis like judging the factual grounding of a RAG response (hallucination detection) or assessing if an agent's tone aligns with qualitative business rules (e.g., "be empathetic").</div></li>
+                    </ul>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-4 text-teal-700">Embedded Judge LLM: Pros & Cons</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-semibold text-green-600">Pros</h4>
+                            <ul class="mt-2 space-y-2 text-sm text-stone-600 list-disc list-inside">
+                                <li>Low Latency</li>
+                                <li>Reduced Cost</li>
+                                <li>Enhanced Privacy</li>
+                                <li>Self-Sufficiency</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-red-600">Cons</h4>
+                            <ul class="mt-2 space-y-2 text-sm text-stone-600 list-disc list-inside">
+                                <li>Increased Resources (CPU/RAM)</li>
+                                <li>Reduced Capability vs. SOTA</li>
+                                <li>Maintenance Overhead</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-sm text-stone-600"><span class="font-semibold">Recommendation:</span> Use fast, embedded judges at the gateway for security, and a tiered approach in the sidecar (embedded for common checks, external SOTA model for high-stakes validation).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Future Architecture & Enterprise Hardening -->
+        <section id="future-architecture" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Future Architecture & Enterprise Hardening</h2>
+            <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
+                To evolve the control plane into a truly enterprise-grade system, several key architectural enhancements should be considered. These components provide dynamic policy management, auditable security, and seamless integration with the broader corporate IT landscape.
+            </p>
+            <div id="future-architecture-content" class="grid md:grid-cols-2 gap-8"></div>
+        </section>
+
+        <!-- Section 8: Features - Locus of Control -->
+        <section id="features" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">The Control Plane in Action</h2>
+            <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
+                Not all safety features can be implemented in the same place. The Gateway handles stateless, perimeter checks, while the Sidecar is required for stateful, context-aware analysis of the agent's internal workflow. Click on the bars in the chart to see why each feature belongs where it does.
+            </p>
+            <div class="card p-4 md:p-8">
+                <div class="chart-container">
+                    <canvas id="featuresChart"></canvas>
+                </div>
+                <div id="feature-details" class="mt-8 p-4 bg-stone-100 rounded-lg text-stone-700 min-h-[100px]">
+                    <h4 class="font-bold text-lg mb-2">Select a Feature</h4>
+                    <p>Click on a feature in the chart above to learn about its optimal implementation locus and the reasoning behind it.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 9: Implementation Roadmap -->
+        <section id="roadmap" class="scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Phased Implementation Roadmap</h2>
+            <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
+                Building a complete AI control plane is a journey. This phased roadmap outlines a strategic approach to deliver value incrementally, starting with foundational controls and progressing to a fully hardened, enterprise-integrated system.
+            </p>
+            <div class="relative pl-8">
+                <div id="roadmap-content"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-200 mt-16">
+        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-stone-600 text-sm">
+            <p>Interactive guide based on the "Architecting a Production-Grade Observability and Control Plane for Agentic AI Systems" report (V5).</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const appData = {
+                gatewayValidators: [
+                    { name: 'PII Detection (Presidio)', category: 'pii', method: 'Algorithmic', description: 'Uses Microsoft Presidio for high-accuracy Named Entity Recognition (NER) to find and redact a wide range of PII entities in prompts and responses.', link: 'https://github.com/microsoft/presidio' },
+                    { name: 'Secrets Detection', category: 'security', method: 'Algorithmic', description: 'Scans prompts and responses for patterns that match common API key and secret formats to prevent accidental leakage.', link: 'https://github.com/guardrails-ai/guardrails/tree/main/guardrails/validators/detect_secrets' },
+                    { name: 'SQL Injection Detection', category: 'security', method: 'Algorithmic', description: 'Uses regular expressions to detect classic SQL injection attack patterns in user prompts before they can be passed to a tool.', link: 'https://hub.guardrailsai.com/validator/guardrails-ai~sql-injection' },
+                    { name: 'Toxicity & Harmful Language', category: 'content', method: 'Model-Based', description: 'Uses a sentence-transformer model to classify text for toxicity, insults, threats, and other harmful content categories.', modelLink: 'https://huggingface.co/martin-ha/toxic-comment-model', link: 'https://hub.guardrailsai.com/validator/guardrails-ai~toxic-language' },
+                    { name: 'Profanity Filter', category: 'content', method: 'Algorithmic', description: 'A straightforward filter that checks for words against a comprehensive list of profanities.', link: 'https://hub.guardrailsai.com/validator/guardrails-ai~profanity-free' },
+                    { name: 'Detect Anonymized Text', category: 'pii', method: 'Model-Based', description: 'A specialized text-classification model that detects if a text has been *improperly* anonymized, finding leftover PII that other methods might miss.', modelLink: 'https://huggingface.co/guardrails-ai/deberta-base-detection-v1', link: 'https://hub.guardrailsai.com/validator/guardrails-ai~detect-anonymized-text' },
+                    { name: 'Is High Quality', category: 'quality', method: 'Model-Based', description: 'Uses a model to score the grammatical and structural quality of a text, useful for ensuring LLM outputs are well-formed.', modelLink: 'https://huggingface.co/guardrails-ai/distilbert-base-uncased-is-high-quality', link: 'https://hub.guardrailsai.com/validator/guardrails-ai~is-high-quality' },
+                    { name: 'Is Profane', category: 'content', method: 'Model-Based', description: 'A more nuanced, model-based approach to detecting profanity that can understand context better than a simple word list.', modelLink: 'https://huggingface.co/guardrails-ai/distilbert-base-uncased-is-profane', link: 'https://hub.guardrailsai.com/validator/guardrails-ai~is-profane' },
+                    { name: 'Prompt Injection (Heuristic)', category: 'security', method: 'Algorithmic', description: 'Detects prompt injection attempts by searching for common heuristic patterns and keywords (e.g., "ignore your instructions").', link: 'https://github.com/protectai/rebuffer' },
+                    { name: 'PII Redaction (Faker)', category: 'pii', method: 'Algorithmic', description: 'A validator that not only detects PII but can replace it with realistic but fake data (e.g., replacing a real name with a fake one), which can be useful for testing.', link: 'https://hub.guardrailsai.com/validator/guardrails-ai~pii-redaction' },
+                ],
+                gatewayComparison: {
+                    recommendation: `Given the context of a software company comfortable with building and managing its own systems, **LiteLLM emerges as the more strategically aligned choice.** The "infrastructure-as-code" approach, deep extensibility via callbacks, and composable nature fit better with a skilled engineering team's desire for control and flexibility. While it requires more initial setup, it provides a more powerful and unopinionated foundation for a truly custom AI Control Plane.`,
+                    capabilities: [
+                        { capability: 'Primary Interface', portkey: '`@portkey-ai/client` SDK.', litellm: 'Standard `openai` SDK with a modified `baseURL`.', recommendation: 'LiteLLM. Zero friction for existing OpenAI SDK users.' },
+                        { capability: 'Configuration', portkey: 'Primarily via a web UI.', litellm: '`config.yaml` file, managed as code.', recommendation: 'LiteLLM. Infrastructure-as-code is a best practice.' },
+                        { capability: 'Custom Logic in JS/TS', portkey: 'Limited to UI-based rules and routing based on metadata.', litellm: 'Highly extensible. Python callbacks can call custom TS/JS microservices for logic execution.', recommendation: 'LiteLLM. Far superior flexibility for custom logic.' },
+                        { capability: 'Observability', portkey: 'Integrated, managed dashboard. "Golden path" solution.', litellm: 'Exports standard OTEL/Prometheus data to any backend. "Bring your own stack."', recommendation: 'LiteLLM. Foundation for a best-of-breed stack (Grafana + Jaeger/SigNoz).' },
+                        { capability: 'Operational Overhead', portkey: 'Low. Managed by Portkey.', litellm: 'Higher. Requires self-hosting and management.', recommendation: 'Tie. A trade-off; LiteLLM\'s overhead is acceptable for teams valuing control.' },
+                        { capability: 'Ecosystem Fit', portkey: 'A curated, vertical ecosystem.', litellm: 'A horizontal component for a diverse, user-defined ecosystem.', recommendation: 'LiteLLM. Aligns better with composing solutions from specialized tools.' },
+                    ]
+                },
+                sidecarArchitecture: {
+                    dataFlow: [
+                        { step: 1, title: 'Ingestion', icon: '📥', description: 'The OTEL Collector (Go) in the sidecar receives a constant stream of trace data from the Agentic App via gRPC on `localhost`.'},
+                        { step: 2, title: 'Batching', icon: '📦', description: 'The `batch` processor groups individual spans into batches to optimize processing and network traffic.'},
+                        { step: 3, title: 'Orchestration', icon: '🎼', description: 'A Custom Go Processor iterates through spans, evaluates simple rules, and triggers deeper analysis for complex cases.'},
+                        { step: 4, title: 'Async RPC Call', icon: '⚡️', description: 'For complex analysis, the Go processor makes a non-blocking gRPC call to the Python Analysis Service within the same pod.'},
+                        { step: 5, title: 'Specialized Analysis', icon: '🔬', description: 'The Python service uses libraries like `sentence-transformers` or an embedded Judge LLM for tasks like hallucination detection, then returns a structured result.'},
+                        { step: 6, title: 'Telemetry Enrichment', icon: '✏️', description: 'The Go processor receives the analysis result and enriches the original span with new attributes (e.g., `validation.score = 0.85`).'},
+                        { step: 7, title: 'Export', icon: '📤', description: 'The final, enriched telemetry is exported to a central observability backend like SigNoz or Jaeger.'}
+                    ],
+                    blueprint: [
+                        { component: 'OpenTelemetry Collector', type: 'Go Application', location: 'Sidecar Container', role: 'The Pipeline. Acts as the central nervous system, orchestrating analysis via gRPC calls to the Python service.' },
+                        { component: 'OpenTelemetry SDK', type: 'Python Library', location: 'Agentic App Container', role: 'The Sensor. Instruments the main application code, generating the raw trace data that feeds the entire system.' },
+                        { component: '`opentelemetry-instrumentation-langchain`', type: 'Python Library', location: 'Agentic App Container', role: 'The Smart Sensor. Auto-enriches traces with LangChain-specific context (chains, tools, docs), making data meaningful.' },
+                        { component: '`sentence-transformers`', type: 'Python Library', location: 'Python Analysis Service (Sidecar)', role: 'The Hallucination Detector. Computes vector embeddings for context-response semantic similarity checks.' },
+                        { component: '`pymilvus` / `weaviate-client`', type: 'Python Library', location: 'Python Analysis Service (Sidecar)', role: 'The Topic Violation Detector. Queries a central vector DB to check for semantic topic violations.' },
+                        { component: 'Embedded Judge LLM (e.g., Phi-3)', type: 'Python Library/Model', location: 'Gateway & Sidecar Containers', role: 'Performs nuanced validation for tasks like prompt injection, advanced content moderation, and qualitative business logic checks.' },
+                        { component: 'SigNoz / Jaeger', type: 'Go Application', location: 'Central Observability Cluster', role: 'The Brain. Visualizes traces, creates dashboards, and alerts on custom attributes added by the sidecar.' }
+                    ]
+                },
+                futureArchitecture: [
+                    { icon: '⚖️', title: 'Formal Policy Engine (OPA/Cedar)', description: 'Replace the custom rules engine with a standard, battle-tested engine like Open Policy Agent (OPA). This provides a declarative, auditable, and secure way to manage policies as code (using Rego), separating policy logic from application logic and enabling security teams to own policy authorship.' },
+                    { icon: '🧠', title: 'Embedded Judge LLMs', description: 'Deploy small, fast, and private Judge LLMs (e.g., Phi-3, Llama-3-8B) directly within the gateway and sidecar. This enables extremely low-latency, secure, and cost-effective analysis for tasks like prompt injection and qualitative checks.' },
+                    { icon: '🏦', title: 'Secure Keystore for PII Tokenization', description: 'Enhance PII redaction by integrating with a secure vault (e.g., HashiCorp Vault). Instead of just masking data, the gateway tokenizes it, storing the encrypted value in the vault and replacing it with a non-sensitive token. This allows for auditable, reversible de-tokenization by authorized systems, a critical feature for compliance.' },
+                    { icon: '📡', title: 'Asynchronous Event Bus for SIEM/SOC', description: 'Configure the OTEL Collector with a second exporter (e.g., Kafka) to stream a filtered set of high-priority security events (policy violations, detected threats) to a dedicated event bus. This decouples observability from security and allows the SOC team to ingest AI-specific security signals into their SIEM (e.g., Splunk, Sentinel) for enterprise-wide correlation.' },
+                    { icon: '⚙️', title: 'MCP Enforcement & Validation', description: 'Implement a defense-in-depth strategy for tools. MCP/Tool servers perform synchronous, blocking calls to the Policy Engine for preventative control. The sidecar provides a secondary, observational layer, verifying tool behavior and context freshness by monitoring both the agent trace and MCP server logs.' }
+                ],
+                features: {
+                    labels: ['PII Detection', 'Jailbreak Prevention', 'Content Moderation', 'Data Leakage (Simple)', 'Hallucination Detection', 'Business Logic Validation', 'Topic Enforcement', 'Data Leakage (Complex)'],
+                    gateway:  [100, 100, 100, 100, 5, 5, 10, 10],
+                    sidecar:  [20, 20, 20, 20, 100, 100, 100, 100],
+                    details: [
+                        { locus: 'Gateway', rationale: 'Canonical gateway function. Inspects stateless payloads to prevent sensitive data from reaching the external LLM.'},
+                        { locus: 'Gateway', rationale: 'First line of defense. Applies centralized checks like pattern matching or "guard" LLMs to block malicious prompts.'},
+                        { locus: 'Gateway', rationale: 'High-level policies based on keywords or simple classifiers can be efficiently enforced on individual messages.'},
+                        { locus: 'Gateway', rationale: 'Can use fast regular expression filters to block well-defined, static patterns like internal project codes.'},
+                        { locus: 'Sidecar', rationale: 'Impossible for a gateway. Requires comparing the LLM response against the specific retrieved context, which only the sidecar can see via the full application trace.'},
+                        { locus: 'Sidecar', rationale: 'Business rules are stateful and context-dependent. The sidecar can analyze the full trace, access user state, and maintain counters.'},
+                        { locus: 'Sidecar', rationale: 'True topic enforcement requires semantic understanding. The sidecar can perform vector similarity searches against a knowledge base.'},
+                        { locus: 'Sidecar', rationale: 'Detecting complex, contextual data leakage requires understanding the agent\'s entire reasoning path and the source of the information.'},
+                    ]
+                },
+                roadmap: [
+                    { phase: 1, title: "Foundational Control & Visibility", duration: "1-2 Months", objective: "Achieve immediate control over all LLM traffic and establish baseline observability.", actions: ["Deploy an LLM Gateway (LiteLLM).", "Implement gateway-centric features: PII masking, prompt injection prevention.", "Instrument all agents with the OTEL SDK.", "Deploy a central observability backend (e.g., SigNoz)."], outcome: "All LLM traffic is secured and monitored. Teams have full trace visibility for debugging." },
+                    { phase: 2, title: "Advanced Introspective Monitoring", duration: "2-3 Months", objective: "Prove the sidecar pattern and deliver value on a critical advanced feature like hallucination detection.", actions: ["Develop and deploy the v1 Observability Sidecar (OTEL Collector + Python Service).", "Implement the first custom analysis processor for hallucination detection.", "Roll out the sidecar to a key RAG-based application.", "Analyze and refine detection results."], outcome: "Functioning sidecar architecture flagging potential hallucinations in production." },
+                    { phase: 3, title: "Dynamic Policy Enforcement & Rollout", duration: "Ongoing", objective: "Mature the sidecar into a full-featured, dynamic policy enforcement engine.", actions: ["Implement a custom Rules Engine processor in the sidecar.", "Define and encode custom business logic validations as declarative rules.", "Standardize the 'Agent + Sidecar' deployment pattern for all teams."], outcome: "A mature, scalable, and dynamic AI Control Plane is operational, providing robust governance." },
+                    { phase: 4, title: "Enterprise Hardening & Integration", duration: "Future", objective: "Evolve the control plane into a fully hardened, enterprise-integrated system ready for the most stringent security and compliance requirements.", actions: ["Replace the custom rules engine with a formal Policy Engine (e.g., OPA).", "Integrate the gateway with a secure Keystore (e.g., HashiCorp Vault) for PII tokenization.", "Add a dedicated OTEL exporter to stream security events to a SIEM via an Event Bus (e.g., Kafka).", "Implement preventative controls by integrating MCP/Tool servers directly with the Policy Engine.", "Deploy embedded Judge LLMs in the gateway and sidecar for low-latency, nuanced validations."], outcome: "A fully enterprise-grade AI Control Plane, integrated with corporate security (SOC/SIEM) and IT systems, providing auditable, preventative, and robust governance." }
+                ],
+                diagramInfo: {
+                    'agent-pod': "The Application Pod contains the agent and its sidecar. They share a network namespace, allowing secure, low-latency communication.",
+                    'mcp': "Internal services the agent interacts with. This includes RAG databases for context and other tools providing business capabilities.",
+                    'backend': "Shared, cluster-level services that support the control plane, such as the policy engine and secure keystore.",
+                    'gateway': "The single entry/exit point for all external LLM traffic. It enforces perimeter security and can use an embedded Judge LLM for fast prompt analysis.",
+                    'external': "Third-party services, including the primary LLM providers (OpenAI, Anthropic) and potentially more powerful external Judge LLMs for high-stakes validation.",
+                    default: "Hover over or tap a component to learn more."
+                }
+            };
+
+            // Render Gateway Validators
+            function renderGatewayValidators() {
+                const container = document.getElementById('validators-grid');
+                const filters = document.querySelectorAll('.filter-btn');
+                
+                function displayValidators(filter) {
+                    container.innerHTML = appData.gatewayValidators
+                        .filter(validator => filter === 'all' || validator.category === filter)
+                        .map(validator => `
+                        <div class="card p-4 flex flex-col">
+                            <h4 class="font-bold text-md text-teal-700">${validator.name}</h4>
+                            <p class="text-sm text-stone-600 mt-2 flex-grow">${validator.description}</p>
+                            <div class="mt-4 flex justify-between items-center">
+                                ${validator.method === 'Algorithmic' 
+                                    ? `<span class="text-xs font-semibold bg-cyan-100 text-cyan-800 px-2 py-1 rounded-full">Algorithmic</span>`
+                                    : `<a href="${validator.modelLink || '#'}" target="_blank" class="text-xs font-semibold bg-amber-100 text-amber-800 px-2 py-1 rounded-full hover:bg-amber-200" ${!validator.modelLink ? 'onclick="return false;" style="cursor:default;"' : ''}>Model-Based 🧠</a>`
+                                }
+                                <a href="${validator.link}" target="_blank" class="text-sm font-medium text-teal-600 hover:text-teal-800">Source →</a>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                filters.forEach(button => {
+                    button.addEventListener('click', () => {
+                        filters.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        displayValidators(button.dataset.filter);
+                    });
+                });
+
+                displayValidators('all');
+            }
+
+            // Render Gateway Comparison
+            function renderGatewayComparison() {
+                const content = appData.gatewayComparison;
+                const container = document.getElementById('gateway-comparison-content');
+                let tableHTML = `<table class="w-full comparison-table"><thead class="bg-stone-100"><tr><th class="w-1/4">Capability</th><th class="w-1/4">Portkey</th><th class="w-1/4">LiteLLM</th><th class="w-1/4 font-semibold text-teal-700">Recommendation for JS/TS Team</th></tr></thead><tbody>${content.capabilities.map(row => `<tr><td class="font-semibold text-stone-700">${row.capability}</td><td>${row.portkey}</td><td>${row.litellm}</td><td class="font-medium text-teal-800">${row.recommendation}</td></tr>`).join('')}</tbody></table><div class="p-6 bg-teal-50 border-t border-teal-200"><h4 class="font-bold text-lg text-teal-800 mb-2">Strategic Recommendation</h4><p class="text-teal-900">${content.recommendation}</p></div>`;
+                container.innerHTML = tableHTML;
+            }
+
+            // Render Sidecar Architecture
+            function renderSidecarArchitecture() {
+                const dataFlowContainer = document.getElementById('sidecar-data-flow');
+                const blueprintContainer = document.getElementById('sidecar-blueprint-content');
+                let dataFlowHTML = appData.sidecarArchitecture.dataFlow.map((item, index) => `<div class="flex items-center w-full"><div class="card p-4 md:p-6 flex-grow data-flow-step cursor-pointer" data-step="${item.step}"><div class="flex items-center"><div class="flex-shrink-0 w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-4"><span class="text-2xl">${item.icon}</span></div><div><h4 class="font-bold text-lg text-teal-700">Step ${item.step}: ${item.title}</h4><p class="text-stone-600">${item.description}</p></div></div></div></div>${index < appData.sidecarArchitecture.dataFlow.length - 1 ? '<div class="flex justify-center"><div class="flow-arrow">↓</div></div>' : ''}`).join('');
+                dataFlowContainer.innerHTML = dataFlowHTML;
+                let blueprintHTML = `<table class="w-full comparison-table"><thead class="bg-stone-100"><tr><th class="w-1/4">Component / Library</th><th class="w-1/6">Type</th><th class="w-1/4">Where It Runs</th><th class="w-1/3">Role & Integration Method</th></tr></thead><tbody>${appData.sidecarArchitecture.blueprint.map(row => `<tr><td class="font-semibold text-stone-700">${row.component.replace(/`/g, '<code class="bg-stone-200 text-stone-800 px-1 rounded-sm">').replace(/`/g, '</code>')}</td><td>${row.type}</td><td>${row.location}</td><td class="text-sm">${row.role}</td></tr>`).join('')}</tbody></table>`;
+                blueprintContainer.innerHTML = blueprintHTML;
+                document.querySelectorAll('.data-flow-step').forEach(stepEl => {
+                    stepEl.addEventListener('click', () => {
+                        document.querySelectorAll('.data-flow-step').forEach(el => el.classList.remove('highlight'));
+                        stepEl.classList.add('highlight');
+                    });
+                });
+            }
+
+            // Render Future Architecture
+            function renderFutureArchitecture() {
+                 const container = document.getElementById('future-architecture-content');
+                 container.innerHTML = appData.futureArchitecture.map(item => `
+                    <div class="card p-6 flex">
+                        <div class="flex-shrink-0 w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-5 mt-1">
+                            <span class="text-2xl">${item.icon}</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-teal-700">${item.title}</h4>
+                            <p class="text-stone-600 mt-1">${item.description}</p>
+                        </div>
+                    </div>
+                 `).join('');
+            }
+
+            // Features Chart
+            const ctx = document.getElementById('featuresChart').getContext('2d');
+            const featureDetails = document.getElementById('feature-details');
+            const featuresChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: appData.features.labels,
+                    datasets: [
+                        { label: 'Gateway Suitability', data: appData.features.gateway, backgroundColor: 'rgba(13, 148, 136, 0.6)', borderColor: 'rgba(13, 148, 136, 1)', borderWidth: 1 },
+                        { label: 'Sidecar Suitability', data: appData.features.sidecar, backgroundColor: 'rgba(245, 158, 11, 0.6)', borderColor: 'rgba(245, 158, 11, 1)', borderWidth: 1 }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                    scales: { x: { stacked: true, display: false }, y: { stacked: true, ticks: { font: { size: 14 } } } },
+                    plugins: { legend: { position: 'top' }, tooltip: { enabled: false } },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const elementIndex = elements[0].index;
+                            const featureData = appData.features.details[elementIndex];
+                            featureDetails.innerHTML = `<h4 class="font-bold text-lg mb-2">${appData.features.labels[elementIndex]}</h4><p><span class="font-semibold">Optimal Locus:</span> <span class="font-bold text-teal-600">${featureData.locus}</span></p><p class="mt-2"><span class="font-semibold">Rationale:</span> ${featureData.rationale}</p>`;
+                        }
+                    }
+                }
+            });
+
+            // Roadmap
+            const roadmapContent = document.getElementById('roadmap-content');
+            roadmapContent.innerHTML = appData.roadmap.map(item => `<div class="mb-12 timeline-item pl-8 relative"><div class="absolute -left-[7.5px] top-1 w-4 h-4 rounded-full timeline-dot border-4 border-white"></div><p class="text-sm font-semibold text-stone-500">${item.duration}</p><h3 class="text-xl font-bold text-teal-700 mt-1 mb-2">Phase ${item.phase}: ${item.title}</h3><div class="card p-6"><p class="font-semibold mb-2">Objective:</p><p class="text-stone-600 mb-4">${item.objective}</p><p class="font-semibold mb-2">Key Actions:</p><ul class="list-disc list-inside text-stone-600 space-y-1 mb-4">${item.actions.map(action => `<li>${action}</li>`).join('')}</ul><p class="font-semibold mb-2">Outcome:</p><p class="text-stone-600">${item.outcome}</p></div></div>`).join('');
+
+            // Architecture Diagram Interactivity
+            const diagramComponents = document.querySelectorAll('.diagram-component');
+            const diagramInfo = document.getElementById('diagram-info');
+            diagramComponents.forEach(comp => {
+                const id = comp.id.split('-')[1];
+                comp.addEventListener('mouseenter', () => { diagramInfo.textContent = appData.diagramInfo[id] || appData.diagramInfo.default; });
+                comp.addEventListener('mouseleave', () => { diagramInfo.textContent = appData.diagramInfo.default; });
+            });
+            
+            // Smooth scrolling for nav links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Initial Renders
+            renderGatewayValidators();
+            renderGatewayComparison();
+            renderSidecarArchitecture();
+            renderFutureArchitecture();
+        });
+    </script>
+</body>
+</html>
+
     <title>Agentic AI Control Plane: An Interactive Guide (V5)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
