@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Stone & Teal -->
-    <!-- Application Structure Plan: A single-page dashboard guides the user from high-level concepts to implementation details. Flow: 1. Core Architecture, 2. Gateway Deep Dive, 3. Gateway Scanners, 4. Sidecar Architecture, 5. eBPF Enrichment (restored), 6. Advanced Interactions, 7. The Role of Judge LLMs, 8. Future Architecture, 9. Feature Locus, 10. Roadmap. This thematic structure is more intuitive than a linear report. -->
-    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Core Architecture -> Organize -> HTML/CSS Diagram -> Interactive hover/click -> Visualize relationships. | Gateway Comparison -> Compare -> Detailed HTML Table -> Facilitate direct comparison. | eBPF Strategy -> Explain -> Diagram + Comparison table -> Clarify a new, complex technical layer. | All choices avoid SVG/Mermaid and prioritize interaction. -->
+    <!-- Application Structure Plan: A single-page dashboard guides the user from high-level concepts to implementation details. Flow: 1. Core Architecture, 2. Gateway Deep Dive, 3. Gateway Scanners, 4. Sidecar Architecture, 5. eBPF Enrichment, 6. Advanced Interactions, 7. The Role of Judge LLMs, 8. Future Architecture, 9. Feature Locus, 10. Roadmap. This thematic structure is more intuitive than a linear report. -->
+    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Core Architecture -> Organize -> HTML/CSS Diagram -> Interactive hover/click -> Visualize relationships. | Gateway Rationale -> Explain -> Card layout -> Clearly articulate core architectural choices. | eBPF Strategy -> Explain -> Diagram + Comparison table -> Clarify a new, complex technical layer. | All choices avoid SVG/Mermaid and prioritize interaction. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -204,11 +204,7 @@
 
         <!-- Section 2: Gateway Deep Dive -->
         <section id="gateway-deep-dive" class="mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Gateway Deep-Dive for JS/TS Teams</h2>
-            <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
-                For a JavaScript/TypeScript-centric company, the choice between Portkey and LiteLLM involves weighing managed convenience against framework flexibility. The following comparison focuses on developer experience, extensibility within a Node.js environment, and alignment with a best-of-breed open-source strategy.
-            </p>
-            <div id="gateway-comparison-content" class="card overflow-x-auto"></div>
+            <!-- This section is now rendered dynamically by JS -->
         </section>
 
         <!-- Section 3: Gateway Scanners -->
@@ -440,22 +436,29 @@
                     { name: 'One Line', category: 'quality', method: 'Algorithmic', description: 'Validates that a string does not contain any newline characters.', link: 'https://hub.guardrailsai.com/validator/guardrails/one_line' },
                     { name: 'Valid JSON', category: 'quality', method: 'Algorithmic', description: 'Ensures that an LLM\'s output strictly adheres to a provided JSON schema, crucial for reliable tool use.', link: 'https://hub.guardrailsai.com/validator/guardrails/valid_json' },
                 ],
-                gatewayComparison: {
-                    recommendation: `Given the context of a software company comfortable with building and managing its own systems, **LiteLLM emerges as the more strategically aligned choice.** The "infrastructure-as-code" approach, deep extensibility via callbacks, and composable nature fit better with a skilled engineering team's desire for control and flexibility. While it requires more initial setup, it provides a more powerful and unopinionated foundation for a truly custom AI Control Plane.`,
-                    capabilities: [
-                        { capability: 'Primary Interface', portkey: '`@portkey-ai/client` SDK.', litellm: 'Standard `openai` SDK with a modified `baseURL`.', recommendation: 'LiteLLM. Zero friction for existing OpenAI SDK users.' },
-                        { capability: 'Configuration', portkey: 'Primarily via a web UI.', litellm: '`config.yaml` file, managed as code.', recommendation: 'LiteLLM. Infrastructure-as-code is a best practice.' },
-                        { capability: 'Custom Logic in JS/TS', portkey: 'Limited to UI-based rules and routing based on metadata.', litellm: 'Highly extensible. Python callbacks can call custom TS/JS microservices for logic execution.', recommendation: 'LiteLLM. Far superior flexibility for custom logic.' },
-                        { capability: 'Observability', portkey: 'Integrated, managed dashboard. "Golden path" solution.', litellm: 'Exports standard OTEL/Prometheus data to any backend. "Bring your own stack."', recommendation: 'LiteLLM. Foundation for a best-of-breed stack (Grafana + Jaeger/SigNoz).' },
-                        { capability: 'Operational Overhead', portkey: 'Low. Managed by Portkey.', litellm: 'Higher. Requires self-hosting and management.', recommendation: 'Tie. A trade-off; LiteLLM\'s overhead is acceptable for teams valuing control.' },
-                        { capability: 'Ecosystem Fit', portkey: 'A curated, vertical ecosystem.', litellm: 'A horizontal component for a diverse, user-defined ecosystem.', recommendation: 'LiteLLM. Aligns better with composing solutions from specialized tools.' },
-                    ]
+                gatewayDeepDive: {
+                    title: "LLM Gateway vs Reverse Proxy",
+                    intro: "For behavioral control, a simple reverse proxy is insufficient. A reverse proxy manages network traffic, but an LLM Gateway operates at the application layer, understanding and acting upon the content of AI interactions. It's the essential component for enforcing intelligent, content-aware policies.",
+                    points: [
+                        { icon: '🔍', title: 'Inspect & Transform Content', description: 'Unlike a proxy, a gateway can read the actual text of prompts and responses. This allows it to perform critical actions like finding and masking PII before data leaves your infrastructure.' },
+                        { icon: '🧩', title: 'Host Specialized Logic', description: 'The gateway acts as a platform to run the specific open-source scanners listed in this report. It orchestrates the chain of security and quality checks on every call.' },
+                        { icon: '🤖', title: 'Understand LLM-Specifics', description: 'It provides a unified API for hundreds of models, handles API key management, and can execute complex logic like retries or fallbacks if a primary model fails.' }
+                    ],
+                    liteLLMPros: {
+                        title: 'LiteLLM: An Open-Source Foundation',
+                        intro: 'This architecture recommends LiteLLM as the gateway because it provides powerful features while ensuring the entire system remains open-source and free from vendor lock-in.',
+                        pros: [
+                            { icon: '🔄', title: 'Model Agnostic', description: 'Provides a single, consistent API endpoint for over 100 different LLM providers. You can swap backend models without changing any of your agent application code.' },
+                            { icon: '🔌', title: 'Extensible Callbacks', description: 'Its powerful callback system is the mechanism for plugging in all the custom scanners and logic. This makes it a highly composable and flexible foundation.' },
+                            { icon: '📄', title: 'Configuration as Code', description: 'All routing, model settings, and keys are managed in a simple YAML file. This aligns with best practices for version-controlled, auditable infrastructure.' }
+                        ]
+                    }
                 },
                 sidecarArchitecture: {
                     dataFlow: [
                         { step: 1, title: 'Ingestion', icon: '📥', description: 'The OTEL Collector (Go) in the sidecar receives a constant stream of trace data from the Agentic App via gRPC on `localhost`.'},
                         { step: 2, title: 'Batching', icon: '📦', description: 'The `batch` processor groups individual spans into batches to optimize processing and network traffic.'},
-                        { step: 3, title: 'Orchestration', icon: '🎼', description: 'A Custom Go Processor iterates through spans, evaluates simple rules, and triggers deeper analysis for complex cases.'},
+                        { step: 3, title: 'Orchestration', icon: '⚙️', description: 'A Custom Go Processor iterates through spans, evaluates simple rules, and triggers deeper analysis for complex cases.'},
                         { step: 4, title: 'Async RPC Call', icon: '⚡️', description: 'For complex analysis, the Go processor makes a non-blocking gRPC call to the Python Analysis Service within the same pod.'},
                         { step: 5, title: 'Specialized Analysis', icon: '🔬', description: 'The Python service uses libraries like `sentence-transformers` or an embedded Judge LLM for tasks like hallucination detection, then returns a structured result.'},
                         { step: 6, title: 'Telemetry Enrichment', icon: '✏️', description: 'The Go processor receives the analysis result and enriches the original span with new attributes (e.g., `validation.score = 0.85`).'},
@@ -515,6 +518,46 @@
                     default: "Hover over or tap a component to learn more."
                 }
             };
+            
+            // Render Gateway Deep Dive (New Version)
+            function renderGatewayDeepDive() {
+                const content = appData.gatewayDeepDive;
+                const container = document.getElementById('gateway-deep-dive');
+                
+                let pointsHTML = content.points.map(point => `
+                    <div class="card p-6 flex">
+                        <div class="flex-shrink-0 w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-5 mt-1">
+                            <span class="text-2xl">${point.icon}</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-teal-700">${point.title}</h4>
+                            <p class="text-stone-600 mt-1">${point.description}</p>
+                        </div>
+                    </div>
+                `).join('');
+
+                let liteLLMProsHTML = content.liteLLMPros.pros.map(pro => `
+                     <div class="flex items-start">
+                        <span class="text-xl mr-3 text-teal-500">${pro.icon}</span>
+                        <div>
+                            <h5 class="font-semibold">${pro.title}</h5>
+                            <p class="text-sm text-stone-600">${pro.description}</p>
+                        </div>
+                     </div>
+                `).join('');
+
+                container.innerHTML = `
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">${content.title}</h2>
+                    <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">${content.intro}</p>
+                    <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8 mb-12">${pointsHTML}</div>
+                    <div class="card p-6 md:p-8">
+                        <h3 class="text-2xl font-bold tracking-tight text-center mb-4">${content.liteLLMPros.title}</h3>
+                        <p class="max-w-3xl mx-auto text-center text-stone-600 mb-8">${content.liteLLMPros.intro}</p>
+                        <div class="grid md:grid-cols-3 gap-8">${liteLLMProsHTML}</div>
+                    </div>
+                `;
+            }
+
 
             // Render Gateway Scanners
             function renderGatewayScanners() {
@@ -548,14 +591,6 @@
                 });
 
                 displayScanners('all');
-            }
-
-            // Render Gateway Comparison
-            function renderGatewayComparison() {
-                const content = appData.gatewayComparison;
-                const container = document.getElementById('gateway-comparison-content');
-                let tableHTML = `<table class="w-full comparison-table"><thead class="bg-stone-100"><tr><th class="w-1/4">Capability</th><th class="w-1/4">Portkey</th><th class="w-1/4">LiteLLM</th><th class="w-1/4 font-semibold text-teal-700">Recommendation for JS/TS Team</th></tr></thead><tbody>${content.capabilities.map(row => `<tr><td class="font-semibold text-stone-700">${row.capability}</td><td>${row.portkey}</td><td>${row.litellm}</td><td class="font-medium text-teal-800">${row.recommendation}</td></tr>`).join('')}</tbody></table><div class="p-6 bg-teal-50 border-t border-teal-200"><h4 class="font-bold text-lg text-teal-800 mb-2">Strategic Recommendation</h4><p class="text-teal-900">${content.recommendation}</p></div>`;
-                container.innerHTML = tableHTML;
             }
 
             // Render Sidecar Architecture
@@ -640,8 +675,8 @@
             });
 
             // Initial Renders
+            renderGatewayDeepDive();
             renderGatewayScanners();
-            renderGatewayComparison();
             renderSidecarArchitecture();
             renderFutureArchitecture();
         });
