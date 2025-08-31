@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agentic AI Control Plane: An Interactive Guide (V5)</title>
+    <title>Agentic AI Control Plane: An Interactive Guide (V6)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Stone & Teal -->
-    <!-- Application Structure Plan: A single-page dashboard guides the user from high-level concepts to implementation details. Flow: 1. Core Architecture, 2. Gateway Deep Dive, 3. Gateway Validators (new), 4. Sidecar Architecture, 5. Advanced Interactions, 6. The Role of Judge LLMs, 7. Future Architecture, 8. Feature Locus, 9. Roadmap. This thematic structure is more intuitive than a linear report. Interactions include clickable diagrams, tabbed content, and an interactive chart. -->
-    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Core Architecture -> Organize -> HTML/CSS Diagram -> Interactive hover/click -> Visualize relationships. | Gateway Comparison -> Compare -> Detailed HTML Table -> Facilitate direct comparison. | Gateway Validators -> Inform/Compare -> Filterable card layout -> Allow easy exploration of OSS tools. | Sidecar Data Flow -> Organize/Explain -> HTML/CSS Diagram -> Break down a process. | All choices avoid SVG/Mermaid and prioritize interaction. -->
+    <!-- Application Structure Plan: A single-page dashboard guides the user from high-level concepts to implementation details. Flow: 1. Core Architecture, 2. Gateway Deep Dive, 3. Gateway Scanners, 4. Sidecar Architecture, 5. eBPF Enrichment (new), 6. Advanced Interactions, 7. The Role of Judge LLMs, 8. Future Architecture, 9. Feature Locus, 10. Roadmap. This thematic structure is more intuitive than a linear report. -->
+    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Core Architecture -> Organize -> HTML/CSS Diagram -> Interactive hover/click -> Visualize relationships. | Gateway Comparison -> Compare -> Detailed HTML Table -> Facilitate direct comparison. | eBPF Strategy -> Explain -> Diagram + Comparison table -> Clarify a new, complex technical layer. | All choices avoid SVG/Mermaid and prioritize interaction. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -108,19 +108,20 @@
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0">
-                    <h1 class="text-xl font-bold text-stone-800">AI Control Plane V5</h1>
+                    <h1 class="text-xl font-bold text-stone-800">AI Control Plane V6</h1>
                 </div>
                 <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-2">
-                        <a href="#architecture" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Architecture</a>
-                        <a href="#gateway-deep-dive" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Gateway</a>
-                        <a href="#gateway-validators" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Validators</a>
-                        <a href="#sidecar-architecture" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Sidecar</a>
-                        <a href="#advanced-interactions" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Interactions</a>
-                        <a href="#judge-llm" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Judge LLM</a>
-                        <a href="#future-architecture" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Future</a>
-                        <a href="#features" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Features</a>
-                        <a href="#roadmap" class="nav-link px-3 py-2 text-sm font-medium text-stone-600">Roadmap</a>
+                    <div class="ml-10 flex items-baseline space-x-2 text-xs lg:text-sm">
+                        <a href="#architecture" class="nav-link px-2 py-2 font-medium text-stone-600">Architecture</a>
+                        <a href="#gateway-deep-dive" class="nav-link px-2 py-2 font-medium text-stone-600">Gateway</a>
+                        <a href="#gateway-scanners" class="nav-link px-2 py-2 font-medium text-stone-600">Scanners</a>
+                        <a href="#sidecar-architecture" class="nav-link px-2 py-2 font-medium text-stone-600">Sidecar</a>
+                        <a href="#ebpf" class="nav-link px-2 py-2 font-medium text-stone-600">eBPF</a>
+                        <a href="#advanced-interactions" class="nav-link px-2 py-2 font-medium text-stone-600">Interactions</a>
+                        <a href="#judge-llm" class="nav-link px-2 py-2 font-medium text-stone-600">Judge LLM</a>
+                        <a href="#future-architecture" class="nav-link px-2 py-2 font-medium text-stone-600">Future</a>
+                        <a href="#features" class="nav-link px-2 py-2 font-medium text-stone-600">Features</a>
+                        <a href="#roadmap" class="nav-link px-2 py-2 font-medium text-stone-600">Roadmap</a>
                     </div>
                 </div>
             </div>
@@ -210,11 +211,11 @@
             <div id="gateway-comparison-content" class="card overflow-x-auto"></div>
         </section>
 
-        <!-- Section 3: Gateway Validators -->
-        <section id="gateway-validators" class="mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Gateway Validators: Open-Source Library Deep Dive</h2>
+        <!-- Section 3: Gateway Scanners -->
+        <section id="gateway-scanners" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Gateway Scanners: Open-Source Library Deep Dive</h2>
             <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
-                The LLM Gateway is the ideal place to enforce stateless policies on prompts and responses. The following open-source validators from Guardrails Hub and other projects can be plugged into the gateway to provide a robust first line of defense, operating without needing access to the agent's internal context.
+                The LLM Gateway is the ideal place to enforce stateless policies on prompts and responses. The following open-source scanners from Guardrails Hub and other projects can be plugged into the gateway to provide a robust first line of defense, operating without needing access to the agent's internal context.
             </p>
             <div class="flex justify-center mb-8">
                 <div class="flex flex-wrap gap-2 p-1 bg-stone-200 rounded-lg">
@@ -225,8 +226,8 @@
                     <button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md" data-filter="quality">Quality</button>
                 </div>
             </div>
-            <div id="validators-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Validator cards will be injected here by JS -->
+            <div id="scanners-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Scanner cards will be injected here by JS -->
             </div>
         </section>
         
@@ -244,8 +245,68 @@
             </p>
             <div id="sidecar-blueprint-content" class="card overflow-x-auto"></div>
         </section>
+        
+        <!-- Section 5: Enriching Observability with eBPF -->
+        <section id="ebpf" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Enriching Observability with eBPF</h2>
+            <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
+               To achieve the ultimate level of observability, we can enrich the sidecar with data from eBPF (Extended Berkeley Packet Filter). eBPF operates at the Linux kernel level, providing a "ground truth" view of system behavior that complements the application-level context from OTEL. This is a powerful combination for advanced security and performance analysis.
+            </p>
+            
+            <div class="card p-6 md:p-8">
+                <h3 class="text-xl font-bold text-center mb-4 text-teal-700">OTEL + eBPF: A Complete Picture</h3>
+                <div class="grid md:grid-cols-2 gap-8 items-start">
+                    <div>
+                        <p class="font-semibold text-stone-700 mb-2">What OTEL Provides (Application Context):</p>
+                        <ul class="list-disc list-inside space-y-1 text-stone-600">
+                            <li>Business logic flow (e.g., user ID, trace ID)</li>
+                            <li>LLM interaction details (prompts, responses)</li>
+                            <li>Application errors and exceptions</li>
+                            <li>Dependencies between services</li>
+                        </ul>
+                    </div>
+                     <div>
+                        <p class="font-semibold text-stone-700 mb-2">What eBPF Adds (System-Level Truth):</p>
+                        <ul class="list-disc list-inside space-y-1 text-stone-600">
+                            <li>Monitoring for uninstrumented "black box" code</li>
+                            <li>Granular network visibility (TCP connections, DNS)</li>
+                            <li>File system access monitoring (read/write auditing)</li>
+                            <li>Precise resource consumption (CPU, memory)</li>
+                        </ul>
+                    </div>
+                </div>
+                 <h3 class="text-xl font-bold text-center mt-8 mb-4 text-teal-700">Integrated Architecture</h3>
+                 <p class="text-center text-stone-600 max-w-2xl mx-auto mb-6">An eBPF agent on the node captures kernel events and sends them to the OTEL Collector in the sidecar. The backend can then correlate the OTEL application trace with the eBPF system trace for a unified view.</p>
+                 <div class="max-w-3xl mx-auto p-4 border border-dashed border-stone-300 rounded-lg">
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+                        <div class="text-center p-2">
+                            <p class="font-bold">🤖 Agent App</p>
+                            <p class="text-xs text-stone-500">Emits OTEL Spans</p>
+                        </div>
+                        <div class="font-bold text-teal-500 text-2xl">→</div>
+                        <div class="text-center p-4 bg-teal-50 rounded-lg border border-teal-200">
+                            <p class="font-bold">🔬 Sidecar</p>
+                            <p class="text-xs text-stone-500">(OTEL Collector)</p>
+                        </div>
+                        <div class="font-bold text-teal-500 text-2xl">→</div>
+                         <div class="text-center p-2">
+                            <p class="font-bold">📈 Backend</p>
+                            <p class="text-xs text-stone-500">(SigNoz, etc.)</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-center my-2">
+                        <div class="w-px h-8 bg-stone-300"></div>
+                    </div>
+                    <div class="text-center p-4 bg-purple-50 rounded-lg border border-purple-200 w-fit mx-auto">
+                        <p class="font-bold">🐜 eBPF Agent</p>
+                        <p class="text-xs text-stone-500">(On Node Kernel)</p>
+                        <p class="text-xs text-purple-600">Sends system events</p>
+                    </div>
+                 </div>
+            </div>
+        </section>
 
-        <!-- Section 5: Advanced Interaction Patterns -->
+        <!-- Section 6: Advanced Interaction Patterns -->
         <section id="advanced-interactions" class="mb-16 md:mb-24 scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Advanced Interaction Patterns</h2>
             <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -265,7 +326,7 @@
             </div>
         </section>
         
-        <!-- Section 6: The Role of Judge LLMs -->
+        <!-- Section 7: The Role of Judge LLMs -->
         <section id="judge-llm" class="mb-16 md:mb-24 scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">The Role of Judge LLMs</h2>
             <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -305,7 +366,7 @@
             </div>
         </section>
 
-        <!-- Section 7: Future Architecture & Enterprise Hardening -->
+        <!-- Section 8: Future Architecture & Enterprise Hardening -->
         <section id="future-architecture" class="mb-16 md:mb-24 scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Future Architecture & Enterprise Hardening</h2>
             <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -314,7 +375,7 @@
             <div id="future-architecture-content" class="grid md:grid-cols-2 gap-8"></div>
         </section>
 
-        <!-- Section 8: Features - Locus of Control -->
+        <!-- Section 9: Features - Locus of Control -->
         <section id="features" class="mb-16 md:mb-24 scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">The Control Plane in Action</h2>
             <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -331,7 +392,7 @@
             </div>
         </section>
         
-        <!-- Section 9: Implementation Roadmap -->
+        <!-- Section 10: Implementation Roadmap -->
         <section id="roadmap" class="scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Phased Implementation Roadmap</h2>
             <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -346,7 +407,7 @@
 
     <footer class="bg-stone-200 mt-16">
         <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-stone-600 text-sm">
-            <p>Interactive guide based on the "Architecting a Production-Grade Observability and Control Plane for Agentic AI Systems" report (V5).</p>
+            <p>Interactive guide based on the "Architecting a Production-Grade Observability and Control Plane for Agentic AI Systems" report (V6).</p>
         </div>
     </footer>
 
@@ -354,7 +415,9 @@
         document.addEventListener('DOMContentLoaded', () => {
 
             const appData = {
-                gatewayValidators: [
+                gatewayScanners: [
+                    { name: 'LlamaFirewall: AlignmentCheck', category: 'content', method: 'Model-Based', description: 'An alignment-focused Judge LLM that reviews the LLM\'s final response to ensure it is helpful, harmless, and adheres to predefined content policies.', modelLink: 'https://huggingface.co/meta-llama/LlamaGuard-7b', link: 'https://arxiv.org/abs/2405.16160' },
+                    { name: 'LlamaFirewall: PromptGuard', category: 'security', method: 'Model-Based', description: 'A security-focused Judge LLM that analyzes user prompts to detect malicious instructions, prompt injection, and other defense evasion techniques.', modelLink: 'https://huggingface.co/meta-llama/LlamaGuard-7b', link: 'https://arxiv.org/abs/2405.16160' },
                     { name: 'PII Detection (Presidio)', category: 'pii', method: 'Algorithmic', description: 'Uses Microsoft Presidio for high-accuracy Named Entity Recognition (NER) to find and redact a wide range of PII entities.', link: 'https://github.com/microsoft/presidio' },
                     { name: 'Secrets Present', category: 'security', method: 'Algorithmic', description: 'Scans text for patterns that match common API key and secret formats to prevent accidental leakage.', link: 'https://hub.guardrailsai.com/validator/guardrails/secrets_present' },
                     { name: 'Toxicity & Harmful Language', category: 'content', method: 'Model-Based', description: 'Uses a sentence-transformer model to classify text for toxicity, insults, threats, and other harmful content.', modelLink: 'https://huggingface.co/martin-ha/toxic-comment-model', link: 'https://hub.guardrailsai.com/validator/guardrails/toxic_language' },
@@ -366,7 +429,9 @@
                     { name: 'Language Detection', category: 'content', method: 'Algorithmic', description: 'Identifies the language of the text to enforce that the LLM only responds in specific languages.', link: 'https://hub.guardrailsai.com/validator/scb-10x/correct_language' },
                     { name: 'Emotion Detection', category: 'content', method: 'Model-Based', description: 'Classifies text into emotional categories like joy, sadness, anger, etc. Useful for monitoring conversation tone.', modelLink: 'https://huggingface.co/j-hartmann/emotion-english-distilroberta-base', link: 'https://huggingface.co/j-hartmann/emotion-english-distilroberta-base' },
                     { name: 'Reading Time', category: 'quality', method: 'Algorithmic', description: 'Calculates the estimated reading time of a text and validates it against a min/max range.', link: 'https://hub.guardrailsai.com/validator/guardrails/reading_time' },
-                    { name: 'Self-Contradiction Check', category: 'quality', method: 'Model-Based', description: 'Checks if an LLM\'s response contains internally contradictory statements. A key feature of NeMo Guardrails.', link: 'https://github.com/NVIDIA/NeMo-Guardrails' },
+                    { name: 'Self-Contradiction Check (NeMo)', category: 'quality', method: 'Model-Based', description: 'Checks if an LLM\'s response contains internally contradictory statements. A key feature of NeMo Guardrails.', link: 'https://github.com/NVIDIA/NeMo-Guardrails' },
+                    { name: 'Jailbreak Detection (NeMo)', category: 'security', method: 'Model-Based', description: 'A specialized model from NeMo Guardrails to detect if an input is an attempt to jailbreak the LLM.', link: 'https://github.com/NVIDIA/NeMo-Guardrails' },
+                    { name: 'Output Moderation (NeMo)', category: 'content', method: 'Model-Based', description: 'A comprehensive moderation rail from NeMo that checks for a variety of unsafe content categories.', link: 'https://github.com/NVIDIA/NeMo-Guardrails' },
                     { name: 'Ban List', category: 'content', method: 'Algorithmic', description: 'Blocks or flags text that contains any word from a user-defined list of banned terms.', link: 'https://hub.guardrailsai.com/validator/guardrails/ban_list' },
                     { name: 'Ends With', category: 'quality', method: 'Algorithmic', description: 'Validates that a string ends with a specific substring, useful for formatting enforcement.', link: 'https://hub.guardrailsai.com/validator/guardrails/ends_with' },
                     { name: 'Regex Match', category: 'quality', method: 'Algorithmic', description: 'Validates that a string matches a given regular expression pattern.', link: 'https://hub.guardrailsai.com/validator/guardrails/regex_match' },
@@ -374,8 +439,6 @@
                     { name: 'Valid Range', category: 'quality', method: 'Algorithmic', description: 'Ensures a numerical value falls within a specified minimum and maximum range.', link: 'https://hub.guardrailsai.com/validator/guardrails/valid_range' },
                     { name: 'One Line', category: 'quality', method: 'Algorithmic', description: 'Validates that a string does not contain any newline characters.', link: 'https://hub.guardrailsai.com/validator/guardrails/one_line' },
                     { name: 'Valid JSON', category: 'quality', method: 'Algorithmic', description: 'Ensures that an LLM\'s output strictly adheres to a provided JSON schema, crucial for reliable tool use.', link: 'https://hub.guardrailsai.com/validator/guardrails/valid_json' },
-                    { name: 'Jailbreak Detection (NeMo)', category: 'security', method: 'Model-Based', description: 'A specialized model from NeMo Guardrails to detect if an input is an attempt to jailbreak the LLM.', link: 'https://github.com/NVIDIA/NeMo-Guardrails' },
-                    { name: 'Output Moderation (NeMo)', category: 'content', method: 'Model-Based', description: 'A comprehensive moderation rail from NeMo that checks for a variety of unsafe content categories.', link: 'https://github.com/NVIDIA/NeMo-Guardrails' },
                 ],
                 gatewayComparison: {
                     recommendation: `Given the context of a software company comfortable with building and managing its own systems, **LiteLLM emerges as the more strategically aligned choice.** The "infrastructure-as-code" approach, deep extensibility via callbacks, and composable nature fit better with a skilled engineering team's desire for control and flexibility. While it requires more initial setup, it provides a more powerful and unopinionated foundation for a truly custom AI Control Plane.`,
@@ -392,7 +455,7 @@
                     dataFlow: [
                         { step: 1, title: 'Ingestion', icon: '📥', description: 'The OTEL Collector (Go) in the sidecar receives a constant stream of trace data from the Agentic App via gRPC on `localhost`.'},
                         { step: 2, title: 'Batching', icon: '📦', description: 'The `batch` processor groups individual spans into batches to optimize processing and network traffic.'},
-                        { step: 3, title: 'Orchestration', icon: '🎼', description: 'A Custom Go Processor iterates through spans, evaluates simple rules, and triggers deeper analysis for complex cases.'},
+                        { step: 3, title: 'Orchestration', icon: ' orchestrator', description: 'A Custom Go Processor iterates through spans, evaluates simple rules, and triggers deeper analysis for complex cases.'},
                         { step: 4, title: 'Async RPC Call', icon: '⚡️', description: 'For complex analysis, the Go processor makes a non-blocking gRPC call to the Python Analysis Service within the same pod.'},
                         { step: 5, title: 'Specialized Analysis', icon: '🔬', description: 'The Python service uses libraries like `sentence-transformers` or an embedded Judge LLM for tasks like hallucination detection, then returns a structured result.'},
                         { step: 6, title: 'Telemetry Enrichment', icon: '✏️', description: 'The Go processor receives the analysis result and enriches the original span with new attributes (e.g., `validation.score = 0.85`).'},
@@ -434,7 +497,14 @@
                     { phase: 1, title: "Foundational Control & Visibility", duration: "1-2 Months", objective: "Achieve immediate control over all LLM traffic and establish baseline observability.", actions: ["Deploy an LLM Gateway (LiteLLM).", "Implement gateway-centric features: PII masking, prompt injection prevention.", "Instrument all agents with the OTEL SDK.", "Deploy a central observability backend (e.g., SigNoz)."], outcome: "All LLM traffic is secured and monitored. Teams have full trace visibility for debugging." },
                     { phase: 2, title: "Advanced Introspective Monitoring", duration: "2-3 Months", objective: "Prove the sidecar pattern and deliver value on a critical advanced feature like hallucination detection.", actions: ["Develop and deploy the v1 Observability Sidecar (OTEL Collector + Python Service).", "Implement the first custom analysis processor for hallucination detection.", "Roll out the sidecar to a key RAG-based application.", "Analyze and refine detection results."], outcome: "Functioning sidecar architecture flagging potential hallucinations in production." },
                     { phase: 3, title: "Dynamic Policy Enforcement & Rollout", duration: "Ongoing", objective: "Mature the sidecar into a full-featured, dynamic policy enforcement engine.", actions: ["Implement a custom Rules Engine processor in the sidecar.", "Define and encode custom business logic validations as declarative rules.", "Standardize the 'Agent + Sidecar' deployment pattern for all teams."], outcome: "A mature, scalable, and dynamic AI Control Plane is operational, providing robust governance." },
-                    { phase: 4, title: "Enterprise Hardening & Integration", duration: "Future", objective: "Evolve the control plane into a fully hardened, enterprise-integrated system ready for the most stringent security and compliance requirements.", actions: ["Replace the custom rules engine with a formal Policy Engine (e.g., OPA).", "Integrate the gateway with a secure Keystore (e.g., HashiCorp Vault) for PII tokenization.", "Add a dedicated OTEL exporter to stream security events to a SIEM via an Event Bus (e.g., Kafka).", "Implement preventative controls by integrating MCP/Tool servers directly with the Policy Engine.", "Deploy embedded Judge LLMs in the gateway and sidecar for low-latency, nuanced validations."], outcome: "A fully enterprise-grade AI Control Plane, integrated with corporate security (SOC/SIEM) and IT systems, providing auditable, preventative, and robust governance." }
+                    { phase: 4, title: "Enterprise Hardening & Integration", duration: "Future", objective: "Evolve the control plane into a fully hardened, enterprise-integrated system ready for the most stringent security and compliance requirements.", actions: [
+                        "Replace the custom rules engine with a formal Policy Engine (e.g., OPA).", 
+                        "Integrate the gateway with a secure Keystore (e.g., HashiCorp Vault) for PII tokenization.", 
+                        "Add a dedicated OTEL exporter to stream security events to a SIEM via an Event Bus (e.g., Kafka).", 
+                        "Implement preventative controls by integrating MCP/Tool servers directly with the Policy Engine.", 
+                        "Deploy embedded Judge LLMs in the gateway and sidecar for low-latency, nuanced validations.",
+                        "Integrate an eBPF agent to capture kernel-level system data for uninstrumented code and deeper security analysis."
+                    ], outcome: "A fully enterprise-grade AI Control Plane, integrated with corporate security (SOC/SIEM) and IT systems, providing auditable, preventative, and robust governance." }
                 ],
                 diagramInfo: {
                     'agent-pod': "The Application Pod contains the agent and its sidecar. They share a network namespace, allowing secure, low-latency communication.",
@@ -446,24 +516,24 @@
                 }
             };
 
-            // Render Gateway Validators
-            function renderGatewayValidators() {
-                const container = document.getElementById('validators-grid');
+            // Render Gateway Scanners
+            function renderGatewayScanners() {
+                const container = document.getElementById('scanners-grid');
                 const filters = document.querySelectorAll('.filter-btn');
                 
-                function displayValidators(filter) {
-                    container.innerHTML = appData.gatewayValidators
-                        .filter(validator => filter === 'all' || validator.category === filter)
-                        .map(validator => `
+                function displayScanners(filter) {
+                    container.innerHTML = appData.gatewayScanners
+                        .filter(scanner => filter === 'all' || scanner.category === filter)
+                        .map(scanner => `
                         <div class="card p-4 flex flex-col">
-                            <h4 class="font-bold text-md text-teal-700">${validator.name}</h4>
-                            <p class="text-sm text-stone-600 mt-2 flex-grow">${validator.description}</p>
+                            <h4 class="font-bold text-md text-teal-700">${scanner.name}</h4>
+                            <p class="text-sm text-stone-600 mt-2 flex-grow">${scanner.description}</p>
                             <div class="mt-4 flex justify-between items-center">
-                                ${validator.method === 'Algorithmic' 
+                                ${scanner.method === 'Algorithmic' 
                                     ? `<span class="text-xs font-semibold bg-cyan-100 text-cyan-800 px-2 py-1 rounded-full">Algorithmic</span>`
-                                    : `<a href="${validator.modelLink || '#'}" target="_blank" class="text-xs font-semibold bg-amber-100 text-amber-800 px-2 py-1 rounded-full hover:bg-amber-200" ${!validator.modelLink ? 'onclick="return false;" style="cursor:default;"' : ''}>Model-Based 🧠</a>`
+                                    : `<a href="${scanner.modelLink || '#'}" target="_blank" class="text-xs font-semibold bg-amber-100 text-amber-800 px-2 py-1 rounded-full hover:bg-amber-200" ${!scanner.modelLink ? 'onclick="return false;" style="cursor:default;"' : ''}>Model-Based 🧠</a>`
                                 }
-                                ${validator.link ? `<a href="${validator.link}" target="_blank" class="text-sm font-medium text-teal-600 hover:text-teal-800">Source →</a>` : ''}
+                                ${scanner.link ? `<a href="${scanner.link}" target="_blank" class="text-sm font-medium text-teal-600 hover:text-teal-800">Source →</a>` : ''}
                             </div>
                         </div>
                     `).join('');
@@ -473,11 +543,11 @@
                     button.addEventListener('click', () => {
                         filters.forEach(btn => btn.classList.remove('active'));
                         button.classList.add('active');
-                        displayValidators(button.dataset.filter);
+                        displayScanners(button.dataset.filter);
                     });
                 });
 
-                displayValidators('all');
+                displayScanners('all');
             }
 
             // Render Gateway Comparison
@@ -570,7 +640,7 @@
             });
 
             // Initial Renders
-            renderGatewayValidators();
+            renderGatewayScanners();
             renderGatewayComparison();
             renderSidecarArchitecture();
             renderFutureArchitecture();
