@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agentic AI Control Plane: An Interactive Guide (V6)</title>
+    <title>Agentic AI Control Plane: An Interactive Guide (V7)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.comcom/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Stone & Teal -->
-    <!-- Application Structure Plan: A single-page dashboard guides the user from high-level concepts to implementation details. Flow: 1. Core Architecture, 2. Gateway Deep Dive, 3. Gateway Scanners, 4. Sidecar Architecture, 5. eBPF Enrichment, 6. Advanced Interactions, 7. The Role of Judge LLMs, 8. Future Architecture, 9. Feature Locus, 10. Roadmap. This thematic structure is more intuitive than a linear report. -->
-    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Core Architecture -> Organize -> HTML/CSS Diagram -> Interactive hover/click -> Visualize relationships. | Gateway Rationale -> Explain -> Card layout -> Clearly articulate core architectural choices. | eBPF Strategy -> Explain -> Diagram + Comparison table -> Clarify a new, complex technical layer. | All choices avoid SVG/Mermaid and prioritize interaction. -->
+    <!-- Application Structure Plan: A single-page dashboard guides the user from high-level concepts to implementation details. Flow: 1. Core Architecture, 2. Gateway Deep Dive, 3. Gateway Scanners, 4. Sidecar Architecture, 5. eBPF Enrichment, 6. Advanced Interactions, 7. Enforcement Strategy (new), 8. The Role of Judge LLMs, 9. Future Architecture, 10. Feature Locus, 11. Roadmap. This thematic structure is more intuitive than a linear report. -->
+    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Core Architecture -> Organize -> HTML/CSS Diagram -> Interactive hover/click -> Visualize relationships. | Gateway Rationale -> Explain -> Card layout -> Clearly articulate core architectural choices. | Enforcement Strategy -> Explain -> Diagram + Code Snippet -> Clarify a key implementation detail. | All choices avoid SVG/Mermaid and prioritize interaction. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -99,6 +99,14 @@
             background-color: #14b8a6;
             color: white;
         }
+        pre {
+            background-color: #292524; /* stone-800 */
+            color: #f5f5f4; /* stone-100 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -108,7 +116,7 @@
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0">
-                    <h1 class="text-xl font-bold text-stone-800">AI Control Plane V6</h1>
+                    <h1 class="text-xl font-bold text-stone-800">AI Control Plane V7</h1>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-1 lg:space-x-2 text-xs lg:text-sm">
@@ -118,6 +126,7 @@
                         <a href="#sidecar-architecture" class="nav-link px-2 py-2 font-medium text-stone-600">Sidecar</a>
                         <a href="#ebpf" class="nav-link px-2 py-2 font-medium text-stone-600">eBPF</a>
                         <a href="#advanced-interactions" class="nav-link px-2 py-2 font-medium text-stone-600">Interactions</a>
+                        <a href="#enforcement-strategy" class="nav-link px-2 py-2 font-medium text-stone-600">Enforcement</a>
                         <a href="#judge-llm" class="nav-link px-2 py-2 font-medium text-stone-600">Judge LLM</a>
                         <a href="#future-architecture" class="nav-link px-2 py-2 font-medium text-stone-600">Future</a>
                         <a href="#features" class="nav-link px-2 py-2 font-medium text-stone-600">Features</a>
@@ -322,7 +331,12 @@
             </div>
         </section>
         
-        <!-- Section 7: The Role of Judge LLMs -->
+        <!-- Section 7: Enforcing Policies on Tools: A Dual Approach -->
+        <section id="enforcement-strategy" class="mb-16 md:mb-24 scroll-mt-20">
+            <!-- This section is rendered dynamically by JS -->
+        </section>
+
+        <!-- Section 8: The Role of Judge LLMs -->
         <section id="judge-llm" class="mb-16 md:mb-24 scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">The Role of Judge LLMs</h2>
             <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -362,7 +376,7 @@
             </div>
         </section>
 
-        <!-- Section 8: Future Architecture & Enterprise Hardening -->
+        <!-- Section 9: Future Architecture & Enterprise Hardening -->
         <section id="future-architecture" class="mb-16 md:mb-24 scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Future Architecture & Enterprise Hardening</h2>
             <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -371,7 +385,7 @@
             <div id="future-architecture-content" class="grid md:grid-cols-2 gap-8"></div>
         </section>
 
-        <!-- Section 9: Features - Locus of Control -->
+        <!-- Section 10: Features - Locus of Control -->
         <section id="features" class="mb-16 md:mb-24 scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">The Control Plane in Action</h2>
             <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -388,7 +402,7 @@
             </div>
         </section>
         
-        <!-- Section 10: Implementation Roadmap -->
+        <!-- Section 11: Implementation Roadmap -->
         <section id="roadmap" class="scroll-mt-20">
             <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Phased Implementation Roadmap</h2>
             <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">
@@ -403,7 +417,7 @@
 
     <footer class="bg-stone-200 mt-16">
         <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-stone-600 text-sm">
-            <p>Interactive guide based on the "Architecting a Production-Grade Observability and Control Plane for Agentic AI Systems" report (V6).</p>
+            <p>Interactive guide based on the "Architecting a Production-Grade Observability and Control Plane for Agentic AI Systems" report (V7).</p>
         </div>
     </footer>
 
@@ -474,6 +488,43 @@
                         { component: 'SigNoz / Jaeger', type: 'Go Application', location: 'Central Observability Cluster', role: 'The Brain. Visualizes traces, creates dashboards, and alerts on custom attributes added by the sidecar.' }
                     ]
                 },
+                 enforcementStrategy: {
+                    title: 'Enforcing Policies on Tools: A Dual Approach',
+                    intro: 'Active enforcement requires checks to happen *before* an action is executed. Since the Tool Server is an application component, we must provide secure and easy ways for it to query the Policy Engine, backed by unbypassable infrastructure-level controls.',
+                    methods: [
+                        {
+                            title: 'Method 1: The "Golden Path" SDK',
+                            description: 'We provide an internal SDK that abstracts away policy checks. Tool developers add a single line of code to protect their endpoints. The SDK handles the call to OPA and throws an exception if the action is denied, making compliance simple.',
+                            code: `from our_internal_sdk import ToolSecurity
+
+@app.post("/run_billing_report")
+async def run_billing_report(request: BillingRequest):
+  
+  # SDK handles OPA check under the hood.
+  # Throws exception on "deny", stopping execution.
+  ToolSecurity.enforce(
+    user=request.user, 
+    action="run_report", 
+    resource="billing"
+  )
+  
+  # This code is only reached if OPA returns "allow"
+  result = await generate_sensitive_report(request.params)
+  return {"status": "success", "data": result}`
+                        },
+                        {
+                            title: 'Method 2: Service Mesh Enforcement (Zero Trust)',
+                            description: 'For a truly unbypassable control, a service mesh (e.g., Istio) intercepts all network traffic to the tool server. It is configured to query OPA for an authorization decision *before* forwarding the request to the tool. The tool\'s code is never even reached if the policy denies the request.',
+                            diagram: [
+                                { item: '🤖 Agent App', arrow: true },
+                                { item: '📦 Service Mesh Proxy', arrow: true },
+                                { item: '⚖️ OPA Policy Engine (allow/deny)', arrow: true },
+                                { item: '🛠️ Tool Server' }
+                            ]
+                        }
+                    ],
+                    conclusion: 'The best strategy is to use both: provide the SDK for developer ease-of-use and rich application context, and use the service mesh as a mandatory infrastructure backstop to guarantee that no call to a protected resource goes unchecked.'
+                },
                 futureArchitecture: [
                     { icon: '⚖️', title: 'Formal Policy Engine (OPA/Cedar)', description: 'Replace the custom rules engine with a standard, battle-tested engine like Open Policy Agent (OPA). This provides a declarative, auditable, and secure way to manage policies as code (using Rego), separating policy logic from application logic and enabling security teams to own policy authorship.' },
                     { icon: '🧠', title: 'Embedded Judge LLMs', description: 'Deploy small, fast, and private Judge LLMs (e.g., Phi-3, Llama-3-8B) directly within the gateway and sidecar. This enables extremely low-latency, secure, and cost-effective analysis for tasks like prompt injection and qualitative checks.' },
@@ -504,7 +555,7 @@
                         "Replace the custom rules engine with a formal Policy Engine (e.g., OPA).", 
                         "Integrate the gateway with a secure Keystore (e.g., HashiCorp Vault) for PII tokenization.", 
                         "Add a dedicated OTEL exporter to stream security events to a SIEM via an Event Bus (e.g., Kafka).", 
-                        "Implement preventative controls by integrating MCP/Tool servers directly with the Policy Engine.", 
+                        "Implement the dual SDK/Service Mesh enforcement strategy for MCP/Tool servers.", 
                         "Deploy embedded Judge LLMs in the gateway and sidecar for low-latency, nuanced validations.",
                         "Integrate an eBPF agent to capture kernel-level system data for uninstrumented code and deeper security analysis."
                     ], outcome: "A fully enterprise-grade AI Control Plane, integrated with corporate security (SOC/SIEM) and IT systems, providing auditable, preventative, and robust governance." }
@@ -519,7 +570,7 @@
                 }
             };
             
-            // Render Gateway Deep Dive (New Version)
+            // Render Gateway Deep Dive
             function renderGatewayDeepDive() {
                 const content = appData.gatewayDeepDive;
                 const container = document.getElementById('gateway-deep-dive');
@@ -554,6 +605,46 @@
                         <h3 class="text-2xl font-bold tracking-tight text-center mb-4">${content.liteLLMPros.title}</h3>
                         <p class="max-w-3xl mx-auto text-center text-stone-600 mb-8">${content.liteLLMPros.intro}</p>
                         <div class="grid md:grid-cols-3 gap-8">${liteLLMProsHTML}</div>
+                    </div>
+                `;
+            }
+
+            // Render Enforcement Strategy
+            function renderEnforcementStrategy() {
+                const content = appData.enforcementStrategy;
+                const container = document.getElementById('enforcement-strategy');
+
+                let methodsHTML = content.methods.map(method => {
+                    let diagramHTML = '';
+                    if (method.diagram) {
+                        diagramHTML = `<div class="mt-4 flex items-center justify-center space-x-2 text-sm">${method.diagram.map((d, i) => `
+                            <div class="text-center p-2 bg-stone-100 rounded-md">${d.item}</div>
+                            ${d.arrow ? `<div class="font-bold text-teal-500 text-xl">→</div>` : ''}
+                        `).join('')}</div>`;
+                    }
+                    
+                    let codeHTML = '';
+                    if(method.code) {
+                         codeHTML = `<div class="mt-4"><pre><code>${method.code.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</code></pre></div>`;
+                    }
+
+                    return `
+                        <div class="card p-6">
+                            <h3 class="text-xl font-bold mb-2 text-teal-700">${method.title}</h3>
+                            <p class="text-stone-600">${method.description}</p>
+                            ${diagramHTML}
+                            ${codeHTML}
+                        </div>
+                    `;
+                }).join('');
+
+                container.innerHTML = `
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">${content.title}</h2>
+                    <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">${content.intro}</p>
+                    <div class="grid md:grid-cols-2 gap-8">${methodsHTML}</div>
+                    <div class="card p-6 mt-8 bg-teal-50/50 border-teal-200">
+                        <h3 class="text-xl font-bold text-center text-teal-800">The Combined Strategy</h3>
+                        <p class="max-w-3xl mx-auto text-center text-teal-900 mt-2">${content.conclusion}</p>
                     </div>
                 `;
             }
@@ -678,9 +769,9 @@
             renderGatewayDeepDive();
             renderGatewayScanners();
             renderSidecarArchitecture();
+            renderEnforcementStrategy();
             renderFutureArchitecture();
         });
     </script>
 </body>
 </html>
-
