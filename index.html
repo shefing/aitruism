@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Stone & Teal -->
-    <!-- Application Structure Plan: A single-page dashboard guides the user from high-level concepts to implementation details. Flow: 1. Core Architecture, 2. Gateway Deep Dive, 3. Gateway Scanners, 4. Sidecar Architecture, 5. eBPF Enrichment (new), 6. Advanced Interactions, 7. The Role of Judge LLMs, 8. Future Architecture, 9. Feature Locus, 10. Roadmap. This thematic structure is more intuitive than a linear report. -->
+    <!-- Application Structure Plan: A single-page dashboard guides the user from high-level concepts to implementation details. Flow: 1. Core Architecture, 2. Gateway Deep Dive, 3. Gateway Scanners, 4. Sidecar Architecture, 5. eBPF Enrichment (restored), 6. Advanced Interactions, 7. The Role of Judge LLMs, 8. Future Architecture, 9. Feature Locus, 10. Roadmap. This thematic structure is more intuitive than a linear report. -->
     <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Core Architecture -> Organize -> HTML/CSS Diagram -> Interactive hover/click -> Visualize relationships. | Gateway Comparison -> Compare -> Detailed HTML Table -> Facilitate direct comparison. | eBPF Strategy -> Explain -> Diagram + Comparison table -> Clarify a new, complex technical layer. | All choices avoid SVG/Mermaid and prioritize interaction. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -111,7 +111,7 @@
                     <h1 class="text-xl font-bold text-stone-800">AI Control Plane V6</h1>
                 </div>
                 <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-2 text-xs lg:text-sm">
+                    <div class="ml-10 flex items-baseline space-x-1 lg:space-x-2 text-xs lg:text-sm">
                         <a href="#architecture" class="nav-link px-2 py-2 font-medium text-stone-600">Architecture</a>
                         <a href="#gateway-deep-dive" class="nav-link px-2 py-2 font-medium text-stone-600">Gateway</a>
                         <a href="#gateway-scanners" class="nav-link px-2 py-2 font-medium text-stone-600">Scanners</a>
@@ -142,7 +142,7 @@
                     <div class="flex flex-col items-center space-y-6">
                         <div class="flex items-center space-x-4 text-lg font-semibold"><span>👤</span><p>User</p></div>
                         <div class="w-px h-8 bg-stone-300"></div>
-                        <div id="diagram-agent-pod" class="diagram-component p-4 border-2 border-dashed border-teal-500 rounded-xl bg-teal-50/30 w-full">
+                        <div id="diagram-agent-pod" class="diagram-component p-4 border-2 border-dashed border-teal-500 rounded-xl bg-teal-50/30 w-full cursor-pointer">
                             <p class="font-bold text-teal-600 text-center mb-2">Application Pod</p>
                             <div class="p-4 bg-white rounded-lg shadow text-center relative">
                                 <span class="text-2xl">🤖</span>
@@ -160,7 +160,7 @@
 
                     <!-- Middle Column: Internal & Central Services -->
                     <div class="flex flex-col items-center space-y-6">
-                        <div id="diagram-mcp" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full">
+                        <div id="diagram-mcp" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full cursor-pointer">
                              <p class="font-bold text-stone-600 text-center mb-2">Internal Tools & Data (MCP)</p>
                              <div class="space-y-2">
                                 <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">🗄️</span>RAG Vector DB</div>
@@ -168,7 +168,7 @@
                              </div>
                         </div>
                         <div class="w-px h-8 bg-stone-300"></div>
-                        <div id="diagram-backend" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full">
+                        <div id="diagram-backend" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full cursor-pointer">
                             <p class="font-bold text-stone-600 text-center mb-2">Central Backend Services</p>
                              <div class="space-y-2">
                                 <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">⚖️</span>Policy Engine (OPA)</div>
@@ -180,7 +180,7 @@
 
                     <!-- Right Column: Gateway & External Services -->
                      <div class="flex flex-col items-center space-y-6">
-                        <div id="diagram-gateway" class="diagram-component p-4 border-2 border-dashed border-sky-500 rounded-xl bg-sky-50/30 w-full">
+                        <div id="diagram-gateway" class="diagram-component p-4 border-2 border-dashed border-sky-500 rounded-xl bg-sky-50/30 w-full cursor-pointer">
                             <p class="font-bold text-sky-600 text-center mb-2">LLM Gateway</p>
                             <div class="p-4 bg-white rounded-lg shadow text-center relative">
                                 <span class="text-2xl">🛡️</span>
@@ -189,7 +189,7 @@
                             </div>
                         </div>
                         <div class="w-px h-8 bg-stone-300"></div>
-                        <div id="diagram-external" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full">
+                        <div id="diagram-external" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full cursor-pointer">
                             <p class="font-bold text-stone-600 text-center mb-2">External Services</p>
                              <div class="space-y-2">
                                 <div class="p-2 bg-white rounded-lg shadow text-center"><span class="text-xl mr-2">☁️</span>Primary LLM Providers</div>
@@ -455,7 +455,7 @@
                     dataFlow: [
                         { step: 1, title: 'Ingestion', icon: '📥', description: 'The OTEL Collector (Go) in the sidecar receives a constant stream of trace data from the Agentic App via gRPC on `localhost`.'},
                         { step: 2, title: 'Batching', icon: '📦', description: 'The `batch` processor groups individual spans into batches to optimize processing and network traffic.'},
-                        { step: 3, title: 'Orchestration', icon: ' orchestrator', description: 'A Custom Go Processor iterates through spans, evaluates simple rules, and triggers deeper analysis for complex cases.'},
+                        { step: 3, title: 'Orchestration', icon: '🎼', description: 'A Custom Go Processor iterates through spans, evaluates simple rules, and triggers deeper analysis for complex cases.'},
                         { step: 4, title: 'Async RPC Call', icon: '⚡️', description: 'For complex analysis, the Go processor makes a non-blocking gRPC call to the Python Analysis Service within the same pod.'},
                         { step: 5, title: 'Specialized Analysis', icon: '🔬', description: 'The Python service uses libraries like `sentence-transformers` or an embedded Judge LLM for tasks like hallucination detection, then returns a structured result.'},
                         { step: 6, title: 'Telemetry Enrichment', icon: '✏️', description: 'The Go processor receives the analysis result and enriches the original span with new attributes (e.g., `validation.score = 0.85`).'},
@@ -624,8 +624,8 @@
             const diagramComponents = document.querySelectorAll('.diagram-component');
             const diagramInfo = document.getElementById('diagram-info');
             diagramComponents.forEach(comp => {
-                const id = comp.id.split('-')[1];
-                comp.addEventListener('mouseenter', () => { diagramInfo.textContent = appData.diagramInfo[id] || appData.diagramInfo.default; });
+                const key = comp.id.replace('diagram-', '');
+                comp.addEventListener('mouseenter', () => { diagramInfo.textContent = appData.diagramInfo[key] || appData.diagramInfo.default; });
                 comp.addEventListener('mouseleave', () => { diagramInfo.textContent = appData.diagramInfo.default; });
             });
             
@@ -648,3 +648,4 @@
     </script>
 </body>
 </html>
+
