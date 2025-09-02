@@ -11,8 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Stone & Teal -->
-    <!-- Application Structure Plan: A single-page dashboard with a two-level navigation. "Future Architecture" has been merged into a new, top-level "Roadmap" section, creating a more logical narrative flow from present to future. -->
-    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Roadmap Section -> Explain/Plan -> Combines feature cards with a timeline -> Presents the ultimate architectural goals and the phased plan to achieve them in one cohesive story. | All other choices remain consistent. -->
+    <!-- Application Structure Plan: Same as V14. Focus of this update is improving the "Locus of Control" section. -->
+    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Feature Locus Chart -> Analyze -> Updated data to reflect MCP's enforcement role. | Feature Labels -> Inform -> Added HTML labels with info-hovers for clarity, replacing canvas labels. | This improves both accuracy and user experience. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -53,35 +53,6 @@
         }
         .timeline-dot {
             background-color: #14b8a6; /* teal-500 */
-        }
-        .data-flow-step {
-            transition: all 0.3s ease-in-out;
-            border: 2px solid transparent;
-        }
-        .data-flow-step.highlight {
-            border-color: #14b8a6;
-            transform: scale(1.03);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        }
-        .flow-arrow {
-            color: #a8a29e; /* stone-400 */
-            font-size: 2rem;
-            line-height: 1;
-        }
-        .flow-line {
-            position: relative;
-            border-left: 2px dashed #9ca3af;
-        }
-        .flow-line::after {
-            content: '▼';
-            position: absolute;
-            left: -9px;
-            bottom: -5px;
-            color: #9ca3af;
-        }
-        .filter-btn.active {
-            background-color: #14b8a6;
-            color: white;
         }
         pre {
             background-color: #292524; /* stone-800 */
@@ -190,6 +161,7 @@
             </p>
             <div class="w-full max-w-7xl mx-auto p-4 md:p-8 card relative mb-16">
                  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left Column: User & App Pod -->
                     <div class="flex flex-col items-center space-y-6">
                         <div class="flex items-center space-x-4 text-lg font-semibold"><span>👤</span><p>User</p></div>
                         <div class="w-px h-8 bg-stone-300"></div>
@@ -208,6 +180,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Middle Column: Internal & Central Services -->
                     <div class="flex flex-col items-center space-y-6">
                         <div id="diagram-mcp" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full cursor-pointer">
                              <p class="font-bold text-stone-600 text-center mb-2">Internal Tools & Data (MCP)</p>
@@ -226,6 +199,7 @@
                              </div>
                         </div>
                     </div>
+                    <!-- Right Column: Gateway & External Services -->
                      <div class="flex flex-col items-center space-y-6">
                         <div id="diagram-gateway" class="diagram-component p-4 border-2 border-dashed border-sky-500 rounded-xl bg-sky-50/30 w-full cursor-pointer">
                             <p class="font-bold text-sky-600 text-center mb-2">LLM Gateway</p>
@@ -268,40 +242,50 @@
 
         <!-- Section 2: Gateway -->
         <section id="gateway" class="mb-16 md:mb-24 scroll-mt-20">
+            <!-- Content will be rendered by JS -->
         </section>
 
         <!-- Section 3: Sidecar -->
         <section id="sidecar" class="mb-16 md:mb-24 scroll-mt-20">
+            <!-- Content will be rendered by JS -->
         </section>
 
         <!-- Section 4: eBPF -->
         <section id="ebpf" class="mb-16 md:mb-24 scroll-mt-20">
+            <!-- Content will be rendered by JS -->
         </section>
 
-        <!-- Section 5: MCP Enforcement -->
+        <!-- Section 5: MCP Enforcement Layer -->
         <section id="mcp-enforcement" class="mb-16 md:mb-24 scroll-mt-20">
+             <!-- Content will be rendered by JS -->
         </section>
         
         <!-- Section 6: Judge LLM -->
         <section id="judge-llm" class="mb-16 md:mb-24 scroll-mt-20">
+             <!-- Content will be rendered by JS -->
         </section>
 
          <!-- Section 7: Roadmap -->
         <section id="roadmap" class="scroll-mt-20">
+             <!-- Content will be rendered by JS -->
         </section>
 
         <!-- Scanners & Policies Sections -->
         <div id="scanners-and-policies">
             <section id="scanners" class="mb-16 md:mb-24 scroll-mt-20">
+                 <!-- Content will be rendered by JS -->
             </section>
             
             <section id="demos" class="mb-16 md:mb-24 scroll-mt-20">
+                 <!-- Content will be rendered by JS -->
             </section>
 
             <section id="custom-scanners" class="mb-16 md:mb-24 scroll-mt-20">
+                 <!-- Content will be rendered by JS -->
             </section>
 
             <section id="tool-enforcement" class="mb-16 md:mb-24 scroll-mt-20">
+                 <!-- Content will be rendered by JS -->
             </section>
         </div>
 
@@ -316,7 +300,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const appData = {
-                gatewayScanners: [
+                 gatewayScanners: [
                     { scannerName: 'LlamaFirewall: AlignmentCheck', category: 'content', method: 'Model-Based', description: 'An alignment-focused Judge LLM that reviews the LLM\'s final response to ensure it is helpful, harmless, and adheres to predefined content policies.', modelLink: 'https://huggingface.co/meta-llama/LlamaGuard-7b', link: 'https://arxiv.org/abs/2405.16160' },
                     { scannerName: 'LlamaFirewall: PromptGuard', category: 'security', method: 'Model-Based', description: 'A security-focused Judge LLM that analyzes user prompts to detect malicious instructions, prompt injection, and other defense evasion techniques.', modelLink: 'https://huggingface.co/meta-llama/LlamaGuard-7b', link: 'https://arxiv.org/abs/2405.16160' },
                     { scannerName: 'PII Detection (Presidio)', category: 'pii', method: 'Algorithmic', description: 'Uses Microsoft Presidio for high-accuracy Named Entity Recognition (NER) to find and redact a wide range of PII entities.', link: 'https://github.com/microsoft/presidio' },
@@ -435,19 +419,6 @@ ASSISTANT: DELIVERY DATE`
                         { component: 'SigNoz / Jaeger', type: 'Go Application', location: 'Central Observability Cluster', role: 'The Brain. Visualizes traces, creates dashboards, and alerts on custom attributes added by the sidecar.' }
                     ]
                 },
-                mcpEnforcement: {
-                    title: "The MCP/Tool: The Final Enforcement Layer",
-                    intro: "While the Gateway and Sidecar are essential for perimeter defense and observation, the MCP/Tool Server is the ultimate locus of control for preventing damage to internal systems. It is the last line of defense and has the final say on whether a high-stakes action is executed.",
-                    analogy: {
-                        title: "The Bank Vault Analogy",
-                        points: [
-                            { role: "LLM Gateway", is: "The Front-Door Guard", does: "Checks IDs and prevents obvious threats from entering." },
-                            { role: "Sidecar", is: "The Surveillance System", does: "Records all activity and detects suspicious patterns for later review." },
-                            { role: "MCP/Tool", is: "The Vault Door", does: "Performs a final, mandatory authorization check at the point of action. It trusts nothing and is the ultimate gatekeeper of the resource." }
-                        ]
-                    },
-                    conclusion: "The MCP/Tool is the only component with the ground-truth business context (e.g., real account balances) and the ability to enforce transactional integrity. By performing a synchronous check against the policy engine *before* committing an action, it provides true, preventative control."
-                },
                  enforcementStrategy: {
                     title: 'Enforcing Policies on Tools: A Dual Approach',
                     intro: 'Active enforcement requires checks to happen *before* an action is executed. Since the Tool Server is an application component, we must provide secure and easy ways for it to query the Policy Engine, backed by unbypassable infrastructure-level controls.',
@@ -485,12 +456,48 @@ async def run_billing_report(request: BillingRequest):
                     ],
                     conclusion: 'The best strategy is to use both: provide the SDK for developer ease-of-use and rich application context, and use the service mesh as a mandatory infrastructure backstop to guarantee that no call to a protected resource goes unchecked.'
                 },
-                futureArchitecture: [
-                    { icon: '⚖️', title: 'Formal Policy Engine (OPA/Cedar)', description: 'Replace the custom rules engine with a standard, battle-tested engine like Open Policy Agent (OPA). This provides a declarative, auditable, and secure way to manage policies as code (using Rego), separating policy logic from application logic and enabling security teams to own policy authorship.' },
-                    { icon: '🧠', title: 'Embedded Judge LLMs', description: 'Deploy small, fast, and private Judge LLMs (e.g., Phi-3, Llama-3-8B) directly within the gateway and sidecar. This enables extremely low-latency, secure, and cost-effective analysis for tasks like prompt injection and qualitative checks.' },
-                    { icon: '🏦', title: 'Secure Keystore for PII Tokenization', description: 'Enhance PII redaction by integrating with a secure vault (e.g., HashiCorp Vault). Instead of just masking data, the gateway tokenizes it, storing the encrypted value in the vault and replacing it with a non-sensitive token. This allows for auditable, reversible de-tokenization by authorized systems, a critical feature for compliance.' },
-                    { icon: '📡', title: 'Asynchronous Event Bus for SIEM/SOC', description: 'Configure the OTEL Collector with a second exporter (e.g., Kafka) to stream a filtered set of high-priority security events (policy violations, detected threats) to a dedicated event bus. This decouples observability from security and allows the SOC team to ingest AI-specific security signals into their SIEM (e.g., Splunk, Sentinel) for enterprise-wide correlation.' }
-                ],
+                mcpEnforcement: {
+                    title: "The MCP/Tool: The Final Enforcement Layer",
+                    intro: "While the Gateway and Sidecar are essential for perimeter defense and observation, the MCP/Tool Server is the ultimate locus of control for preventing damage to internal systems. It is the last line of defense and has the final say on whether a high-stakes action is executed.",
+                    analogy: {
+                        title: "The Bank Vault Analogy",
+                        points: [
+                            { role: "LLM Gateway", is: "The Front-Door Guard", does: "Checks IDs and prevents obvious threats from entering." },
+                            { role: "Sidecar", is: "The Surveillance System", does: "Records all activity and detects suspicious patterns for later review." },
+                            { role: "MCP/Tool", is: "The Vault Door", does: "Performs a final, mandatory authorization check at the point of action. It trusts nothing and is the ultimate gatekeeper of the resource." }
+                        ]
+                    },
+                    conclusion: "The MCP/Tool is the only component with the ground-truth business context (e.g., real account balances) and the ability to enforce transactional integrity. By performing a synchronous check against the policy engine *before* committing an action, it provides true, preventative control."
+                },
+                roadmap: {
+                    future: [
+                        { icon: '⚖️', title: 'Formal Policy Engine (OPA/Cedar)', description: 'Replace the custom rules engine with a standard, battle-tested engine like Open Policy Agent (OPA). This provides a declarative, auditable, and secure way to manage policies as code (using Rego), separating policy logic from application logic and enabling security teams to own policy authorship.' },
+                        { icon: '🧠', title: 'Embedded Judge LLMs', description: 'Deploy small, fast, and private Judge LLMs (e.g., Phi-3, Llama-3-8B) directly within the gateway and sidecar. This enables extremely low-latency, secure, and cost-effective analysis for tasks like prompt injection and qualitative checks.' },
+                        { icon: '🏦', title: 'Secure Keystore for PII Tokenization', description: 'Enhance PII redaction by integrating with a secure vault (e.g., HashiCorp Vault). Instead of just masking data, the gateway tokenizes it, storing the encrypted value in the vault and replacing it with a non-sensitive token. This allows for auditable, reversible de-tokenization by authorized systems, a critical feature for compliance.' },
+                        { icon: '📡', title: 'Asynchronous Event Bus for SIEM/SOC', description: 'Configure the OTEL Collector with a second exporter (e.g., Kafka) to stream a filtered set of high-priority security events (policy violations, detected threats) to a dedicated event bus. This decouples observability from security and allows the SOC team to ingest AI-specific security signals into their SIEM (e.g., Splunk, Sentinel) for enterprise-wide correlation.' }
+                    ],
+                    timeline: [
+                        { phase: 1, title: "Foundational Control & Visibility", duration: "1-2 Months", objective: "Achieve immediate control over all LLM traffic and establish baseline observability.", actions: ["Deploy an LLM Gateway (LiteLLM).", "Implement gateway-centric features: PII masking, prompt injection prevention.", "Instrument all agents with the OTEL SDK.", "Deploy a central observability backend (e.g., SigNoz)."], outcome: "All LLM traffic is secured and monitored. Teams have full trace visibility for debugging." },
+                        { phase: 2, title: "Advanced Introspective Monitoring", duration: "2-3 Months", objective: "Prove the sidecar pattern and deliver value on a critical advanced feature like hallucination detection.", actions: ["Develop and deploy the v1 Observability Sidecar (OTEL Collector + Python Service).", "Implement the first custom analysis processor for hallucination detection.", "Roll out the sidecar to a key RAG-based application.", "Analyze and refine detection results."], outcome: "Functioning sidecar architecture flagging potential hallucinations in production." },
+                        { phase: 3, title: "Dynamic Policy Enforcement & Rollout", duration: "Ongoing", objective: "Mature the sidecar into a full-featured, dynamic policy enforcement engine.", actions: ["Implement a custom Rules Engine processor in the sidecar.", "Define and encode custom business logic validations as declarative rules.", "Develop the first custom business logic scanner (e.g., 'no delivery dates').", "Standardize the 'Agent + Sidecar' deployment pattern for all teams."], outcome: "A mature, scalable, and dynamic AI Control Plane is operational, providing robust governance." },
+                        { phase: 4, title: "Enterprise Hardening & Integration", duration: "Future", objective: "Evolve the control plane into a fully hardened, enterprise-integrated system ready for the most stringent security and compliance requirements.", actions: [
+                            "Replace the custom rules engine with a formal Policy Engine (e.g., OPA).", 
+                            "Integrate the gateway with a secure Keystore (e.g., HashiCorp Vault) for PII tokenization.", 
+                            "Add a dedicated OTEL exporter to stream security events to a SIEM via an Event Bus (e.g., Kafka).", 
+                            "Develop and roll out the dual SDK/Service Mesh enforcement strategy for MCP/Tool servers.", 
+                            "Deploy embedded Judge LLMs in the gateway and sidecar for low-latency, nuanced validations.",
+                            "Integrate an eBPF agent to capture kernel-level system data for uninstrumented code and deeper security analysis."
+                        ], outcome: "A fully enterprise-grade AI Control Plane, integrated with corporate security (SOC/SIEM) and IT systems, providing auditable, preventative, and robust governance." }
+                    ]
+                },
+                diagramInfo: {
+                    'agent-pod': "The Application Pod contains the agent and its sidecar. They share a network namespace, allowing secure, low-latency communication.",
+                    'mcp': "Internal services the agent interacts with. This includes RAG databases for context and other tools providing business capabilities.",
+                    'backend': "Shared, cluster-level services that support the control plane, such as the policy engine and secure keystore.",
+                    'gateway': "The single entry/exit point for all external LLM traffic. It enforces perimeter security and can use an embedded Judge LLM for fast prompt analysis.",
+                    'external': "Third-party services, including the primary LLM providers (OpenAI, Anthropic) and potentially more powerful external Judge LLMs for high-stakes validation.",
+                    default: "Hover over or tap a component to learn more."
+                },
                 features: {
                     labels: [
                         'PII Detection', 'Prompt Injection', 'Content Moderation', 
@@ -513,8 +520,8 @@ async def run_billing_report(request: BillingRequest):
                         'Directs user traffic to different models or prompts to test and optimize performance.'
                     ],
                     gateway:  [100, 100, 100, 80, 5, 10, 10, 20, 100, 100, 100, 100],
-                    sidecar:  [20, 20, 50, 60, 100, 60, 100, 100, 20, 20, 80, 20],
-                    mcp:      [0, 5, 10, 100, 80, 100, 20, 20, 0, 0, 30, 0],
+                    sidecar:  [20, 20, 50, 100, 100, 60, 100, 100, 20, 20, 80, 20],
+                    mcp:      [0, 5, 10, 90, 80, 100, 20, 20, 0, 0, 30, 0],
                     details: [
                         { rationale: {
                             gateway: 'Primary locus. Real-time scanning and redaction of prompts/responses is a core gateway function.',
@@ -532,8 +539,8 @@ async def run_billing_report(request: BillingRequest):
                             mcp: 'Limited role. Tools generally focus on their specific task, not broad content moderation.'
                         }},
                         { rationale: {
-                            gateway: 'Strong role for preventing leakage of well-defined secrets (e.g., API key patterns) or PII.',
-                            sidecar: 'Primary locus for complex *detection*. Can identify if an agent is leaking information learned in one user session to another by analyzing stateful traces.',
+                            gateway: 'Strong role. Can prevent leakage of well-defined secrets (e.g., API key patterns) or PII.',
+                            sidecar: 'Primary locus for complex *detection*. Can detect if an agent is leaking information learned in one user session to another by analyzing stateful traces.',
                             mcp: 'Primary locus for *prevention*. The tool must have its own authorization checks to prevent it from returning data to an unauthorized user, providing the final, unbypassable control.'
                         }},
                         { rationale: {
@@ -543,8 +550,8 @@ async def run_billing_report(request: BillingRequest):
                         }},
                          { rationale: {
                             gateway: 'Limited role. Can handle very simple, stateless business rules (e.g., block certain keywords).',
-                            sidecar: 'Primary locus for *detection*. Can analyze the full trace to see if a rule was violated and alert on it.',
-                            mcp: 'Primary locus for *enforcement*. The tool contains the core business logic (e.g., inventory check) and is the only place to prevent a damaging action before it happens via a transactional check.'
+                            sidecar: 'Primary locus for *detection*. Can analyze the full trace to see if a rule was violated, which is essential for auditing and alerting.',
+                            mcp: 'Primary locus for *enforcement*. The tool contains the ground-truth business context (e.g., inventory) and is the only component that can prevent a damaging action before it happens.'
                         }},
                          { rationale: {
                             gateway: 'Limited role. Can perform simple keyword-based topic filtering.',
@@ -577,31 +584,24 @@ async def run_billing_report(request: BillingRequest):
                             mcp: 'N/A. Routing decisions happen at the gateway, before a tool is ever called.'
                         }},
                     ]
-                },
-                roadmap: [
-                    { phase: 1, title: "Foundational Control & Visibility", duration: "1-2 Months", objective: "Achieve immediate control over all LLM traffic and establish baseline observability.", actions: ["Deploy an LLM Gateway (LiteLLM).", "Implement gateway-centric features: PII masking, prompt injection prevention.", "Instrument all agents with the OTEL SDK.", "Deploy a central observability backend (e.g., SigNoz)."], outcome: "All LLM traffic is secured and monitored. Teams have full trace visibility for debugging." },
-                    { phase: 2, title: "Advanced Introspective Monitoring", duration: "2-3 Months", objective: "Prove the sidecar pattern and deliver value on a critical advanced feature like hallucination detection.", actions: ["Develop and deploy the v1 Observability Sidecar (OTEL Collector + Python Service).", "Implement the first custom analysis processor for hallucination detection.", "Roll out the sidecar to a key RAG-based application.", "Analyze and refine detection results."], outcome: "Functioning sidecar architecture flagging potential hallucinations in production." },
-                    { phase: 3, title: "Dynamic Policy Enforcement & Rollout", duration: "Ongoing", objective: "Mature the sidecar into a full-featured, dynamic policy enforcement engine.", actions: ["Implement a custom Rules Engine processor in the sidecar.", "Define and encode custom business logic validations as declarative rules.", "Develop the first custom business logic scanner (e.g., 'no delivery dates').", "Standardize the 'Agent + Sidecar' deployment pattern for all teams."], outcome: "A mature, scalable, and dynamic AI Control Plane is operational, providing robust governance." },
-                    { phase: 4, title: "Enterprise Hardening & Integration", duration: "Future", objective: "Evolve the control plane into a fully hardened, enterprise-integrated system ready for the most stringent security and compliance requirements.", actions: [
-                        "Replace the custom rules engine with a formal Policy Engine (e.g., OPA).", 
-                        "Integrate the gateway with a secure Keystore (e.g., HashiCorp Vault) for PII tokenization.", 
-                        "Add a dedicated OTEL exporter to stream security events to a SIEM via an Event Bus (e.g., Kafka).", 
-                        "Develop and roll out the dual SDK/Service Mesh enforcement strategy for MCP/Tool servers.", 
-                        "Deploy embedded Judge LLMs in the gateway and sidecar for low-latency, nuanced validations.",
-                        "Integrate an eBPF agent to capture kernel-level system data for uninstrumented code and deeper security analysis."
-                    ], outcome: "A fully enterprise-grade AI Control Plane, integrated with corporate security (SOC/SIEM) and IT systems, providing auditable, preventative, and robust governance." }
-                ],
-                diagramInfo: {
-                    'agent-pod': "The Application Pod contains the agent and its sidecar. They share a network namespace, allowing secure, low-latency communication.",
-                    'mcp': "Internal services the agent interacts with. This includes RAG databases for context and other tools providing business capabilities.",
-                    'backend': "Shared, cluster-level services that support the control plane, such as the policy engine and secure keystore.",
-                    'gateway': "The single entry/exit point for all external LLM traffic. It enforces perimeter security and can use an embedded Judge LLM for fast prompt analysis.",
-                    'external': "Third-party services, including the primary LLM providers (OpenAI, Anthropic) and potentially more powerful external Judge LLMs for high-stakes validation.",
-                    default: "Hover over or tap a component to learn more."
                 }
             };
-            
-            // --- DYNAMICALLY GENERATE DEMO SCENARIOS ---
+
+            function setupSmoothScrolling() {
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    if (anchor.getAttribute('data-listener-attached')) return;
+                    anchor.setAttribute('data-listener-attached', 'true');
+                    anchor.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const targetEl = document.querySelector(this.getAttribute('href'));
+                        if (targetEl) {
+                           targetEl.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                });
+            }
+
+            // --- All render functions ---
             function generateDemoScenarios() {
                  const scenarios = [
                     { scannerName: 'LlamaFirewall: AlignmentCheck', agent: 'Customer support chatbot', userAction: 'Frustrated customer: "This is the worst service. Tell me where I can buy a better product."', risk: 'Brand Damage: Agent might literally recommend a competitor, causing business harm.', impact: 'Alignment Enforced: The scanner intercepts the harmful response, flags it as misaligned with brand policies, and triggers a safe, empathetic re-generation.' },
@@ -640,257 +640,10 @@ async def run_billing_report(request: BillingRequest):
                     return { ...s, scannerId, steps };
                 });
             }
-            
-            function renderGatewayDeepDive() {
-                const content = appData.gatewayDeepDive;
-                const container = document.getElementById('gateway');
-                
-                let pointsHTML = content.points.map(point => `
-                    <div class="card p-6 flex">
-                        <div class="flex-shrink-0 w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-5 mt-1">
-                            <span class="text-2xl">${point.icon}</span>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg text-teal-700">${point.title}</h4>
-                            <p class="text-stone-600 mt-1">${point.description}</p>
-                        </div>
-                    </div>
-                `).join('');
 
-                let liteLLMProsHTML = content.liteLLMPros.pros.map(pro => `
-                     <div class="flex items-start">
-                        <span class="text-xl mr-3 text-teal-500">${pro.icon}</span>
-                        <div>
-                            <h5 class="font-semibold">${pro.title}</h5>
-                            <p class="text-sm text-stone-600">${pro.description}</p>
-                        </div>
-                     </div>
-                `).join('');
-
-                container.innerHTML = `
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">${content.title}</h2>
-                    <p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">${content.intro}</p>
-                    <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8 mb-12">${pointsHTML}</div>
-                    <div class="card p-6 md:p-8">
-                        <h3 class="text-2xl font-bold tracking-tight text-center mb-4">${content.liteLLMPros.title}</h3>
-                        <p class="max-w-3xl mx-auto text-center text-stone-600 mb-8">${content.liteLLMPros.intro}</p>
-                        <div class="grid md:grid-cols-3 gap-8">${liteLLMProsHTML}</div>
-                    </div>
-                `;
-            }
-
-            function renderCustomScanners() {
-                const content = appData.customScanners;
-                const container = document.getElementById('custom-scanners');
-                
-                let implementationsHTML = content.implementations.map(impl => `
-                    <div class="card p-6">
-                         <h3 class="text-xl font-bold mb-2 text-teal-700">${impl.title}</h3>
-                         <div class="space-y-2 text-sm">
-                             <p><strong class="text-green-600">Pros:</strong> ${impl.pros}</p>
-                             <p><strong class="text-red-600">Cons:</strong> ${impl.cons}</p>
-                         </div>
-                         <div class="mt-4"><pre><code>${impl.code.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</code></pre></div>
-                    </div>
-                `).join('');
-
-                container.innerHTML = `
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">${content.title}</h2>
-                    <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">${content.intro}</p>
-                    <div class="grid lg:grid-cols-3 gap-8">${implementationsHTML}</div>
-                     <div class="card p-6 mt-8">
-                        <h3 class="text-xl font-bold text-center text-teal-700">${content.placement.title}</h3>
-                        <p class="max-w-3xl mx-auto text-center text-stone-600 mt-2">${content.placement.intro}</p>
-                        <div class="mt-4 grid md:grid-cols-2 gap-6 text-center">
-                            <div class="p-4 bg-stone-50 rounded-lg">
-                                <h4 class="font-semibold">At the Gateway</h4>
-                                <p class="text-sm text-stone-600">${content.placement.gateway}</p>
-                            </div>
-                            <div class="p-4 bg-stone-50 rounded-lg">
-                                <h4 class="font-semibold">In the Sidecar</h4>
-                                <p class="text-sm text-stone-600">${content.placement.sidecar}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            function renderDemoScenarios() {
-                const container = document.getElementById('demos');
-                let scenariosHTML = appData.demoScenarios.map(scenario => {
-                    let stepsHTML = scenario.steps.map(step => `
-                        <div class="demo-step mb-6" data-icon="${step.icon}">
-                            <h4 class="font-bold text-lg mb-1">${step.title}</h4>
-                            <p class="text-stone-600">${step.text}</p>
-                        </div>
-                    `).join('');
-
-                    return `
-                        <div class="card p-6 md:p-8" id="demo-${scenario.scannerId}">
-                            <h3 class="text-2xl font-bold tracking-tight text-center mb-6 text-teal-800">${scenario.scannerName}</h3>
-                            <div>${stepsHTML}</div>
-                        </div>
-                    `;
-                }).join('');
-
-                container.innerHTML = `
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Scanner Demo Scenarios</h2>
-                    <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
-                        These practical scenarios demonstrate the value of key gateway scanners in preventing common risks, from brand damage to data breaches.
-                    </p>
-                    <div class="space-y-8">${scenariosHTML}</div>
-                `;
-            }
-
-            function renderToolEnforcement() {
-                const content = appData.enforcementStrategy;
-                const container = document.getElementById('tool-enforcement');
-
-                let methodsHTML = content.methods.map(method => {
-                    let diagramHTML = '';
-                    if (method.diagram) {
-                        diagramHTML = `<div class="mt-4 flex items-center justify-center space-x-2 text-sm">${method.diagram.map((d, i) => `
-                            <div class="text-center p-2 bg-stone-100 rounded-md">${d.item}</div>
-                            ${d.arrow ? `<div class="font-bold text-teal-500 text-xl">→</div>` : ''}
-                        `).join('')}</div>`;
-                    }
-                    
-                    let codeHTML = '';
-                    if(method.code) {
-                         codeHTML = `<div class="mt-4"><pre><code>${method.code.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</code></pre></div>`;
-                    }
-
-                    return `
-                        <div class="card p-6">
-                            <h3 class="text-xl font-bold mb-2 text-teal-700">${method.title}</h3>
-                            <p class="text-stone-600">${method.description}</p>
-                            ${diagramHTML}
-                            ${codeHTML}
-                        </div>
-                    `;
-                }).join('');
-
-                container.innerHTML = `
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">${content.title}</h2>
-                    <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">${content.intro}</p>
-                    <div class="grid md:grid-cols-2 gap-8">${methodsHTML}</div>
-                    <div class="card p-6 mt-8 bg-teal-50/50 border-teal-200">
-                        <h3 class="text-xl font-bold text-center text-teal-800">The Combined Strategy</h3>
-                        <p class="max-w-3xl mx-auto text-center text-teal-900 mt-2">${content.conclusion}</p>
-                    </div>
-                `;
-            }
-            
-            function renderMcpEnforcement() {
-                const content = appData.mcpEnforcement;
-                const container = document.getElementById('mcp-enforcement');
-                
-                let pointsHTML = content.analogy.points.map(point => `
-                    <div class="text-center p-4 bg-stone-50 rounded-lg">
-                        <div class="text-3xl">${point.role.includes("Vault") ? '🏦' : (point.role.includes("Guard") ? '🛡️' : '📸')}</div>
-                        <h4 class="font-bold mt-2">${point.role}</h4>
-                        <p class="text-sm text-stone-600"><strong class="text-stone-800">Is:</strong> ${point.is}</p>
-                        <p class="text-sm text-stone-600"><strong class="text-stone-800">Does:</strong> ${point.does}</p>
-                    </div>
-                `).join('');
-
-                container.innerHTML = `
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">${content.title}</h2>
-                    <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">${content.intro}</p>
-                    <div class="card p-6 md:p-8">
-                        <h3 class="text-2xl font-bold tracking-tight text-center mb-6 text-teal-800">${content.analogy.title}</h3>
-                        <div class="grid md:grid-cols-3 gap-6">
-                            ${pointsHTML}
-                        </div>
-                        <div class="mt-6 p-4 bg-teal-50/50 border-t border-teal-200 rounded-b-lg">
-                             <p class="text-center text-teal-900 font-semibold">${content.conclusion}</p>
-                        </div>
-                    </div>
-                `;
-            }
-
-            function renderGatewayScanners() {
-                const container = document.getElementById('scanners');
-                const filters = container.querySelectorAll('.filter-btn');
-                const grid = container.querySelector('#scanners-grid');
-                
-                function displayScanners(filter) {
-                    grid.innerHTML = appData.gatewayScanners
-                        .filter(scanner => filter === 'all' || scanner.category === filter)
-                        .map(scanner => {
-                            const scannerId = scanner.scannerName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-                            const demo = appData.demoScenarios.find(d => d.scannerId === scannerId);
-                            let demoLinkHTML = '';
-                            if (demo) {
-                                demoLinkHTML = `<a href="#demo-${demo.scannerId}" class="text-sm font-medium text-purple-600 hover:text-purple-800">Demo</a>`;
-                            }
-
-                            return `
-                                <div class="card p-4 flex flex-col">
-                                    <h4 class="font-bold text-md text-teal-700">${scanner.scannerName}</h4>
-                                    <p class="text-sm text-stone-600 mt-2 flex-grow">${scanner.description}</p>
-                                    <div class="mt-4 flex justify-between items-center">
-                                        <div>
-                                            ${scanner.method === 'Algorithmic' 
-                                                ? `<span class="text-xs font-semibold bg-cyan-100 text-cyan-800 px-2 py-1 rounded-full">Algorithmic</span>`
-                                                : `<a href="${scanner.modelLink || '#'}" target="_blank" class="text-xs font-semibold bg-amber-100 text-amber-800 px-2 py-1 rounded-full hover:bg-amber-200" ${!scanner.modelLink ? 'onclick="return false;" style="cursor:default;"' : ''}>Model-Based 🧠</a>`
-                                            }
-                                        </div>
-                                        <div class="flex items-center space-x-4">
-                                            ${demoLinkHTML}
-                                            ${scanner.link ? `<a href="${scanner.link}" target="_blank" class="text-sm font-medium text-teal-600 hover:text-teal-800">Source →</a>` : ''}
-                                        </div>
-                                    </div>
-                                </div>
-                            `
-                        }).join('');
-                }
-
-                filters.forEach(button => {
-                    button.addEventListener('click', () => {
-                        filters.forEach(btn => btn.classList.remove('active'));
-                        button.classList.add('active');
-                        displayScanners(button.dataset.filter);
-                        setupSmoothScrolling();
-                    });
-                });
-
-                displayScanners('all');
-            }
-            
-            function renderSidecarArchitecture() {
-                const container = document.getElementById('sidecar');
-                const dataFlowContainer = container.querySelector('#sidecar-data-flow');
-                const blueprintContainer = container.querySelector('#sidecar-blueprint-content');
-                let dataFlowHTML = appData.sidecarArchitecture.dataFlow.map((item, index) => `<div class="flex items-center w-full"><div class="card p-4 md:p-6 flex-grow data-flow-step cursor-pointer" data-step="${item.step}"><div class="flex items-center"><div class="flex-shrink-0 w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-4"><span class="text-2xl">${item.icon}</span></div><div><h4 class="font-bold text-lg text-teal-700">Step ${item.step}: ${item.title}</h4><p class="text-stone-600">${item.description}</p></div></div></div></div>${index < appData.sidecarArchitecture.dataFlow.length - 1 ? '<div class="flex justify-center"><div class="flow-arrow">↓</div></div>' : ''}`).join('');
-                dataFlowContainer.innerHTML = dataFlowHTML;
-                let blueprintHTML = `<table class="w-full"><thead class="bg-stone-100"><tr><th class="p-4 text-left w-1/4">Component / Library</th><th class="p-4 text-left w-1/6">Type</th><th class="p-4 text-left w-1/4">Where It Runs</th><th class="p-4 text-left w-1/3">Role & Integration Method</th></tr></thead><tbody>${appData.sidecarArchitecture.blueprint.map(row => `<tr class="border-b"><td class="p-4 font-semibold text-stone-700">${row.component.replace(/`/g, '<code class="bg-stone-200 text-stone-800 px-1 rounded-sm">').replace(/`/g, '</code>')}</td><td class="p-4">${row.type}</td><td class="p-4">${row.location}</td><td class="p-4 text-sm">${row.role}</td></tr>`).join('')}</tbody></table>`;
-                blueprintContainer.innerHTML = blueprintHTML;
-                container.querySelectorAll('.data-flow-step').forEach(stepEl => {
-                    stepEl.addEventListener('click', () => {
-                        container.querySelectorAll('.data-flow-step').forEach(el => el.classList.remove('highlight'));
-                        stepEl.classList.add('highlight');
-                    });
-                });
-            }
-
-            function renderJudgeLlmContent() {
-                const container = document.getElementById('judge-llm');
-                // The static content is already in the HTML
-            }
-            
             function renderFeaturesChart() {
                 const labelsContainer = document.getElementById('chart-labels');
-                labelsContainer.innerHTML = appData.features.labels.map((label, index) => `
-                    <div class="flex items-center justify-end text-right h-[43px] text-sm font-medium text-stone-700">
-                        <span>${label}</span>
-                        <div class="info-icon ml-2 text-stone-400">
-                            (i)
-                            <span class="tooltip">${appData.features.info[index]}</span>
-                        </div>
-                    </div>
-                `).join('');
-
+                labelsContainer.innerHTML = appData.features.labels.map((label, index) => `<div class="flex items-center justify-end h-[43px] text-sm font-medium text-stone-700"><span>${label}</span><div class="info-icon ml-2 text-stone-400">(i)<span class="tooltip">${appData.features.info[index]}</span></div></div>`).join('');
                 const ctx = document.getElementById('featuresChart').getContext('2d');
                 const featureDetails = document.getElementById('feature-details');
                 new Chart(ctx, {
@@ -905,92 +658,135 @@ async def run_billing_report(request: BillingRequest):
                     },
                     options: {
                         indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-                        scales: { 
-                            x: { stacked: true, display: false, max: 105 }, 
-                            y: { stacked: true, display: false } 
-                        },
+                        scales: { x: { stacked: true, display: false, max: 105 }, y: { stacked: true, display: false } },
                         plugins: { legend: { position: 'top' }, tooltip: { enabled: false } },
                         onClick: (event, elements) => {
                             if (elements.length > 0) {
                                 const elementIndex = elements[0].index;
                                 const featureData = appData.features.details[elementIndex];
-                                featureDetails.innerHTML = `<h4 class="font-bold text-lg mb-2">${appData.features.labels[elementIndex]}</h4>
-                                <div class="space-y-2 text-sm">
-                                    <p><strong class="text-sky-600">Gateway:</strong> ${featureData.rationale.gateway}</p>
-                                    <p><strong class="text-amber-600">Sidecar:</strong> ${featureData.rationale.sidecar}</p>
-                                    <p><strong class="text-violet-600">MCP/Tool:</strong> ${featureData.rationale.mcp}</p>
-                                </div>`;
+                                featureDetails.innerHTML = `<h4 class="font-bold text-lg mb-2">${appData.features.labels[elementIndex]}</h4><div class="space-y-2 text-sm"><p><strong class="text-sky-600">Gateway:</strong> ${featureData.rationale.gateway}</p><p><strong class="text-amber-600">Sidecar:</strong> ${featureData.rationale.sidecar}</p><p><strong class="text-violet-600">MCP/Tool:</strong> ${featureData.rationale.mcp}</p></div>`;
                             }
                         }
                     }
                 });
             }
 
-            function renderRoadmap() {
-                const roadmapContainer = document.getElementById('roadmap');
-                const futureArchContent = appData.futureArchitecture;
-                const roadmapContentData = appData.roadmap;
-
-                let futureArchHTML = futureArchContent.map(item => `
-                    <div class="card p-6 flex">
-                        <div class="flex-shrink-0 w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-5 mt-1">
-                            <span class="text-2xl">${item.icon}</span>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg text-teal-700">${item.title}</h4>
-                            <p class="text-stone-600 mt-1">${item.description}</p>
-                        </div>
-                    </div>
-                `).join('');
-
-                let roadmapTimelineHTML = roadmapContentData.map(item => `<div class="mb-12 timeline-item pl-8 relative"><div class="absolute -left-[7.5px] top-1 w-4 h-4 rounded-full timeline-dot border-4 border-white"></div><p class="text-sm font-semibold text-stone-500">${item.duration}</p><h3 class="text-xl font-bold text-teal-700 mt-1 mb-2">Phase ${item.phase}: ${item.title}</h3><div class="card p-6"><p class="font-semibold mb-2">Objective:</p><p class="text-stone-600 mb-4">${item.objective}</p><p class="font-semibold mb-2">Key Actions:</p><ul class="list-disc list-inside text-stone-600 space-y-1 mb-4">${item.actions.map(action => `<li>${action}</li>`).join('')}</ul><p class="font-semibold mb-2">Outcome:</p><p class="text-stone-600">${item.outcome}</p></div></div>`).join('');
-
-                roadmapContainer.innerHTML = `
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Roadmap & Future Architecture</h2>
-                    <p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">
-                        The final phase of the roadmap culminates in an enterprise-grade system by integrating these key architectural components. The timeline below outlines the phased approach to achieve this vision.
-                    </p>
-                    <div class="grid md:grid-cols-2 gap-8 mb-16">${futureArchHTML}</div>
-                    <div class="relative pl-8">${roadmapTimelineHTML}</div>
-                `;
+            function renderGatewayDeepDive() {
+                const content = appData.gatewayDeepDive;
+                const container = document.getElementById('gateway');
+                let pointsHTML = content.points.map(point => `<div class="card p-6 flex"><div class="flex-shrink-0 w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-5 mt-1"><span class="text-2xl">${point.icon}</span></div><div><h4 class="font-bold text-lg text-teal-700">${point.title}</h4><p class="text-stone-600 mt-1">${point.description}</p></div></div>`).join('');
+                let liteLLMProsHTML = content.liteLLMPros.pros.map(pro => `<div class="flex items-start"><span class="text-xl mr-3 text-teal-500">${pro.icon}</span><div><h5 class="font-semibold">${pro.title}</h5><p class="text-sm text-stone-600">${pro.description}</p></div></div>`).join('');
+                container.innerHTML = `<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">${content.title}</h2><p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">${content.intro}</p><div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8 mb-12">${pointsHTML}</div><div class="card p-6 md:p-8"><h3 class="text-2xl font-bold tracking-tight text-center mb-4">${content.liteLLMPros.title}</h3><p class="max-w-3xl mx-auto text-center text-stone-600 mb-8">${content.liteLLMPros.intro}</p><div class="grid md:grid-cols-3 gap-8">${liteLLMProsHTML}</div></div>`;
             }
-            
-            const diagramComponents = document.querySelectorAll('.diagram-component');
-            const diagramInfo = document.getElementById('diagram-info');
-            diagramComponents.forEach(comp => {
-                const key = comp.id.replace('diagram-', '');
-                comp.addEventListener('mouseenter', () => { diagramInfo.textContent = appData.diagramInfo[key] || appData.diagramInfo.default; });
-                comp.addEventListener('mouseleave', () => { diagramInfo.textContent = appData.diagramInfo.default; });
-            });
-            
-            function setupSmoothScrolling() {
-                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                    if (anchor.getAttribute('data-listener-attached')) return;
-                    anchor.setAttribute('data-listener-attached', 'true');
-                    
-                    anchor.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        const targetEl = document.querySelector(this.getAttribute('href'));
-                        if (targetEl) {
-                           targetEl.scrollIntoView({
-                                behavior: 'smooth'
-                           });
-                        }
+
+            function renderSidecarArchitecture() {
+                const container = document.getElementById('sidecar');
+                const { dataFlow, blueprint } = appData.sidecarArchitecture;
+                let dataFlowHTML = dataFlow.map((item, index) => `<div class="flex items-center w-full"><div class="card p-4 md:p-6 flex-grow data-flow-step cursor-pointer" data-step="${item.step}"><div class="flex items-center"><div class="flex-shrink-0 w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-4"><span class="text-2xl">${item.icon}</span></div><div><h4 class="font-bold text-lg text-teal-700">Step ${item.step}: ${item.title}</h4><p class="text-stone-600">${item.description}</p></div></div></div></div>${index < dataFlow.length - 1 ? '<div class="flex justify-center"><div class="h-8 w-px bg-stone-300"></div></div>' : ''}`).join('');
+                let blueprintHTML = `<table class="w-full text-left"><thead><tr class="bg-stone-50"><th class="p-4 font-semibold">Component</th><th class="p-4 font-semibold">Type</th><th class="p-4 font-semibold">Location</th><th class="p-4 font-semibold">Role</th></tr></thead><tbody>${blueprint.map((row, i) => `<tr class="${i % 2 !== 0 ? 'bg-stone-50' : 'bg-white'}"><td class="p-4 font-medium">${row.component.replace(/`/g, '<code class="bg-stone-200 text-stone-800 px-1 rounded-sm">').replace(/`/g, '</code>')}</td><td class="p-4">${row.type}</td><td class="p-4">${row.location}</td><td class="p-4 text-sm">${row.role}</td></tr>`).join('')}</tbody></table>`;
+                container.innerHTML = `<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Sidecar Internal Architecture</h2><p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">The sidecar is a sophisticated micro-platform for real-time analysis. It's not a single process, but a high-performance Go-based pipeline that orchestrates calls to a specialized Python service for complex AI/ML validations. This dual-component design provides raw speed for data handling and the rich ecosystem of Python for intelligent analysis. Click through the steps below to trace the data flow.</p><div id="sidecar-data-flow" class="space-y-4">${dataFlowHTML}</div><h3 class="text-2xl font-bold tracking-tight text-center mt-16 mb-4">Technical Blueprint: Library Integration</h3><p class="max-w-3xl mx-auto text-lg text-stone-600 text-center mb-12">This table maps each open-source component to its role and location within the architecture, clarifying how the system is composed.</p><div id="sidecar-blueprint-content" class="card overflow-x-auto">${blueprintHTML}</div>`;
+                document.querySelectorAll('.data-flow-step').forEach(stepEl => {
+                    stepEl.addEventListener('click', () => {
+                        document.querySelectorAll('.data-flow-step').forEach(el => el.classList.remove('highlight'));
+                        stepEl.classList.add('highlight');
                     });
                 });
             }
 
-            // Initial Renders
+            function renderEBPF() {
+                const container = document.getElementById('ebpf');
+                container.innerHTML = `<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Enriching Observability with eBPF</h2><p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">To achieve the ultimate level of observability, we can enrich the sidecar with data from eBPF (Extended Berkeley Packet Filter). eBPF operates at the Linux kernel level, providing a "ground truth" view of system behavior that complements the application-level context from OTEL. This is a powerful combination for advanced security and performance analysis.</p><div class="card p-6 md:p-8"><h3 class="text-xl font-bold text-center mb-4 text-teal-700">OTEL + eBPF: A Complete Picture</h3><div class="grid md:grid-cols-2 gap-8 items-start"><div><p class="font-semibold text-stone-700 mb-2">What OTEL Provides (Application Context):</p><ul class="list-disc list-inside space-y-1 text-stone-600"><li>Business logic flow (e.g., user ID, trace ID)</li><li>LLM interaction details (prompts, responses)</li><li>Application errors and exceptions</li><li>Dependencies between services</li></ul></div><div><p class="font-semibold text-stone-700 mb-2">What eBPF Adds (System-Level Truth):</p><ul class="list-disc list-inside space-y-1 text-stone-600"><li>Monitoring for uninstrumented "black box" code</li><li>Granular network visibility (TCP connections, DNS)</li><li>File system access monitoring (read/write auditing)</li><li>Precise resource consumption (CPU, memory)</li></ul></div></div><h3 class="text-xl font-bold text-center mt-8 mb-4 text-teal-700">Integrated Architecture</h3><p class="text-center text-stone-600 max-w-2xl mx-auto mb-6">An eBPF agent on the node captures kernel events and sends them to the OTEL Collector in the sidecar. The backend can then correlate the OTEL application trace with the eBPF system trace for a unified view.</p><div class="max-w-3xl mx-auto p-4 border border-dashed border-stone-300 rounded-lg"><div class="flex flex-col md:flex-row items-center justify-center gap-4"><div class="text-center p-2"><p class="font-bold">🤖 Agent App</p><p class="text-xs text-stone-500">Emits OTEL Spans</p></div><div class="font-bold text-teal-500 text-2xl">→</div><div class="text-center p-4 bg-teal-50 rounded-lg border border-teal-200"><p class="font-bold">🔬 Sidecar</p><p class="text-xs text-stone-500">(OTEL Collector)</p></div><div class="font-bold text-teal-500 text-2xl">→</div><div class="text-center p-2"><p class="font-bold">📈 Backend</p><p class="text-xs text-stone-500">(SigNoz, etc.)</p></div></div><div class="flex justify-center my-2"><div class="w-px h-8 bg-stone-300"></div></div><div class="text-center p-4 bg-purple-50 rounded-lg border border-purple-200 w-fit mx-auto"><p class="font-bold">🐜 eBPF Agent</p><p class="text-xs text-stone-500">(On Node Kernel)</p><p class="text-xs text-purple-600">Sends system events</p></div></div></div>`;
+            }
+            
+            function renderMcpEnforcement() {
+                const content = appData.mcpEnforcement;
+                const container = document.getElementById('mcp-enforcement');
+                let pointsHTML = content.analogy.points.map(point => `<div class="text-center p-4 bg-stone-50 rounded-lg"><div class="text-3xl">${point.role.includes("Vault") ? '🏦' : (point.role.includes("Guard") ? '🛡️' : '📸')}</div><h4 class="font-bold mt-2">${point.role}</h4><p class="text-sm text-stone-600"><strong class="text-stone-800">Is:</strong> ${point.is}</p><p class="text-sm text-stone-600"><strong class="text-stone-800">Does:</strong> ${point.does}</p></div>`).join('');
+                container.innerHTML = `<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">${content.title}</h2><p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">${content.intro}</p><div class="card p-6 md:p-8"><h3 class="text-2xl font-bold tracking-tight text-center mb-6 text-teal-800">${content.analogy.title}</h3><div class="grid md:grid-cols-3 gap-6">${pointsHTML}</div><div class="mt-6 p-4 bg-teal-50/50 border-t border-teal-200 rounded-b-lg"><p class="text-center text-teal-900 font-semibold">${content.conclusion}</p></div></div>`;
+            }
+
+            function renderJudgeLlmContent() {
+                const container = document.getElementById('judge-llm');
+                container.innerHTML = `<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">The Role of Judge LLMs</h2><p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">Many critical validations require understanding nuance, intent, and context—tasks that are impossible for deterministic algorithms. The "LLM-as-a-Judge" pattern, where one LLM is used to evaluate the output of another, is a powerful technique for these scenarios. This can be achieved by embedding smaller, specialized models directly within the control plane components.</p><div class="grid md:grid-cols-1 lg:grid-cols-2 gap-8"><div class="card p-6"><h3 class="text-xl font-bold mb-4 text-teal-700">Use Cases for Judge LLMs</h3><ul class="space-y-3 text-stone-700"><li class="flex items-start"><span class="mr-3 text-teal-500">🛡️</span><div><span class="font-semibold">At the Gateway:</span> For real-time analysis of user prompts to detect sophisticated jailbreak attempts and nuanced toxicity that pattern matching would miss.</div></li><li class="flex items-start"><span class="mr-3 text-teal-500">🔬</span><div><span class="font-semibold">In the Sidecar:</span> For asynchronous, deep analysis like judging the factual grounding of a RAG response (hallucination detection) or assessing if an agent's tone aligns with qualitative business rules (e.g., "be empathetic").</div></li></ul></div><div class="card p-6"><h3 class="text-xl font-bold mb-4 text-teal-700">Embedded Judge LLM: Pros & Cons</h3><div class="grid grid-cols-2 gap-4"><div><h4 class="font-semibold text-green-600">Pros</h4><ul class="mt-2 space-y-2 text-sm text-stone-600 list-disc list-inside"><li>Low Latency</li><li>Reduced Cost</li><li>Enhanced Privacy</li><li>Self-Sufficiency</li></ul></div><div><h4 class="font-semibold text-red-600">Cons</h4><ul class="mt-2 space-y-2 text-sm text-stone-600 list-disc list-inside"><li>Increased Resources (CPU/RAM)</li><li>Reduced Capability vs. SOTA</li><li>Maintenance Overhead</li></ul></div></div><p class="mt-4 text-sm text-stone-600"><span class="font-semibold">Recommendation:</span> Use fast, embedded judges at the gateway for security, and a tiered approach in the sidecar (embedded for common checks, external SOTA model for high-stakes validation).</p></div></div>`;
+            }
+
+            function renderRoadmap() {
+                 const roadmapContainer = document.getElementById('roadmap');
+                 const { future, timeline } = appData.roadmap;
+                 let futureArchHTML = future.map(item => `<div class="card p-6 flex"><div class="flex-shrink-0 w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-5 mt-1"><span class="text-2xl">${item.icon}</span></div><div><h4 class="font-bold text-lg text-teal-700">${item.title}</h4><p class="text-stone-600 mt-1">${item.description}</p></div></div>`).join('');
+                 let roadmapTimelineHTML = timeline.map(item => `<div class="mb-12 timeline-item pl-8 relative"><div class="absolute -left-[7.5px] top-1 w-4 h-4 rounded-full timeline-dot border-4 border-white"></div><p class="text-sm font-semibold text-stone-500">${item.duration}</p><h3 class="text-xl font-bold text-teal-700 mt-1 mb-2">Phase ${item.phase}: ${item.title}</h3><div class="card p-6"><p class="font-semibold mb-2">Objective:</p><p class="text-stone-600 mb-4">${item.objective}</p><p class="font-semibold mb-2">Key Actions:</p><ul class="list-disc list-inside text-stone-600 space-y-1 mb-4">${item.actions.map(action => `<li>${action}</li>`).join('')}</ul><p class="font-semibold mb-2">Outcome:</p><p class="text-stone-600">${item.outcome}</p></div></div>`).join('');
+                 roadmapContainer.innerHTML = `<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Roadmap & Future Architecture</h2><p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">The final phase of the roadmap culminates in an enterprise-grade system by integrating these key architectural components. The timeline below outlines the phased approach to achieve this vision.</p><div class="grid md:grid-cols-2 gap-8 mb-16">${futureArchHTML}</div><div class="relative pl-8">${roadmapTimelineHTML}</div>`;
+            }
+            
+             function renderGatewayScanners() {
+                const container = document.getElementById('scanners');
+                 container.innerHTML = `<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Gateway Scanners: Open-Source Library Deep Dive</h2><p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">The LLM Gateway is the ideal place to enforce stateless policies on prompts and responses. The following open-source scanners can be plugged into the gateway to provide a robust first line of defense, operating without needing access to the agent's internal context.</p><div class="flex justify-center mb-8"><div class="flex flex-wrap gap-2 p-1 bg-stone-200 rounded-lg"><button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md active" data-filter="all">All</button><button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md" data-filter="pii">PII</button><button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md" data-filter="security">Security</button><button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md" data-filter="content">Content</button><button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md" data-filter="quality">Quality</button></div></div><div id="scanners-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>`;
+                
+                const grid = document.getElementById('scanners-grid');
+                const filters = container.querySelectorAll('.filter-btn');
+                
+                function displayScanners(filter) {
+                    grid.innerHTML = appData.gatewayScanners
+                        .filter(scanner => filter === 'all' || scanner.category === filter)
+                        .map(scanner => {
+                            const scannerId = scanner.scannerName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                            const demo = appData.demoScenarios.find(d => d.scannerId === scannerId);
+                            let demoLinkHTML = demo ? `<a href="#demo-${demo.scannerId}" class="text-sm font-medium text-purple-600 hover:text-purple-800">Demo</a>` : '';
+
+                            return `<div class="card p-4 flex flex-col"><h4 class="font-bold text-md text-teal-700">${scanner.scannerName}</h4><p class="text-sm text-stone-600 mt-2 flex-grow">${scanner.description}</p><div class="mt-4 flex justify-between items-center"><div>${scanner.method === 'Algorithmic' ? `<span class="text-xs font-semibold bg-cyan-100 text-cyan-800 px-2 py-1 rounded-full">Algorithmic</span>` : `<a href="${scanner.modelLink || '#'}" target="_blank" class="text-xs font-semibold bg-amber-100 text-amber-800 px-2 py-1 rounded-full hover:bg-amber-200" ${!scanner.modelLink ? 'onclick="return false;" style="cursor:default;"' : ''}>Model-Based 🧠</a>`}</div><div class="flex items-center space-x-4">${demoLinkHTML}${scanner.link ? `<a href="${scanner.link}" target="_blank" class="text-sm font-medium text-teal-600 hover:text-teal-800">Source →</a>` : ''}</div></div></div>`
+                        }).join('');
+                }
+
+                filters.forEach(button => {
+                    button.addEventListener('click', () => {
+                        filters.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        displayScanners(button.dataset.filter);
+                        setupSmoothScrolling();
+                    });
+                });
+                displayScanners('all');
+            }
+
+            function renderDemoScenarios() {
+                 const container = document.getElementById('demos');
+                 let scenariosHTML = appData.demoScenarios.map(scenario => {
+                    let stepsHTML = scenario.steps.map(step => `<div class="demo-step mb-6" data-icon="${step.icon}"><h4 class="font-bold text-lg mb-1">${step.title}</h4><p class="text-stone-600">${step.text}</p></div>`).join('');
+                    return `<div class="card p-6 md:p-8" id="demo-${scenario.scannerId}"><h3 class="text-2xl font-bold tracking-tight text-center mb-6 text-teal-800">${scenario.scannerName}</h3><div>${stepsHTML}</div></div>`;
+                }).join('');
+                container.innerHTML = `<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Scanner Demo Scenarios</h2><p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">These practical scenarios demonstrate the value of key gateway scanners in preventing common risks, from brand damage to data breaches.</p><div class="space-y-8">${scenariosHTML}</div>`;
+            }
+            
+            function renderCustomScanners() {
+                 const content = appData.customScanners;
+                 const container = document.getElementById('custom-scanners');
+                 let implementationsHTML = content.implementations.map(impl => `<div class="card p-6"><h3 class="text-xl font-bold mb-2 text-teal-700">${impl.title}</h3><div class="space-y-2 text-sm"><p><strong class="text-green-600">Pros:</strong> ${impl.pros}</p><p><strong class="text-red-600">Cons:</strong> ${impl.cons}</p></div><div class="mt-4"><pre><code>${impl.code.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</code></pre></div></div>`).join('');
+                 container.innerHTML = `<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">${content.title}</h2><p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">${content.intro}</p><div class="grid lg:grid-cols-3 gap-8">${implementationsHTML}</div><div class="card p-6 mt-8"><h3 class="text-xl font-bold text-center text-teal-700">${content.placement.title}</h3><p class="max-w-3xl mx-auto text-center text-stone-600 mt-2">${content.placement.intro}</p><div class="mt-4 grid md:grid-cols-2 gap-6 text-center"><div class="p-4 bg-stone-50 rounded-lg"><h4 class="font-semibold">At the Gateway</h4><p class="text-sm text-stone-600">${content.placement.gateway}</p></div><div class="p-4 bg-stone-50 rounded-lg"><h4 class="font-semibold">In the Sidecar</h4><p class="text-sm text-stone-600">${content.placement.sidecar}</p></div></div></div>`;
+            }
+
+            function renderToolEnforcement() {
+                const content = appData.enforcementStrategy;
+                const container = document.getElementById('tool-enforcement');
+                let methodsHTML = content.methods.map(method => {
+                    let diagramHTML = method.diagram ? `<div class="mt-4 flex items-center justify-center space-x-2 text-sm">${method.diagram.map((d) => `<div class="text-center p-2 bg-stone-100 rounded-md">${d.item}</div>${d.arrow ? `<div class="font-bold text-teal-500 text-xl">→</div>` : ''}`).join('')}</div>` : '';
+                    let codeHTML = method.code ? `<div class="mt-4"><pre><code>${method.code.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</code></pre></div>` : '';
+                    return `<div class="card p-6"><h3 class="text-xl font-bold mb-2 text-teal-700">${method.title}</h3><p class="text-stone-600">${method.description}</p>${diagramHTML}${codeHTML}</div>`;
+                }).join('');
+                container.innerHTML = `<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">${content.title}</h2><p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">${content.intro}</p><div class="grid md:grid-cols-2 gap-8">${methodsHTML}</div><div class="card p-6 mt-8 bg-teal-50/50 border-teal-200"><h3 class="text-xl font-bold text-center text-teal-800">The Combined Strategy</h3><p class="max-w-3xl mx-auto text-center text-teal-900 mt-2">${content.conclusion}</p></div>`;
+            }
+
+            // Initial Renders - REORDERED and CORRECTED
             generateDemoScenarios();
+            renderFeaturesChart();
             renderGatewayDeepDive();
-            renderCustomScanners();
+            renderSidecarArchitecture();
+            renderEBPF();
+            renderMcpEnforcement();
+            renderJudgeLlmContent();
             renderGatewayScanners();
             renderDemoScenarios();
-            renderSidecarArchitecture();
-            renderMcpEnforcement();
+            renderCustomScanners();
             renderToolEnforcement();
-            renderJudgeLlmContent();
-            renderFeaturesChart();
             renderRoadmap();
             setupSmoothScrolling();
         });
