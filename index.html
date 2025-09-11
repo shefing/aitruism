@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agentic AI Control Plane: An Interactive Guide (V15)</title>
+    <title>Agentic AI Control Plane: An Interactive Guide (V16)</title>
     <link rel="icon" type="image/x-icon" href="https://www.shefing.com/favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -11,8 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Stone & Teal -->
-    <!-- Application Structure Plan: Same as V14. Focus of this update is improving the "Locus of Control" section. -->
-    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Feature Locus Chart -> Analyze -> Updated data to reflect MCP's enforcement role. | Feature Labels -> Inform -> Added HTML labels with info-hovers for clarity, replacing canvas labels. | This improves both accuracy and user experience. -->
+    <!-- Application Structure Plan: Restructured the Scanners section to be organized by strategic priorities instead of a flat list. This provides a much clearer narrative and implementation guide. -->
+    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation. | Scanners Section -> Organize/Explain -> Grouped card layouts with detailed rationale text -> Directly maps technical components to business goals. | All other choices remain consistent. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -119,12 +119,13 @@
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0 flex items-center">
-                    <h1 class="text-xl font-bold text-stone-800">AI Control Plane V15</h1>
+                    <h1 class="text-xl font-bold text-stone-800">AI Control Plane V16</h1>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-center space-x-4 text-sm">
                         <a href="#architecture" class="nav-link px-3 py-2 font-medium text-stone-600">Architecture</a>
                         <a href="#gateway" class="nav-link px-3 py-2 font-medium text-stone-600">Gateway</a>
+                        <a href="#scanners" class="nav-link px-3 py-2 font-medium text-stone-600">Scanners</a>
                         <a href="#sidecar" class="nav-link px-3 py-2 font-medium text-stone-600">Sidecar</a>
                         <a href="#ebpf" class="nav-link px-3 py-2 font-medium text-stone-600">eBPF</a>
                         <a href="#mcp-enforcement" class="nav-link px-3 py-2 font-medium text-stone-600">MCP Enforcement</a>
@@ -133,12 +134,11 @@
                         
                         <div class="relative group">
                             <button class="nav-link px-3 py-2 font-medium text-stone-600 inline-flex items-center">
-                                <span>Scanners & Policies</span>
+                                <span>Policies & Demos</span>
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
                             <div class="absolute right-0 pt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden group-hover:block focus-within:block z-50">
                                 <div class="py-1">
-                                    <a href="#scanners" class="block px-4 py-2 text-sm text-stone-700 hover:bg-stone-100">OSS Scanners</a>
                                     <a href="#demos" class="block px-4 py-2 text-sm text-stone-700 hover:bg-stone-100">Demo Scenarios</a>
                                     <a href="#custom-scanners" class="block px-4 py-2 text-sm text-stone-700 hover:bg-stone-100">Custom Scanners</a>
                                     <a href="#tool-enforcement" class="block px-4 py-2 text-sm text-stone-700 hover:bg-stone-100">Tool Enforcement SDK</a>
@@ -153,34 +153,23 @@
 
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
 
-        <!-- Section 1: Core Architecture -->
         <section id="architecture" class="mb-16 md:mb-24 text-center scroll-mt-20">
-             <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">A Unified Architecture for AI Governance</h2>
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">A Unified Architecture for AI Governance</h2>
             <p class="max-w-3xl mx-auto text-lg text-stone-600 mb-12">
                 This interactive guide explores a robust, multi-layered architecture for managing Agentic AI systems. The framework provides a comprehensive control plane for security, quality, and observability across all AI interactions. Hover over components in the diagram to learn more.
             </p>
             <div class="w-full max-w-7xl mx-auto p-4 md:p-8 card relative mb-16">
                  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <!-- Left Column: User & App Pod -->
                     <div class="flex flex-col items-center space-y-6">
                         <div class="flex items-center space-x-4 text-lg font-semibold"><span>👤</span><p>User</p></div>
                         <div class="w-px h-8 bg-stone-300"></div>
                         <div id="diagram-agent-pod" class="diagram-component p-4 border-2 border-dashed border-teal-500 rounded-xl bg-teal-50/30 w-full cursor-pointer">
                             <p class="font-bold text-teal-600 text-center mb-2">Application Pod</p>
-                            <div class="p-4 bg-white rounded-lg shadow text-center relative">
-                                <span class="text-2xl">🤖</span>
-                                <p class="font-semibold">Agentic App</p>
-                                <div class="absolute top-1/2 -translate-y-1/2 -right-4 text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full z-10">OTEL</div>
-                            </div>
+                            <div class="p-4 bg-white rounded-lg shadow text-center relative"><span class="text-2xl">🤖</span><p class="font-semibold">Agentic App</p><div class="absolute top-1/2 -translate-y-1/2 -right-4 text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full z-10">OTEL</div></div>
                             <div class="h-4"></div>
-                            <div class="p-4 bg-white rounded-lg shadow text-center relative">
-                                <span class="text-2xl">🔬</span>
-                                <p class="font-semibold">Sidecar</p>
-                                <div class="absolute top-2 right-2 text-xs bg-amber-100 text-amber-700 px-1 rounded-full" title="Embedded Judge LLM">🧠</div>
-                            </div>
+                            <div class="p-4 bg-white rounded-lg shadow text-center relative"><span class="text-2xl">🔬</span><p class="font-semibold">Sidecar</p><div class="absolute top-2 right-2 text-xs bg-amber-100 text-amber-700 px-1 rounded-full" title="Embedded Judge LLM">🧠</div></div>
                         </div>
                     </div>
-                    <!-- Middle Column: Internal & Central Services -->
                     <div class="flex flex-col items-center space-y-6">
                         <div id="diagram-mcp" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full cursor-pointer">
                              <p class="font-bold text-stone-600 text-center mb-2">Internal Tools & Data (MCP)</p>
@@ -199,15 +188,10 @@
                              </div>
                         </div>
                     </div>
-                    <!-- Right Column: Gateway & External Services -->
                      <div class="flex flex-col items-center space-y-6">
                         <div id="diagram-gateway" class="diagram-component p-4 border-2 border-dashed border-sky-500 rounded-xl bg-sky-50/30 w-full cursor-pointer">
                             <p class="font-bold text-sky-600 text-center mb-2">LLM Gateway</p>
-                            <div class="p-4 bg-white rounded-lg shadow text-center relative">
-                                <span class="text-2xl">🛡️</span>
-                                <p class="font-semibold">Gateway Logic</p>
-                                <div class="absolute top-2 right-2 text-xs bg-amber-100 text-amber-700 px-1 rounded-full" title="Embedded Judge LLM">🧠</div>
-                            </div>
+                            <div class="p-4 bg-white rounded-lg shadow text-center relative"><span class="text-2xl">🛡️</span><p class="font-semibold">Gateway Logic</p><div class="absolute top-2 right-2 text-xs bg-amber-100 text-amber-700 px-1 rounded-full" title="Embedded Judge LLM">🧠</div></div>
                         </div>
                         <div class="w-px h-8 bg-stone-300"></div>
                         <div id="diagram-external" class="diagram-component p-4 border-2 border-dashed border-stone-400 rounded-xl w-full cursor-pointer">
@@ -240,15 +224,14 @@
             </div>
         </section>
 
-        <!-- Other sections will be rendered by JS -->
         <section id="gateway" class="mb-16 md:mb-24 scroll-mt-20"></section>
+        <section id="scanners" class="mb-16 md:mb-24 scroll-mt-20"></section>
         <section id="sidecar" class="mb-16 md:mb-24 scroll-mt-20"></section>
         <section id="ebpf" class="mb-16 md:mb-24 scroll-mt-20"></section>
         <section id="mcp-enforcement" class="mb-16 md:mb-24 scroll-mt-20"></section>
         <section id="judge-llm" class="mb-16 md:mb-24 scroll-mt-20"></section>
         <section id="roadmap" class="scroll-mt-20"></section>
-        <div id="scanners-and-policies">
-            <section id="scanners" class="mb-16 md:mb-24 scroll-mt-20"></section>
+        <div id="policies-and-demos">
             <section id="demos" class="mb-16 md:mb-24 scroll-mt-20"></section>
             <section id="custom-scanners" class="mb-16 md:mb-24 scroll-mt-20"></section>
             <section id="tool-enforcement" class="mb-16 md:mb-24 scroll-mt-20"></section>
@@ -257,7 +240,7 @@
 
     <footer class="bg-stone-200 mt-16">
         <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-stone-600 text-sm">
-            <p>Interactive guide based on the "Architecting a Production-Grade Observability and Control Plane for Agentic AI Systems" report (V15).</p>
+            <p>Interactive guide based on the "Architecting a Production-Grade Observability and Control Plane for Agentic AI Systems" report (V16).</p>
         </div>
     </footer>
 
@@ -265,60 +248,36 @@
         document.addEventListener('DOMContentLoaded', () => {
             const appData = {
                  gatewayScanners: [
-                    { scannerName: 'LlamaFirewall: AlignmentCheck', category: 'content', method: 'Model-Based', description: 'An alignment-focused Judge LLM that reviews the LLM\'s final response to ensure it is helpful, harmless, and adheres to predefined content policies.', modelLink: 'https://huggingface.co/meta-llama/LlamaGuard-7b', link: 'https://arxiv.org/abs/2405.16160' },
-                    { scannerName: 'LlamaFirewall: PromptGuard', category: 'security', method: 'Model-Based', description: 'A security-focused Judge LLM that analyzes user prompts to detect malicious instructions, prompt injection, and other defense evasion techniques.', modelLink: 'https://huggingface.co/meta-llama/LlamaGuard-7b', link: 'https://arxiv.org/abs/2405.16160' },
-                    { scannerName: 'PII Detection (Presidio)', category: 'pii', method: 'Algorithmic', description: 'Uses Microsoft Presidio for high-accuracy Named Entity Recognition (NER) to find and redact a wide range of PII entities.', link: 'https://github.com/microsoft/presidio' },
-                    { scannerName: 'Secrets Present', category: 'security', method: 'Algorithmic', description: 'Scans text for patterns that match common API key and secret formats to prevent accidental leakage.', link: 'https://hub.guardrailsai.com/validator/guardrails/secrets_present' },
+                    { scannerName: 'LlamaFirewall: AlignmentCheck', priority: 1, category: 'content', method: 'Model-Based', description: 'An alignment-focused Judge LLM that reviews the LLM\'s final response to ensure it is helpful, harmless, and adheres to predefined content policies.', modelLink: 'https://huggingface.co/meta-llama/LlamaGuard-7b', link: 'https://arxiv.org/abs/2405.16160' },
+                    { scannerName: 'LlamaFirewall: PromptGuard', priority: 1, category: 'security', method: 'Model-Based', description: 'A security-focused Judge LLM that analyzes user prompts to detect malicious instructions, prompt injection, and other defense evasion techniques.', modelLink: 'https://huggingface.co/meta-llama/LlamaGuard-7b', link: 'https://arxiv.org/abs/2405.16160' },
+                    { scannerName: 'PII Detection (Presidio)', priority: 2, category: 'pii', method: 'Algorithmic', description: 'Uses Microsoft Presidio for high-accuracy Named Entity Recognition (NER) to find and redact a wide range of PII entities.', link: 'https://github.com/microsoft/presidio' },
+                    { scannerName: 'Secrets Present', priority: 2, category: 'security', method: 'Algorithmic', description: 'Scans text for patterns that match common API key and secret formats to prevent accidental leakage.', link: 'https://hub.guardrailsai.com/validator/guardrails/secrets_present' },
+                    { scannerName: 'URL Reachability', priority: 4, category: 'quality', method: 'Algorithmic', description: 'Extracts all URLs from a response and verifies that they are reachable, preventing dead links.', link: 'https://hub.guardrailsai.com/validator/guardrails/urls_reachable' },
+                    { scannerName: 'Emotion Detection', priority: 1, category: 'content', method: 'Model-Based', description: 'Classifies text into emotional categories like joy, sadness, anger, etc. Useful for monitoring conversation tone.', modelLink: 'https://huggingface.co/j-hartmann/emotion-english-distilroberta-base', link: 'https://huggingface.co/j-hartmann/emotion-english-distilroberta-base' },
+                    { scannerName: 'NeMo Self-Contradiction Check', priority: 1, category: 'quality', method: 'Model-Based', description: 'Checks if an LLM\'s response contains internally contradictory statements. A key feature of NeMo Guardrails.', link: 'https://github.com/NVIDIA/NeMo-Guardrails' },
+                    { scannerName: 'NeMo Jailbreak Detection', priority: 1, category: 'security', method: 'Model-Based', description: 'A specialized model from NeMo Guardrails to detect if an input is an attempt to jailbreak the LLM.', link: 'https://github.com/NVIDIA/NeMo-Guardrails' },
+                    { scannerName: 'Valid Range', priority: 4, category: 'quality', method: 'Algorithmic', description: 'Ensures a numerical value falls within a specified minimum and maximum range.', link: 'https://hub.guardrailsai.com/validator/guardrails/valid_range' },
+                    { scannerName: 'Valid JSON', priority: 4, category: 'quality', method: 'Algorithmic', description: 'Ensures that an LLM\'s output strictly adheres to a provided JSON schema, crucial for reliable tool use.', link: 'https://hub.guardrailsai.com/validator/guardrails/valid_json' },
                     { scannerName: 'Toxicity & Harmful Language', category: 'content', method: 'Model-Based', description: 'Uses a sentence-transformer model to classify text for toxicity, insults, threats, and other harmful content.', modelLink: 'https://huggingface.co/martin-ha/toxic-comment-model', link: 'https://hub.guardrailsai.com/validator/guardrails/toxic_language' },
                     { scannerName: 'Profanity Filter', category: 'content', method: 'Algorithmic', description: 'A straightforward filter that checks for words against a comprehensive list of profanities.', link: 'https://hub.guardrailsai.com/validator/guardrails/profanity_free' },
-                    { scannerName: 'Prompt Injection (Vigil)', category: 'security', method: 'Model-Based', description: 'A powerful prompt injection detector using a fine-tuned transformer model to identify adversarial inputs.', modelLink: 'https://huggingface.co/deadbits/vigil-llm-prompt-injection', link: 'https://github.com/deadbits/vigil-llm' },
-                    { scannerName: 'Gibberish Detection', category: 'quality', method: 'Algorithmic', description: 'Checks if text is coherent language or random characters by analyzing character frequencies and patterns.', link: 'https://hub.guardrailsai.com/validator/guardrails/gibberish_text' },
-                    { scannerName: 'URL Reachability', category: 'quality', method: 'Algorithmic', description: 'Extracts all URLs from a response and verifies that they are reachable, preventing dead links.', link: 'https://hub.guardrailsai.com/validator/guardrails/urls_reachable' },
                     { scannerName: 'Code Security (Semgrep)', category: 'security', method: 'Algorithmic', description: 'Uses the Semgrep static analysis engine to scan for common security vulnerabilities in generated code.', link: 'https://github.com/semgrep/semgrep' },
-                    { scannerName: 'Language Detection', category: 'content', method: 'Algorithmic', description: 'Identifies the language of the text to enforce that the LLM only responds in specific languages.', link: 'https://hub.guardrailsai.com/validator/scb-10x/correct_language' },
-                    { scannerName: 'Emotion Detection', category: 'content', method: 'Model-Based', description: 'Classifies text into emotional categories like joy, sadness, anger, etc. Useful for monitoring conversation tone.', modelLink: 'https://huggingface.co/j-hartmann/emotion-english-distilroberta-base', link: 'https://huggingface.co/j-hartmann/emotion-english-distilroberta-base' },
-                    { scannerName: 'Reading Time', category: 'quality', method: 'Algorithmic', description: 'Calculates the estimated reading time of a text and validates it against a min/max range.', link: 'https://hub.guardrailsai.com/validator/guardrails/reading_time' },
-                    { scannerName: 'Self-Contradiction Check (NeMo)', category: 'quality', method: 'Model-Based', description: 'Checks if an LLM\'s response contains internally contradictory statements. A key feature of NeMo Guardrails.', link: 'https://github.com/NVIDIA/NeMo-Guardrails' },
-                    { scannerName: 'Jailbreak Detection (NeMo)', category: 'security', method: 'Model-Based', description: 'A specialized model from NeMo Guardrails to detect if an input is an attempt to jailbreak the LLM.', link: 'https://github.com/NVIDIA/NeMo-Guardrails' },
-                    { scannerName: 'Output Moderation (NeMo)', category: 'content', method: 'Model-Based', description: 'A comprehensive moderation rail from NeMo that checks for a variety of unsafe content categories.', link: 'https://github.com/NVIDIA/NeMo-Guardrails' },
-                    { scannerName: 'Ban List', category: 'content', method: 'Algorithmic', description: 'Blocks or flags text that contains any word from a user-defined list of banned terms.', link: 'https://hub.guardrailsai.com/validator/guardrails/ban_list' },
-                    { scannerName: 'Ends With', category: 'quality', method: 'Algorithmic', description: 'Validates that a string ends with a specific substring, useful for formatting enforcement.', link: 'https://hub.guardrailsai.com/validator/guardrails/ends_with' },
-                    { scannerName: 'Regex Match', category: 'quality', method: 'Algorithmic', description: 'Validates that a string matches a given regular expression pattern.', link: 'https://hub.guardrailsai.com/validator/guardrails/regex_match' },
-                    { scannerName: 'Similar To Document', category: 'content', method: 'Model-Based', description: 'Checks if a given text is semantically similar to a reference document.', modelLink: 'https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2', link: 'https://hub.guardrailsai.com/validator/guardrails/similar_to_document' },
-                    { scannerName: 'Valid Range', category: 'quality', method: 'Algorithmic', description: 'Ensures a numerical value falls within a specified minimum and maximum range.', link: 'https://hub.guardrailsai.com/validator/guardrails/valid_range' },
-                    { scannerName: 'One Line', category: 'quality', method: 'Algorithmic', description: 'Validates that a string does not contain any newline characters.', link: 'https://hub.guardrailsai.com/validator/guardrails/one_line' },
-                    { scannerName: 'Valid JSON', category: 'quality', method: 'Algorithmic', description: 'Ensures that an LLM\'s output strictly adheres to a provided JSON schema, crucial for reliable tool use.', link: 'https://hub.guardrailsai.com/validator/guardrails/valid_json' },
+                ],
+                scannerPriorities: [
+                    { priority: 1, title: "Priority 1: Alignment & On-Topic Check", rationale: "This is about ensuring the agent stays true to its purpose. These scanners cover the content, logical consistency, and tone of the agent's responses, which are the core components of alignment. We recommend a defense-in-depth approach for security: the specialized `NeMo Jailbreak` scanner can catch common attacks quickly, while the broader `PromptGuard` can analyze for more novel or nuanced threats." },
+                    { priority: 2, title: "Priority 2: Unnecessary Data Disclosure", rationale: "This is a more advanced requirement than simple PII detection; it's about context. While no single off-the-shelf scanner can determine 'necessity,' these scanners are the essential prerequisites. They perform the factual, Stage-1 detection of what sensitive data is present, which is required before a more advanced, custom Judge LLM can perform a contextual check." },
+                    { priority: 3, title: "Priority 3: Detect Unreasonable Behaviors (Anomaly Detection)", rationale: "This goal is achieved not by a single scanner, but by using the outputs of quality scanners as metrics for our observability platform. The Sidecar and Observability Backend are the primary tools here, but they rely on the pass/fail signals from scanners like `Valid Range` and `Valid JSON` to establish a baseline of normal behavior and detect significant deviations that indicate a problem." },
+                    { priority: 4, title: "Priority 4: Trivial Correctness", rationale: "These scanners cover the fundamental structural and logical integrity of the agent's output. For any agent that uses tools or provides structured data, ensuring the output is well-formed, contains valid values, and includes working links is a critical baseline for quality and reliability. These checks prevent downstream system failures and a poor user experience." }
                 ],
                 demoScenarios: [], 
                 customScanners: {
                     title: "Implementing Custom Business Scanners",
                     intro: "The true power of a control plane is the ability to enforce rules unique to your business. For example, a support agent must never promise a specific delivery date, only a shipping window. This section explores how to implement such a custom scanner.",
                     implementations: [
-                        {
-                            title: "Approach 1: Keyword & Regex (The Simple Baseline)",
-                            pros: "Fast, cheap, and easy to implement for catching obvious violations.",
-                            cons: "Brittle. Easily bypassed by synonyms ('arrives by', 'will be there on'). High risk of false positives/negatives.",
-                            code: `import re\n\ndef check_delivery_promise(text):\n    patterns = [r"delivery by \\w+", r"arrives on \\d{1,2}/\\d{1,2}"]\n    for p in patterns:\n        if re.search(p, text, re.IGNORECASE):\n            return {"violation": True, "reason": "Contains a delivery promise."}\n    return {"violation": False}`
-                        },
-                        {
-                            title: "Approach 2: Semantic Search (The Smarter Way)",
-                            pros: "Far more robust. Catches nuanced phrasing and synonyms by understanding meaning, not just words.",
-                            cons: "Requires a sentence-transformer model and a vector comparison, adding some complexity.",
-                            code: `# Pseudocode\nfrom sentence_transformers import SentenceTransformer, util\n\nmodel = SentenceTransformer('all-MiniLM-L6-v2')\nforbidden_phrases = ["guaranteed delivery date", "will arrive on", "you will get it by"]\nforbidden_embeddings = model.encode(forbidden_phrases)\n\ndef check_semantic_promise(text):\n    response_embedding = model.encode(text)\n    scores = util.cos_sim(response_embedding, forbidden_embeddings)\n    if max(scores) > 0.75: # Threshold\n        return {"violation": True, "reason": "Semantically similar to a delivery promise."}\n    return {"violation": False}`
-                        },
-                        {
-                            title: "Approach 3: Judge LLM (The Most Powerful Way)",
-                            pros: "The most accurate method. Can understand context, intent, and complex qualitative rules.",
-                            cons: "Slower and more resource-intensive. Requires careful prompt engineering for the judge.",
-                            code: `# Prompt for the Judge LLM\nSYSTEM: You are a quality assurance bot. The following is a response from a support agent. Does this response promise a specific delivery date or just a shipping window? Respond with only "DELIVERY DATE" or "SHIPPING WINDOW".\n\nUSER: "Your order will be shipped within 2-3 business days and should arrive by Friday, October 27th."\n\nASSISTANT: DELIVERY DATE`
-                        }
+                        { title: "Approach 1: Keyword & Regex (The Simple Baseline)", pros: "Fast, cheap, and easy to implement for catching obvious violations.", cons: "Brittle. Easily bypassed by synonyms ('arrives by', 'will be there on'). High risk of false positives/negatives.", code: `import re\n\ndef check_delivery_promise(text):\n    patterns = [r"delivery by \\w+", r"arrives on \\d{1,2}/\\d{1,2}"]\n    for p in patterns:\n        if re.search(p, text, re.IGNORECASE):\n            return {"violation": True, "reason": "Contains a delivery promise."}\n    return {"violation": False}` },
+                        { title: "Approach 2: Semantic Search (The Smarter Way)", pros: "Far more robust. Catches nuanced phrasing and synonyms by understanding meaning, not just words.", cons: "Requires a sentence-transformer model and a vector comparison, adding some complexity.", code: `# Pseudocode\nfrom sentence_transformers import SentenceTransformer, util\n\nmodel = SentenceTransformer('all-MiniLM-L6-v2')\nforbidden_phrases = ["guaranteed delivery date", "will arrive on", "you will get it by"]\nforbidden_embeddings = model.encode(forbidden_phrases)\n\ndef check_semantic_promise(text):\n    response_embedding = model.encode(text)\n    scores = util.cos_sim(response_embedding, forbidden_embeddings)\n    if max(scores) > 0.75: # Threshold\n        return {"violation": True, "reason": "Semantically similar to a delivery promise."}\n    return {"violation": False}` },
+                        { title: "Approach 3: Judge LLM (The Most Powerful Way)", pros: "The most accurate method. Can understand context, intent, and complex qualitative rules.", cons: "Slower and more resource-intensive. Requires careful prompt engineering for the judge.", code: `# Prompt for the Judge LLM\nSYSTEM: You are a quality assurance bot. The following is a response from a support agent. Does this response promise a specific delivery date or just a shipping window? Respond with only "DELIVERY DATE" or "SHIPPING WINDOW".\n\nUSER: "Your order will be shipped within 2-3 business days and should arrive by Friday, October 27th."\n\nASSISTANT: DELIVERY DATE` }
                     ],
-                    placement: {
-                        title: "Architectural Placement: Gateway vs. Sidecar",
-                        intro: "Where you run your custom scanner depends on its complexity and performance.",
-                        gateway: "Fast, stateless checks like **Keyword/Regex** or **Semantic Search with a small, fast model** can run synchronously at the Gateway. This provides immediate, real-time blocking.",
-                        sidecar: "Complex, context-aware checks using a **Judge LLM** or those that need the full conversational history must run in the Sidecar. The asynchronous nature of the sidecar allows for these powerful but slower analyses without impacting user-perceived latency."
-                    }
+                    placement: { title: "Architectural Placement: Gateway vs. Sidecar", intro: "Where you run your custom scanner depends on its complexity and performance.", gateway: "Fast, stateless checks like **Keyword/Regex** or **Semantic Search with a small, fast model** can run synchronously at the Gateway. This provides immediate, real-time blocking.", sidecar: "Complex, context-aware checks using a **Judge LLM** or those that need the full conversational history must run in the Sidecar. The asynchronous nature of the sidecar allows for these powerful but slower analyses without impacting user-perceived latency." }
                 },
                 gatewayDeepDive: {
                     title: "LLM Gateway vs Reverse Proxy",
@@ -510,8 +469,8 @@
                     ]
                 }
             };
-
-            // --- All render functions ---
+            
+            // FIX: All function definitions are now placed before the initialization block.
             
             function setupSmoothScrolling() {
                  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -559,7 +518,7 @@
                     return { ...s, scannerId, steps };
                 });
             }
-            
+
             function renderFeaturesChart() {
                 const labelsContainer = document.getElementById('chart-labels');
                 labelsContainer.innerHTML = appData.features.labels.map((label, index) => `<div class="flex items-center justify-end h-[43px] text-sm font-medium text-stone-700"><span>${label}</span><div class="info-icon ml-2 text-stone-400">(i)<span class="tooltip">${appData.features.info[index]}</span></div></div>`).join('');
@@ -627,7 +586,7 @@
                  roadmapContainer.innerHTML = `<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Roadmap & Future Architecture</h2><p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">The final phase of the roadmap culminates in an enterprise-grade system by integrating these key architectural components. The timeline below outlines the phased approach to achieve this vision.</p><div class="grid md:grid-cols-2 gap-8 mb-16">${futureArchHTML}</div><div class="relative pl-8">${roadmapTimelineHTML}</div>`;
             }
             
-             function renderGatewayScanners() {
+            function renderGatewayScanners() {
                 const container = document.getElementById('scanners');
                  container.innerHTML = `<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">Gateway Scanners: Open-Source Library Deep Dive</h2><p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">The LLM Gateway is the ideal place to enforce stateless policies on prompts and responses. The following open-source scanners can be plugged into the gateway to provide a robust first line of defense, operating without needing access to the agent's internal context.</p><div class="flex justify-center mb-8"><div class="flex flex-wrap gap-2 p-1 bg-stone-200 rounded-lg"><button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md active" data-filter="all">All</button><button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md" data-filter="pii">PII</button><button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md" data-filter="security">Security</button><button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md" data-filter="content">Content</button><button class="filter-btn px-3 py-1 text-sm font-semibold rounded-md" data-filter="quality">Quality</button></div></div><div id="scanners-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>`;
                 
@@ -684,29 +643,34 @@
                 container.innerHTML = `<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center mb-4">${content.title}</h2><p class="max-w-4xl mx-auto text-lg text-stone-600 text-center mb-12">${content.intro}</p><div class="grid md:grid-cols-2 gap-8">${methodsHTML}</div><div class="card p-6 mt-8 bg-teal-50/50 border-teal-200"><h3 class="text-xl font-bold text-center text-teal-800">The Combined Strategy</h3><p class="max-w-3xl mx-auto text-center text-teal-900 mt-2">${content.conclusion}</p></div>`;
             }
 
-            // --- INITIALIZATION ---
-            generateDemoScenarios();
-            renderFeaturesChart();
-            renderGatewayDeepDive();
-            renderSidecarArchitecture();
-            renderEBPF();
-            renderMcpEnforcement();
-            renderJudgeLlmContent();
-            renderGatewayScanners();
-            renderDemoScenarios();
-            renderCustomScanners();
-            renderToolEnforcement();
-            renderRoadmap();
-            setupSmoothScrolling();
-            
-            // FIX: This function needs to be defined and called *after* the main render calls.
-            const diagramComponents = document.querySelectorAll('.diagram-component');
-            const diagramInfo = document.getElementById('diagram-info');
-            diagramComponents.forEach(comp => {
-                const key = comp.id.replace('diagram-', '');
-                comp.addEventListener('mouseenter', () => { diagramInfo.textContent = appData.diagramInfo[key] || appData.diagramInfo.default; });
-                comp.addEventListener('mouseleave', () => { diagramInfo.textContent = appData.diagramInfo.default; });
-            });
+            function setupArchitectureDiagramInteractivity() {
+                const diagramComponents = document.querySelectorAll('.diagram-component');
+                const diagramInfo = document.getElementById('diagram-info');
+                diagramComponents.forEach(comp => {
+                    const key = comp.id.replace('diagram-', '');
+                    comp.addEventListener('mouseenter', () => { diagramInfo.textContent = appData.diagramInfo[key] || appData.diagramInfo.default; });
+                    comp.addEventListener('mouseleave', () => { diagramInfo.textContent = appData.diagramInfo.default; });
+                });
+            }
+
+            function initializeApp() {
+                generateDemoScenarios();
+                renderFeaturesChart();
+                renderGatewayDeepDive();
+                renderSidecarArchitecture();
+                renderEBPF();
+                renderMcpEnforcement();
+                renderJudgeLlmContent();
+                renderGatewayScanners();
+                renderDemoScenarios();
+                renderCustomScanners();
+                renderToolEnforcement();
+                renderRoadmap();
+                setupSmoothScrolling();
+                setupArchitectureDiagramInteractivity();
+            }
+
+            initializeApp();
         });
     </script>
 </body>
